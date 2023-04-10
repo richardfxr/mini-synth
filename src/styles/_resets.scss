@@ -1,0 +1,80 @@
+// Partial SCSS file containing CSS style resets
+
+/* ============================================
+RESET
+============================================ */
+
+:global {
+    /* Box sizing rules */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    /* remove webkit tap highlighting */
+    * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: transparent;
+
+        /* remove default focus outline */
+        &:focus {
+            outline: none;
+        }
+    }
+
+    /* ensure 100% text size */
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    /* Remove default margin */
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    figure,
+    blockquote,
+    dl,
+    dd {
+        margin: 0;
+    }
+
+    /* Make images easier to work with */
+    img,
+    picture {
+        max-width: 100%;
+        display: block;
+    }
+
+    /* Inherit fonts for inputs and buttons */
+    input,
+    button,
+    textarea,
+    select {
+        font: inherit;
+    }
+
+    /* remove link styling */
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+    }
+
+    input {
+        -webkit-appearance: none;
+        background: transparent;
+    }
+
+    ol, ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+}
