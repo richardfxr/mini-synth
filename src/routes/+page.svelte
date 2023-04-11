@@ -7,6 +7,13 @@
     import * as Tone from 'tone';
     import type { BPM } from 'tone/build/esm/core/type/Units';
 
+    /* === CONSTANTS ========================== */
+    const tweenDuration = 100;
+    const progress = tweened(0, {
+		duration: tweenDuration,
+		easing: cubicOut
+	});
+
     /* === VARIABLES ========================== */
     let synth: Tone.PolySynth;
     let bpm: BPM = 80;
@@ -16,14 +23,10 @@
 
     let trackContainer: HTMLElement;
     let trackFrame: number;
-
-    const tweenDuration = 100;
+    
     let tweenProgress = false;
-    const progress = tweened(0, {
-		duration: tweenDuration,
-		easing: cubicOut
-	});
-
+    
+    /* === FUNCTIONS ========================== */
     function scrollTrack(): void {
         if (!browser || !trackContainer || Tone.Transport.state !== "started") return;
 
@@ -213,7 +216,6 @@
     .tracks {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), 50px);
-        gap: 1px;
         background-color: var(--clr-100);
         padding: 10px 0;
 
@@ -221,6 +223,7 @@
             display: flex;
             flex-direction: column;
             gap: 1px;
+            padding: 0 0.5px;
 
             p {
                 color: var(--clr-0);
@@ -247,6 +250,4 @@
             border-radius: 200px;
         }
     }
-
-    
 </style>
