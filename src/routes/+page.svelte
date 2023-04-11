@@ -2,6 +2,8 @@
     /* === IMPORTS ============================ */
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
+    import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
     import * as Tone from 'tone';
     import type { BPM } from 'tone/build/esm/core/type/Units';
 
@@ -15,15 +17,22 @@
     let trackContainer: HTMLElement;
     let trackFrame: number;
 
+    const tweenDuration = 100;
+    let tweenProgress = false;
+    const progress = tweened(0, {
+		duration: tweenDuration,
+		easing: cubicOut
+	});
+
     function scrollTrack(): void {
         if (!browser || !trackContainer || Tone.Transport.state !== "started") return;
 
         const trackLength = melody.length * 50;
-        trackContainer.scrollLeft = Tone.Transport.progress * trackLength;
+        progress.set(Tone.Transport.progress * trackLength);
 
-        console.log("progress: " + Tone.Transport.progress);
-        console.log("trackLength: " + trackLength);
-        console.log("srollLeft: " + Tone.Transport.progress * trackLength);
+        // console.log("progress: " + Tone.Transport.progress);
+        // console.log("trackLength: " + trackLength);
+        // console.log("srollLeft: " + Tone.Transport.progress * trackLength);
 
         trackFrame = requestAnimationFrame(scrollTrack);
     };
@@ -99,12 +108,20 @@
         })
 
         melodyPart = new Tone.Part(((time, note) => {
-            console.log(JSON.stringify(note) + " @ " + Tone.Time(time).toBarsBeatsSixteenths());
+            // console.log(JSON.stringify(note) + " @ " + Tone.Time(time).toBarsBeatsSixteenths());
             synth.triggerAttackRelease(note, "16n", time);
         }), notesToPlay).start(0);
 
         Tone.Transport.loop = true;
         Tone.Transport.loopEnd = "0:0:" + notesToPlay.length;
+
+        progress.subscribe(() => {
+            // set scrollLeft using progress (tweened)
+            if (tweenProgress) {
+                console.log("progress: " + $progress);
+                trackContainer.scrollLeft = $progress;
+            }
+        });
 
         return () => {
             cancelAnimationFrame(trackFrame);
@@ -113,46 +130,79 @@
 </script>
 
 
-
-<div
-    class="trackContainer"
-    bind:this={trackContainer}>
-    <div class="trackPadding"></div>
+<div class="playerContainer">
     <div
-        class="tracks"
-        style="--melodyLength: {melody.length}">
-        {#each melody as subdiv}
-            <div class="subdiv">
-                {#each subdiv as note}
-                    <p>{note}</p>
-                {/each}
-            </div>
-        {/each}
+        class="trackContainer"
+        bind:this={trackContainer}
+        on:scroll={() => {
+            // update progress if it is not updating scroll
+            if (!tweenProgress) {
+                progress.set(trackContainer.scrollLeft);
+            }
+        }}>
+        <div class="trackPadding"></div>
+        <div
+            class="tracks"
+            style="--melodyLength: {melody.length}">
+            {#each melody as subdiv}
+                <div class="subdiv">
+                    {#each subdiv as note}
+                        <p>{note}</p>
+                    {/each}
+                </div>
+            {/each}
+        </div>
+        <div class="trackPadding"></div>
     </div>
-    <div class="trackPadding"></div>
 </div>
 
-<button on:click={async () => {
-    await Tone.start();
-    Tone.Transport.start();
-    trackFrame = requestAnimationFrame(scrollTrack);
-}}>
-	Play
-</button>
+<div class="controls">
+    <button on:click={async () => {
+        await Tone.start();
+        Tone.Transport.start();
+        tweenProgress = true;
+        console.log("begins at: " + trackContainer.scrollLeft);
+        progress.set(trackContainer.scrollLeft);
+        trackFrame = requestAnimationFrame(scrollTrack);
+    }}>
+        Play
+    </button>
 
-<button on:click={async () => {
-    Tone.Transport.pause();    
-}}>
-	Pause
-</button>
+    <button on:click={async () => {
+        Tone.Transport.pause();
+        setTimeout(() => {
+            tweenProgress = false;
+        }, tweenDuration);
+    }}>
+        Pause
+    </button>
+</div>
 
 
 
 <style lang="scss">
+    .playerContainer {
+        position: relative;
+        padding: 10px 0;
+        
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: calc(50% - 0.5px);
+            width: 1px;
+            z-index: 1000;
+            background-color: red;
+        }
+    }
+
     .trackContainer {
         display: flex;
         flex-flow: row nowrap;
+        position: relative;
         overflow-x: auto;
+        overflow-y: hidden;
     }
 
     .trackPadding {
@@ -163,5 +213,40 @@
     .tracks {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), 50px);
+        gap: 1px;
+        background-color: var(--clr-100);
+        padding: 10px 0;
+
+        .subdiv {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+
+            p {
+                color: var(--clr-0);
+
+                background-color: var(--clr-800);
+                padding: 3px;
+                border-radius: 2px;
+            }
+        }
     }
+
+    .controls {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        padding: 20px 0;
+
+        button {
+            width: 100px;
+            background-color: var(--clr-100);
+            padding: 10px 0;
+            border: solid 1px var(--clr-250);
+            border-radius: 200px;
+        }
+    }
+
+    
 </style>
