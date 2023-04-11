@@ -8,6 +8,7 @@
     import type { BPM } from 'tone/build/esm/core/type/Units';
 
     /* === CONSTANTS ========================== */
+    const subdivWidth = 50;
     const tweenDuration = 100;
     const progress = tweened(0, {
 		duration: tweenDuration,
@@ -19,18 +20,23 @@
     let bpm: BPM = 80;
     let melody: Tone.Unit.Frequency[][] = [];
     let melodyPart: Tone.Part;
-    let notesToPlay: [Tone.Unit.Time, Tone.Unit.Frequency[]][] = [];
+    let notesToPlay: {time: Tone.Unit.Time, note: Tone.Unit.Frequency[], index: number}[] = [];
 
     let trackContainer: HTMLElement;
     let trackFrame: number;
+    let currentSubdiv: number = 0;
     
-    let tweenProgress = false;
+    let autoScroll = false;
+    let hasManuallyScrolled = false;
     
     /* === FUNCTIONS ========================== */
     function scrollTrack(): void {
+        console.log("Tone.Transport.state: " + Tone.Transport.state);
         if (!browser || !trackContainer || Tone.Transport.state !== "started") return;
 
-        const trackLength = melody.length * 50;
+        console.log("scrolling");
+
+        const trackLength = melody.length * subdivWidth;
         progress.set(Tone.Transport.progress * trackLength);
 
         // console.log("progress: " + Tone.Transport.progress);
@@ -107,12 +113,18 @@
 
         melody.forEach((subdiv, index) =>{
             const time = "0:0:" + index;
-            notesToPlay[index] = [time, subdiv];
+            notesToPlay[index] = {
+                time,
+                note: subdiv,
+                index
+            };
         })
 
-        melodyPart = new Tone.Part(((time, note) => {
+        melodyPart = new Tone.Part(((time, details) => {
+            console.log("index: " + details.index);
+            currentSubdiv = details.index;
             // console.log(JSON.stringify(note) + " @ " + Tone.Time(time).toBarsBeatsSixteenths());
-            synth.triggerAttackRelease(note, "16n", time);
+            synth.triggerAttackRelease(details.note, "16n", time);
         }), notesToPlay).start(0);
 
         Tone.Transport.loop = true;
@@ -120,8 +132,8 @@
 
         progress.subscribe(() => {
             // set scrollLeft using progress (tweened)
-            if (tweenProgress) {
-                console.log("progress: " + $progress);
+            if (autoScroll) {
+                // console.log("progress: " + $progress);
                 trackContainer.scrollLeft = $progress;
             }
         });
@@ -139,16 +151,20 @@
         bind:this={trackContainer}
         on:scroll={() => {
             // update progress if it is not updating scroll
-            if (!tweenProgress) {
+            if (!autoScroll) {
                 progress.set(trackContainer.scrollLeft);
+                currentSubdiv = Math.floor(trackContainer.scrollLeft / subdivWidth);
+                hasManuallyScrolled = true;
             }
         }}>
         <div class="trackPadding"></div>
         <div
             class="tracks"
             style="--melodyLength: {melody.length}">
-            {#each melody as subdiv}
-                <div class="subdiv">
+            {#each melody as subdiv, i}
+                <div
+                    class="subdiv"
+                    class:active={i === currentSubdiv}>
                     {#each subdiv as note}
                         <p>{note}</p>
                     {/each}
@@ -162,10 +178,16 @@
 <div class="controls">
     <button on:click={async () => {
         await Tone.start();
-        Tone.Transport.start();
-        tweenProgress = true;
+
+        if (hasManuallyScrolled) {
+            // start transport at current readhead location
+            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+        } else {
+            Tone.Transport.start();
+        }
+        
+        autoScroll = true;
         console.log("begins at: " + trackContainer.scrollLeft);
-        progress.set(trackContainer.scrollLeft);
         trackFrame = requestAnimationFrame(scrollTrack);
     }}>
         Play
@@ -174,7 +196,8 @@
     <button on:click={async () => {
         Tone.Transport.pause();
         setTimeout(() => {
-            tweenProgress = false;
+            autoScroll = false;
+            hasManuallyScrolled = false;
         }, tweenDuration);
     }}>
         Pause
@@ -217,13 +240,16 @@
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), 50px);
         background-color: var(--clr-100);
-        padding: 10px 0;
 
         .subdiv {
             display: flex;
             flex-direction: column;
             gap: 1px;
-            padding: 0 0.5px;
+            padding: 10px 0.5px;
+
+            &.active {
+                background-color: var(--clr-150);
+            }
 
             p {
                 color: var(--clr-0);
