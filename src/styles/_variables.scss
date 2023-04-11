@@ -8,3 +8,17 @@
    ============================================ */
 
 // === BREAKPOINTS ============================
+
+:root {
+   /* === CSS VARIABLES ====================== */
+   
+
+   /* === COLORS ============================= */
+
+   /* light theme (default) */
+   // parse $light into CSS variables
+   @each $name, $value in $light {
+       --clr-#{$name}: #{$value};
+   }
+   color-scheme: light;
+}
