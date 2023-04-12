@@ -4,7 +4,7 @@
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
-    export let playbackState: Tone.PlaybackState;
+    export let tweening: boolean;
     export let tweenedProgress: Tweened<number>;
     export let subdivWidth: number;
     export let currentSubdiv: number; // bind
@@ -13,7 +13,7 @@
 
     tweenedProgress.subscribe(() => {
         // set scrollLeft using progress (tweened)
-        if (playbackState === "started") {
+        if (tweening) {
             // console.log("progress: " + $progress);
             tapes.scrollLeft = $tweenedProgress;
         }
@@ -31,7 +31,7 @@
         bind:this={tapes}
         on:scroll={() => {
             // update progress if it is not updating scroll
-            if (playbackState !== "started") {
+            if (!tweening) {
                 tweenedProgress.set(tapes.scrollLeft);
                 currentSubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
                 hasManuallyScrolled = true;

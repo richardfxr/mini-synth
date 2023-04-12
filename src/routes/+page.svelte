@@ -17,6 +17,7 @@
 
     /* === VARIABLES ========================== */
     let playbackState: Tone.PlaybackState = "stopped";
+    let tweening = false;
     let playbackProgress: number = 0;
 
     let synth: Tone.PolySynth;
@@ -89,7 +90,12 @@
         playbackState = Tone.Transport.state;
         playbackProgress = Tone.Transport.progress;
 
-        if (playbackState !== "started") return;
+        if (playbackState !== "started") {
+            setTimeout(() => {
+                tweening = false;
+            }, tweenDuration)
+            return;
+        };
 
         const trackLength = melody.length * subdivWidth;
         tweenedProgress.set(playbackProgress * trackLength);
@@ -102,6 +108,7 @@
     };
 
     function startTapes(): void {
+        tweening = true;
         tapesFrame = requestAnimationFrame(scrollTapes);
     }
 
@@ -145,7 +152,7 @@
 
 
 <Reels
-    {playbackState}
+    {tweening}
     {tweenedProgress}
     {subdivWidth}
     bind:currentSubdiv = {currentSubdiv}
@@ -157,6 +164,8 @@
         await Tone.start();
 
         if (hasManuallyScrolled) {
+            // reset manual scroll
+            hasManuallyScrolled = false;
             // start transport at current readhead location
             Tone.Transport.start("+0", "0:0:" + currentSubdiv);
         } else {
