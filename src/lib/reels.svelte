@@ -33,8 +33,17 @@
             // update progress if it is not updating scroll
             if (!tweening) {
                 tweenedProgress.set(tapes.scrollLeft);
-                currentSubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
                 hasManuallyScrolled = true;
+                let calculatedubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
+
+                // prevent currentSubdiv from producing invalid index
+                if (calculatedubdiv >= melody.length) {
+                    currentSubdiv = melody.length - 1;
+                } else if (calculatedubdiv < 0) {
+                    currentSubdiv = 0;
+                } else {
+                    currentSubdiv = calculatedubdiv;
+                }
             }
         }}>
         <div class="trackPadding"></div>
