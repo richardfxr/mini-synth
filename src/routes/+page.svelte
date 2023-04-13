@@ -5,7 +5,8 @@
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     import * as Tone from 'tone';
-    import Reels from '../lib/reels.svelte';
+    import Reels from '$lib/reels.svelte';
+    import Controls from '$lib/controls.svelte';
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 50;
@@ -112,6 +113,28 @@
         tapesFrame = requestAnimationFrame(scrollTapes);
     }
 
+    /**
+     * Skip to a relative subdiv. Only functions when not playing
+     * @param relativeIndex positive or negative int. 1 is next subdiv, -1 is previous
+     */
+    function skipTo(relativeIndex: number): void {
+        if (playbackState === "started") return;
+
+        const skiptoSubdiv = currentSubdiv + relativeIndex;
+
+        if (skiptoSubdiv < 0 || skiptoSubdiv >= melody.length) return;
+
+        // update currentSubdiv
+        currentSubdiv = skiptoSubdiv;
+
+        // tween progress for smooth scroll
+        tweening = true;
+        tweenedProgress.set(currentSubdiv * subdivWidth);
+
+        // untween progress after animation is done
+        setTimeout(() => tweening = false, tweenDuration);
+    }
+
     /* === LIFECYCLES ========================= */
     onMount(() => {
         // initialize synth
@@ -159,8 +182,12 @@
     {melody}
     bind:hasManuallyScrolled = {hasManuallyScrolled} />
 
-<div class="controls">
-    <button on:click={async () => {
+<Controls
+    {playbackState}
+    {currentSubdiv}
+    melodyLength = {melody.length}
+    on:prevSubdiv = {() => skipTo(-1)}
+    on:play = {async () => {
         await Tone.start();
 
         if (hasManuallyScrolled) {
@@ -173,35 +200,12 @@
         }
 
         startTapes();
-
-        console.log("Tone.Transport.state: " + Tone.Transport.state);
-    }}>
-        Play
-    </button>
-
-    <button on:click={async () => {
-        Tone.Transport.pause();
-    }}>
-        Pause
-    </button>
-</div>
+    }}
+    on:pause = {() => Tone.Transport.pause()}
+    on:nextSubdiv = {() => skipTo(1)} />
 
 
 
 <style lang="scss">
-    .controls {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 10px;
-        padding: 20px 0;
-
-        button {
-            width: 100px;
-            background-color: var(--clr-100);
-            padding: 10px 0;
-            border: solid 1px var(--clr-250);
-            border-radius: 200px;
-        }
-    }
+    
 </style>
