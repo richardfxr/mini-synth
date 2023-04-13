@@ -63,7 +63,9 @@
         padding: 10px 0;
         
         &::before {
+            // playhead
             content: "";
+            pointer-events: none;
             position: absolute;
             top: 0;
             bottom: 0;
