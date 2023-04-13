@@ -17,6 +17,13 @@
 <div class="controls">
     <button
         class="small"
+        on:click = {() => dispatch('skipToBeginning')}
+        disabled = {playbackState === "started" || currentSubdiv <= 0}>
+        ⇤
+    </button>
+
+    <button
+        class="small"
         on:click = {() => dispatch('prevSubdiv')}
         disabled = {playbackState === "started" || currentSubdiv <= 0}>
         ←
@@ -37,6 +44,13 @@
         on:click = {() => dispatch('nextSubdiv')}
         disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
         →
+    </button>
+
+    <button
+        class="small"
+        on:click = {() => dispatch('skipToEnd')}
+        disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
+        ⇥
     </button>
 </div>
 
