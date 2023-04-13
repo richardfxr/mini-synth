@@ -114,20 +114,20 @@
     }
 
     /**
-     * Skip to a relative subdiv. Only functions when not playing
-     * @param relativeIndex positive or negative int. 1 is next subdiv, -1 is previous
+     * Skip to specified subdiv index. Only functions when not playing
+     * @param relativeIndex index between 0 and (melody.length - 1)
      */
-    async function skipTo(relativeIndex: number): Promise<void> {
-        if (playbackState === "started") return;
-
-        const skiptoSubdiv = currentSubdiv + relativeIndex;
-
-        if (skiptoSubdiv < 0 || skiptoSubdiv >= melody.length) return;
+    async function skipTo(index: number): Promise<void> {
+        if (
+            playbackState === "started" ||
+            index < 0 ||
+            index >= melody.length
+        ) return;
 
         // handle tweenedProgress and scrolling
         hasManuallyScrolled = true;
         tweening = true;
-        currentSubdiv = skiptoSubdiv;
+        currentSubdiv = index;
 
         // await tweened animation to finish
         await tweenedProgress.set(currentSubdiv * subdivWidth);
@@ -187,7 +187,8 @@
     {playbackState}
     {currentSubdiv}
     melodyLength = {melody.length}
-    on:prevSubdiv = {async () => skipTo(-1)}
+    on:skipToBeginning = {async () => await skipTo(0)}
+    on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
     on:play = {async () => {
         await Tone.start();
 
@@ -203,7 +204,8 @@
         startTapes();
     }}
     on:pause = {() => Tone.Transport.pause()}
-    on:nextSubdiv = {async () => skipTo(1)} />
+    on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
+    on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
 
 
