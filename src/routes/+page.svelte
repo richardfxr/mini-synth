@@ -1,6 +1,6 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { browser } from '$app/environment';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
@@ -117,22 +117,23 @@
      * Skip to a relative subdiv. Only functions when not playing
      * @param relativeIndex positive or negative int. 1 is next subdiv, -1 is previous
      */
-    function skipTo(relativeIndex: number): void {
+    async function skipTo(relativeIndex: number): Promise<void> {
         if (playbackState === "started") return;
 
         const skiptoSubdiv = currentSubdiv + relativeIndex;
 
         if (skiptoSubdiv < 0 || skiptoSubdiv >= melody.length) return;
 
-        // update currentSubdiv
+        // handle tweenedProgress and scrolling
+        hasManuallyScrolled = true;
+        tweening = true;
         currentSubdiv = skiptoSubdiv;
 
-        // tween progress for smooth scroll
-        tweening = true;
-        tweenedProgress.set(currentSubdiv * subdivWidth);
-
-        // untween progress after animation is done
-        setTimeout(() => tweening = false, tweenDuration);
+        // await tweened animation to finish
+        await tweenedProgress.set(currentSubdiv * subdivWidth);
+        await tick();
+        
+        tweening = false;
     }
 
     /* === LIFECYCLES ========================= */
@@ -186,7 +187,7 @@
     {playbackState}
     {currentSubdiv}
     melodyLength = {melody.length}
-    on:prevSubdiv = {() => skipTo(-1)}
+    on:prevSubdiv = {async () => skipTo(-1)}
     on:play = {async () => {
         await Tone.start();
 
@@ -202,7 +203,7 @@
         startTapes();
     }}
     on:pause = {() => Tone.Transport.pause()}
-    on:nextSubdiv = {() => skipTo(1)} />
+    on:nextSubdiv = {async () => skipTo(1)} />
 
 
 
