@@ -10,9 +10,11 @@
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 50;
-    const tweenDuration = 100;
     const tweenedProgress = tweened(0, {
-		duration: tweenDuration,
+		duration: (from, to) => {
+            // min duration of 100 ms and increases by 0.1 ms per additional pixel
+            return 100 + 0.1 * Math.max(0, Math.abs(to - from) - 50);
+        },
 		easing: cubicOut
 	});
 
@@ -85,25 +87,22 @@
     let hasManuallyScrolled = false;
 
     /* === FUNCTIONS ========================== */
-    function scrollTapes(): void {
+    async function scrollTapes() {
         if (!browser) return;
 
         playbackState = Tone.Transport.state;
         playbackProgress = Tone.Transport.progress;
+        const scrollAmount = playbackProgress * melody.length * subdivWidth;
 
         if (playbackState !== "started") {
-            setTimeout(() => {
-                tweening = false;
-            }, tweenDuration)
+            // set tweening to false after last tweened (upon pause) animation completes
+            await tweenedProgress.set(scrollAmount);
+            await tick();
+            tweening = false;
             return;
         };
 
-        const trackLength = melody.length * subdivWidth;
-        tweenedProgress.set(playbackProgress * trackLength);
-
-        // console.log("progress: " + Tone.Transport.progress);
-        // console.log("trackLength: " + trackLength);
-        // console.log("srollLeft: " + Tone.Transport.progress * trackLength);
+        tweenedProgress.set(scrollAmount);
 
         tapesFrame = requestAnimationFrame(scrollTapes);
     };
