@@ -14,6 +14,10 @@
 
 
 
+<div class="timecode">
+    <p>{Math.floor(currentSubdiv / 16)}:{Math.floor(currentSubdiv / 4) % 4}:{currentSubdiv % 4}</p>
+</div>
+
 <div class="controls">
     <button
         class="small"
@@ -57,12 +61,19 @@
 
 
 <style lang="scss">
+    .timecode {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 10px 0;
+    }
+
     .controls {
         display: flex;
         flex-direction: row;
         justify-content: center;
         gap: 10px;
-        padding: 20px 0;
+        padding-bottom: 20px;
 
         button {
             background-color: var(--clr-100);
