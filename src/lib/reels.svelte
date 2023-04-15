@@ -1,9 +1,11 @@
 <script lang="ts">
-    import type { Tweened } from 'svelte/motion';
     /* === IMPORTS ============================ */
+    import { createEventDispatcher } from 'svelte';
+    import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
+    export let playbackState: Tone.PlaybackState;
     export let tweening: boolean;
     export let tweenedProgress: Tweened<number>;
     export let subdivWidth: number;
@@ -19,8 +21,12 @@
         }
     });
 
+    /* === CONSTANTS ========================== */
+    const dispatch = createEventDispatcher();
+
     /* === VARIABLES ========================== */
     let tapes: HTMLElement;
+    let dragging = false;
 </script>
 
 
@@ -28,6 +34,7 @@
 <div class="reels">
     <div
         class="tapes"
+        class:dragging={dragging}
         bind:this={tapes}
         on:scroll={() => {
             // update progress if it is not updating scroll
@@ -44,6 +51,29 @@
                 } else {
                     currentSubdiv = calculatedubdiv;
                 }
+            }
+        }}
+        on:pointerdown={() => {
+            if (playbackState === "started") dispatch('pause');
+        }}
+        on:mousedown={() => {
+            dragging = true;
+        }}
+        on:mousemove={(e) => {
+            // drag only if primary mouse button is held down
+            if (e.buttons === 1) {
+                dragging  = true;
+                let newScrollLeft = tapes.scrollLeft - e.movementX;
+
+                // limit newScrollLeft to be between 0 and melody.length
+                if (newScrollLeft > 0)
+                    newScrollLeft = 0;
+                if (newScrollLeft > melody.length * subdivWidth)
+                    newScrollLeft = melody.length * subdivWidth;
+
+                tapes.scrollLeft = tapes.scrollLeft - e.movementX;
+            } else {
+                dragging = false;
             }
         }}>
         <div class="trackPadding"></div>
@@ -78,7 +108,7 @@
             top: 0;
             bottom: -5px;
             left: calc(50% - 0.5px);
-            width: 1px;
+            width: 2px;
             z-index: 1000;
             background-color: red;
         }
@@ -97,8 +127,14 @@
 
         padding: 10px 0;
 
+        cursor: grab;
+
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
+
+        &.dragging {
+            cursor: grabbing;
+        }
 
         &::-webkit-scrollbar {
             height: 2px;
@@ -109,6 +145,14 @@
         }
         &::-webkit-scrollbar-thumb {
             background-color: var(--_clr-thumb);
+
+            &:hover {
+                background-color: var(--clr-700);
+            }
+
+            &:active {
+                background-color: var(--clr-800);
+            }
         }
     }
 
@@ -121,6 +165,10 @@
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), 50px);
         background-color: var(--clr-100);
+
+        // prevent text highlighting on drag
+        -webkit-user-select:none;
+        user-select: none;
 
         .subdiv {
             display: flex;

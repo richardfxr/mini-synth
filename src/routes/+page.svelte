@@ -175,12 +175,14 @@
 
 
 <Reels
+    {playbackState}
     {tweening}
     {tweenedProgress}
     {subdivWidth}
     bind:currentSubdiv = {currentSubdiv}
     {melody}
-    bind:hasManuallyScrolled = {hasManuallyScrolled} />
+    bind:hasManuallyScrolled = {hasManuallyScrolled}
+    on:pause = {() => Tone.Transport.pause()} />
 
 <Controls
     {playbackState}
