@@ -69,7 +69,6 @@
 <style lang="scss">
     .reels {
         position: relative;
-        padding: 10px 0;
         
         &::before {
             // playhead
@@ -77,7 +76,7 @@
             pointer-events: none;
             position: absolute;
             top: 0;
-            bottom: 0;
+            bottom: -5px;
             left: calc(50% - 0.5px);
             width: 1px;
             z-index: 1000;
@@ -86,11 +85,31 @@
     }
 
     .tapes {
+        // internal variables
+        --_clr-scrollbar: var(--clr-100);
+        --_clr-thumb: var(--clr-500);
+
         display: flex;
         flex-flow: row nowrap;
         position: relative;
         overflow-x: auto;
         overflow-y: hidden;
+
+        padding: 10px 0;
+
+        scrollbar-width: thin;
+        scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
+
+        &::-webkit-scrollbar {
+            height: 2px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: var(--_clr-scrollbar);
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--_clr-thumb);
+        }
     }
 
     .trackPadding {
