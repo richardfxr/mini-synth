@@ -7,6 +7,7 @@
     import * as Tone from 'tone';
     import Reels from '$lib/reels.svelte';
     import Controls from '$lib/controls.svelte';
+    import BPMslider from '$lib/BPMslider.svelte';
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 50;
@@ -208,8 +209,22 @@
     on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
     on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
+    <div class="inputs">
+        <BPMslider
+            bind:bpm = {bpm}
+            on:input = {() => Tone.Transport.bpm.value = bpm} />
+    </div>
+
+
 
 
 <style lang="scss">
-    
+    .inputs {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        max-width: 1000px;
+
+        padding: 10px;
+        margin: 0 auto;
+    }
 </style>
