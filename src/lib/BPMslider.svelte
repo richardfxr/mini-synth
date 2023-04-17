@@ -35,7 +35,7 @@
         --_thumb-height: 10px;
 
         display: flex;
-        flex-flow: column-reverse;
+        flex-direction: column-reverse;
         align-items: center;
         gap: 10px;
     }

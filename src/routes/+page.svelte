@@ -8,9 +8,53 @@
     import Reels from '$lib/reels.svelte';
     import Controls from '$lib/controls.svelte';
     import BPMslider from '$lib/BPMslider.svelte';
+    import KeyboardControls from '$lib/keyboardControls.svelte';
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 50;
+    const charOf: { [key: Tone.Unit.Frequency]: String} = {
+        C3: "A",
+        Db3: "B",
+        D3: "C",
+        Eb3: "D",
+        E3: "E",
+        F3: "F",
+        Gb3: "G",
+        G3: "H",
+        Ab3: "I",
+        A3: "J",
+        Bb3: "K",
+        B3: "L",
+        C4: "M",
+        Db4: "N",
+        D4: "O",
+        Eb4: "P",
+        E4: "Q",
+        F4: "R",
+        Gb4: "S",
+        G4: "T",
+        Ab4: "U",
+        A4: "V",
+        Bb4: "W",
+        B4: "X",
+        C5: "Y",
+        Db5: "Z",
+        D5: "0",
+        Eb5: "1",
+        E5: "2",
+        F5: "3",
+        Gb5: "4",
+        G5: "5",
+        Ab5: "6",
+        A5: "7",
+        Bb5: "8",
+        B5: "9",
+    };
+    const notesOfSegment: Tone.Unit.Frequency[][] = [
+        ["C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3"],
+        ["C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4", "C5", "Db5"],
+        ["D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab5", "A5", "Bb5", "B5"],
+    ];
     const tweenedProgress = tweened(0, {
 		duration: (from, to) => {
             // min duration of 100 ms and increases by 0.1 ms per additional pixel
@@ -83,9 +127,16 @@
     let tapesFrame: number;
 
     let currentSubdiv: number = 0;
-    
-    // let autoScroll = false;
+    let currentKbSegment: 0 | 1 | 2 = 0;
     let hasManuallyScrolled = false;
+
+    /* === REACTIVE DECLARATIONS ============== */
+    // if each of the three keyboard segments is populated (has at least one note played)
+    $: segmentIsPopulated = [
+        melody[currentSubdiv].some(e => notesOfSegment[0].includes(e)),
+        melody[currentSubdiv].some(e => notesOfSegment[1].includes(e)),
+        melody[currentSubdiv].some(e => notesOfSegment[2].includes(e))
+    ];
 
     /* === FUNCTIONS ========================== */
     async function scrollTapes() {
@@ -213,6 +264,10 @@
         <BPMslider
             bind:bpm = {bpm}
             on:input = {() => Tone.Transport.bpm.value = bpm} />
+
+        <KeyboardControls
+            bind:currentKbSegment = {currentKbSegment}
+            {segmentIsPopulated} />
     </div>
 
 
@@ -221,7 +276,7 @@
 <style lang="scss">
     .inputs {
         display: grid;
-        grid-template-columns: 50px 1fr;
+        grid-template-columns: 50px 60px 1fr;
         max-width: 1000px;
 
         padding: 10px;
