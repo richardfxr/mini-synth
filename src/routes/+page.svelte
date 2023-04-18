@@ -317,7 +317,7 @@
 
             .secondaryControls {
                 flex-flow: column-reverse nowrap;
-                justify-content: space-between;
+                gap: 20px
             }
         }
     }

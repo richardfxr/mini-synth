@@ -6,26 +6,29 @@
 
 
 
-<div class="keyboardControls">
-    <button
-        class:active={currentKbSegment === 0}
-        on:click={() => currentKbSegment = 0}>
-        A-L
-        <div class="indicator" class:populated={segmentIsPopulated[0]}></div>
-    </button>
-    <button
-        class:active={currentKbSegment === 1}
-        on:click={() => currentKbSegment = 1}>
-        M-Z
-        <div class="indicator" class:populated={segmentIsPopulated[1]}></div>
-    </button>
-    <button
-        class:active={currentKbSegment === 2}
-        on:click={() => currentKbSegment = 2}>
-        0-9
-        <div class="indicator" class:populated={segmentIsPopulated[2]}></div>
-    </button>
+<div class="wrapper">
+    <div class="keyboardControls">
+        <button
+            class:active={currentKbSegment === 0}
+            on:click={() => currentKbSegment = 0}>
+            A-L
+            <div class="indicator" class:populated={segmentIsPopulated[0]}></div>
+        </button>
+        <button
+            class:active={currentKbSegment === 1}
+            on:click={() => currentKbSegment = 1}>
+            M-Z
+            <div class="indicator" class:populated={segmentIsPopulated[1]}></div>
+        </button>
+        <button
+            class:active={currentKbSegment === 2}
+            on:click={() => currentKbSegment = 2}>
+            0-9
+            <div class="indicator" class:populated={segmentIsPopulated[2]}></div>
+        </button>
+    </div>
 </div>
+
 
 
 
@@ -35,6 +38,8 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        position: sticky;
+        top: calc(var(--reels-height) + 10px);
     }
 
     button {
@@ -70,11 +75,14 @@
 
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
+        .wrapper {
+            flex-grow: 1;
+        }
         .keyboardControls {
             flex-direction: column-reverse;
         }
     }
-    
+
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         .keyboardControls {
             flex-direction: row;
