@@ -43,6 +43,8 @@
         align-items: center;
         gap: 3px;
 
+        white-space: nowrap;
+
         background-color: var(--clr-100);
         padding: 10px 10px 8px 10px;
         border: solid 1px var(--clr-250);
@@ -63,6 +65,13 @@
             &.populated {
                 background-color: orange;
             }
+        }
+    }
+
+    /* === BREAKPOINTS ======================== */
+    @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
+        .keyboardControls {
+            flex-direction: row;
         }
     }
 </style>

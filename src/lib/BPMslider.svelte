@@ -29,7 +29,7 @@
         --_clr-track: var(--clr-150);
         --_clr-track-progress: red;
         --_clr-thumb: red;
-        --_track-height: 300px;
+        --_track-height: calc(min(var(--inputs-height), var(--inputs-maxHeight)) - 70px);
         --_track-width: 2px;
         --_thumb-width: 20px;
         --_thumb-height: 10px;
@@ -41,9 +41,9 @@
     }
 
     .rangePlaceholder {
+        flex-grow: 1;
         position: relative;
         width: var(--_thumb-width);
-        height: var(--_track-height);
     }
     
     #bpm {
@@ -53,6 +53,7 @@
         background: transparent;
         cursor: pointer;
 
+        display: block;
         width: var(--_track-height);
         overflow: hidden;
 
@@ -119,6 +120,61 @@
         &::-moz-range-progress {
             height: var(--_track-width);
             background-color: var(--_clr-track-progress);
+        }
+    }
+
+    /* === BREAKPOINTS ======================== */
+    @media (orientation: portrait) {
+        .sliderWrapper {
+            // internal variables
+            --_track-height: 300px;
+        }
+
+        .rangePlaceholder {
+            height: var(--_track-height);
+        }
+    }
+
+    @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
+        .sliderWrapper {
+            // internal variables
+            --_clr-track: var(--clr-150);
+            --_clr-track-progress: red;
+            --_clr-thumb: red;
+            --_track-height: 100%;
+            --_track-width: 2px;
+            --_thumb-width: 20px;
+            --_thumb-height: 10px;
+
+            flex-grow: 1;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .rangePlaceholder {
+            flex-grow: 1;
+            position: relative;
+            width: unset;
+        }
+        
+        #bpm {
+            // reset all styling
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+
+            width: var(--_track-height);
+            overflow: hidden;
+
+            // rotate range input to be vertical and adjust location
+            position: relative;
+            transform-origin: top left;
+            top: var(--_track-height);
+            transform: rotate(0deg);
+
+            // prevent scroll when draggin range input on touch screen
+            touch-action: none;
         }
     }
 </style>

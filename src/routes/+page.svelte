@@ -9,10 +9,11 @@
     import Controls from '$lib/controls.svelte';
     import BPMslider from '$lib/BPMslider.svelte';
     import KeyboardControls from '$lib/keyboardControls.svelte';
+    import Keyboard from '$lib/keyboard.svelte';
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 50;
-    const charOf: { [key: Tone.Unit.Frequency]: String} = {
+    const charOf: { [key: Tone.Unit.Frequency]: String } = {
         C3: "A",
         Db3: "B",
         D3: "C",
@@ -70,6 +71,7 @@
 
     let synth: Tone.PolySynth;
     let bpm: Tone.Unit.BPM = 80;
+    let now: number;
     let melody: Tone.Unit.Frequency[][] = [
         ["E3", "E5"],
         [],
@@ -189,6 +191,9 @@
 
     /* === LIFECYCLES ========================= */
     onMount(() => {
+        // set now
+        now = Tone.now();
+
         // initialize synth
         synth = new Tone.PolySynth(Tone.Synth, {
 			oscillator: {
@@ -260,7 +265,8 @@
     on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
     on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
-    <div class="inputs">
+<div class="inputs">
+    <div class="secondaryControls">
         <BPMslider
             bind:bpm = {bpm}
             on:input = {() => Tone.Transport.bpm.value = bpm} />
@@ -270,16 +276,60 @@
             {segmentIsPopulated} />
     </div>
 
+    <Keyboard
+        {charOf}
+        {notesOfSegment}
+        on:keyDown = {e => synth.triggerAttack(e.detail.note)}
+        on:keyUp = {e => synth.triggerRelease(e.detail.note)}/>
+    </div>
+
 
 
 
 <style lang="scss">
     .inputs {
-        display: grid;
-        grid-template-columns: 50px 60px 1fr;
-        max-width: 1000px;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 20px;
+        max-width: var(--inputs-maxWidth);
+        height: var(--inputs-height);
+        max-height: var(--inputs-maxHeight);
 
-        padding: 10px;
+        padding: 10px 0 10px 10px;
         margin: 0 auto;
+
+        .secondaryControls {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: 10px;
+        }
+    }
+
+    /* === BREAKPOINTS ======================== */
+    @media (orientation: portrait) {
+        .inputs {
+            gap: 15px;
+            height: unset;
+            max-height: unset;
+            padding: 15px 0 15px 15px;
+
+            .secondaryControls {
+                flex-flow: column-reverse nowrap;
+                justify-content: space-between;
+            }
+        }
+    }
+    
+    @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
+        .inputs {
+            flex-flow: column nowrap;
+            gap: 15px;
+            padding-left: 0;
+
+            .secondaryControls {
+                gap: 30px;
+                padding: 0 20px;
+            }
+        }
     }
 </style>
