@@ -1,6 +1,8 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import { onMount, createEventDispatcher } from 'svelte';
+    import { tweened } from 'svelte/motion';
+    import { cubicOut } from 'svelte/easing';
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
@@ -15,16 +17,34 @@
     let activeNotes: Tone.Unit.Frequency[] = [];
     let keyboard: HTMLElement;
     let isReady = false;
+    let isPortrait = false;
 
     /* === REACTIVE DECLARATION =============== */
     // call scrollToCurrentSegment() when currentKbSegment changes
     $: currentKbSegment ? scrollToCurrentSegment() : scrollToCurrentSegment();
 
     /* === FUNCTIONS ========================== */
+    function checkOrientation(): void {
+        isPortrait = window.matchMedia("(orientation: portrait)").matches;
+        scrollToCurrentSegment();
+    }
+
     function scrollToCurrentSegment(): void {
         if (!isReady) return;
-        console.log("keyboard: " + keyboard);
-        keyboard.children[currentKbSegment].scrollIntoView({ behavior: "auto", block: "center", inline: "center" });
+
+        const targetSegment = keyboard.children[currentKbSegment] as HTMLElement;
+
+        if (isPortrait) {
+            keyboard.scrollTop = Math.min(
+                targetSegment.offsetTop,
+                targetSegment.offsetHeight * 3 - keyboard.offsetHeight
+            );
+        } else {
+            keyboard.scrollLeft = Math.min(
+                targetSegment.offsetLeft,
+                targetSegment.offsetWidth * 3 - keyboard.offsetWidth
+            );
+        }
     }
 
     function handleKeyDown(note: Tone.Unit.Frequency): void {
@@ -48,10 +68,15 @@
     }
 
     /* === LIFECYCLES ========================= */
-    onMount(() => isReady = true);
+    onMount(() => {
+        checkOrientation();
+        isReady = true;
+    });
 </script>
 
 
+
+<svelte:window on:resize={checkOrientation} />
 
 <div class="keyboard" bind:this={keyboard}>
     {#each notesOfSegment as segment, i}
@@ -86,6 +111,7 @@
         flex-grow: 1;
         display: flex;
         flex-flow: row nowrap;
+        position: relative;
 
         border-radius: var(--_border-radius);
         overflow: hidden;

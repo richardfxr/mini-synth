@@ -59,7 +59,7 @@
     const tweenedProgress = tweened(0, {
 		duration: (from, to) => {
             // min duration of 100 ms and increases by 0.1 ms per additional pixel
-            return 100 + 0.1 * Math.max(0, Math.abs(to - from) - 50);
+            return 100 + 0.1 * Math.max(0, Math.abs(to - from) - subdivWidth);
         },
 		easing: cubicOut
 	});
