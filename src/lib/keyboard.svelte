@@ -48,10 +48,7 @@
     }
 
     /* === LIFECYCLES ========================= */
-    onMount(() => {
-        isReady = true;
-        scrollToCurrentSegment();
-    });
+    onMount(() => isReady = true);
 </script>
 
 
