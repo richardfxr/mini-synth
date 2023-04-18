@@ -11,7 +11,7 @@
     export let subdivWidth: number;
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
-    export let charOf: { [key: Tone.Unit.Frequency]: String };
+    export let notes: Tone.Unit.Frequency[];
     export let hasManuallyScrolled: boolean; // bind
 
     tweenedProgress.subscribe(() => {
@@ -87,7 +87,7 @@
                     class="subdiv"
                     class:active={i === currentSubdiv}>
                     {#each subdiv as note}
-                        <p>{charOf[note]}</p>
+                        <p>{notes.indexOf(note) + 1}</p>
                     {/each}
                 </div>
             {/each}

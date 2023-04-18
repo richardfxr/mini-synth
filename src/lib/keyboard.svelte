@@ -1,13 +1,11 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import { onMount, createEventDispatcher } from 'svelte';
-    import { tweened } from 'svelte/motion';
-    import { cubicOut } from 'svelte/easing';
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
     export let currentKbSegment: 0 | 1 | 2;
-    export let charOf: { [key: Tone.Unit.Frequency]: String };
+    export let notes: Tone.Unit.Frequency[];
     export let notesOfSegment: Tone.Unit.Frequency[][];
 
     /* === CONSTANTS ========================== */
@@ -90,7 +88,7 @@
                         on:pointerdown={() => handleKeyDown(note)}
                         on:pointerup={() => handleKeyUp(note)}
                         on:pointerleave={() => handleKeyUp(note)}>
-                        <span>{charOf[note]}</span>
+                        <span>{notes.indexOf(note) + 1}</span>
                     </button>
                 </li>
             {/each}

@@ -12,45 +12,13 @@
     import Keyboard from '$lib/keyboard.svelte';
 
     /* === CONSTANTS ========================== */
-    const subdivWidth = 28;
-    const charOf: { [key: Tone.Unit.Frequency]: String } = {
-        C3: "A",
-        Db3: "B",
-        D3: "C",
-        Eb3: "D",
-        E3: "E",
-        F3: "F",
-        Gb3: "G",
-        G3: "H",
-        Ab3: "I",
-        A3: "J",
-        Bb3: "K",
-        B3: "L",
-        C4: "M",
-        Db4: "N",
-        D4: "O",
-        Eb4: "P",
-        E4: "Q",
-        F4: "R",
-        Gb4: "S",
-        G4: "T",
-        Ab4: "U",
-        A4: "V",
-        Bb4: "W",
-        B4: "X",
-        C5: "Y",
-        Db5: "Z",
-        D5: "0",
-        Eb5: "1",
-        E5: "2",
-        F5: "3",
-        Gb5: "4",
-        G5: "5",
-        Ab5: "6",
-        A5: "7",
-        Bb5: "8",
-        B5: "9",
-    };
+    const subdivWidth = 35;
+    const notes: Tone.Unit.Frequency[] = [
+        "C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3",
+        "C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4",
+        "C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab5", "A5", "Bb5", "B5",
+    ];
+
     const notesOfSegment: Tone.Unit.Frequency[][] = [
         ["C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3"],
         ["C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4"],
@@ -238,7 +206,7 @@
     {subdivWidth}
     bind:currentSubdiv = {currentSubdiv}
     {melody}
-    {charOf}
+    {notes}
     bind:hasManuallyScrolled = {hasManuallyScrolled}
     on:pause = {() => Tone.Transport.pause()} />
 
@@ -279,7 +247,7 @@
 
     <Keyboard
         {currentKbSegment}
-        {charOf}
+        {notes}
         {notesOfSegment}
         on:keyDown = {e => synth.triggerAttack(e.detail.note)}
         on:keyUp = {e => synth.triggerRelease(e.detail.note)}/>

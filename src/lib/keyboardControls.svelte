@@ -11,19 +11,19 @@
         <button
             class:active={currentKbSegment === 0}
             on:click={() => currentKbSegment = 0}>
-            A-L
+            1-12
             <div class="indicator" class:populated={segmentIsPopulated[0]}></div>
         </button>
         <button
             class:active={currentKbSegment === 1}
             on:click={() => currentKbSegment = 1}>
-            M-Z
+            13-24
             <div class="indicator" class:populated={segmentIsPopulated[1]}></div>
         </button>
         <button
             class:active={currentKbSegment === 2}
             on:click={() => currentKbSegment = 2}>
-            0-9
+            25-36
             <div class="indicator" class:populated={segmentIsPopulated[2]}></div>
         </button>
     </div>
