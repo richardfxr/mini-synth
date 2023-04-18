@@ -98,7 +98,11 @@
 
 <style lang="scss">
     .reels {
-        position: relative;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+
+        background-color: var(--clr-0);
         
         &::before {
             // playhead
