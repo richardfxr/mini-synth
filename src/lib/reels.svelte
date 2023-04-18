@@ -80,7 +80,8 @@
         }}>
         <div class="trackPadding"></div>
         <div
-            class="tracks"
+            id="melody"
+            class="track"
             style="--melodyLength: {melody.length}">
             {#each melody as subdiv, i}
                 <div
@@ -167,7 +168,7 @@
         flex-shrink: 0;
     }
 
-    .tracks {
+    .track {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
         background-color: var(--clr-100);
@@ -176,11 +177,17 @@
         -webkit-user-select:none;
         user-select: none;
 
+        &#melody {
+            height: var(--melody-height);
+        }
+
         .subdiv {
             display: flex;
             flex-direction: column;
             gap: 1px;
             padding: 10px 0.5px;
+
+            overflow: hidden;
 
             &.active {
                 background-color: var(--clr-150);

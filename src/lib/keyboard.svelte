@@ -4,15 +4,17 @@
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
+    export let currentSubdiv: number;
     export let currentKbSegment: 0 | 1 | 2;
+    export let melody: Tone.Unit.Frequency[][]; // bind
     export let notes: Tone.Unit.Frequency[];
     export let notesOfSegment: Tone.Unit.Frequency[][];
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
+    const borderWidth = 2;
 
     /* === VARIABLES ========================== */
-    let activeNotes: Tone.Unit.Frequency[] = [];
     let keyboard: HTMLElement;
     let isReady = false;
     let isPortrait = false;
@@ -34,8 +36,8 @@
 
         if (isPortrait) {
             keyboard.scrollTop = Math.min(
-                targetSegment.offsetTop,
-                targetSegment.offsetHeight * 3 - keyboard.offsetHeight
+                targetSegment.offsetTop + targetSegment.offsetHeight - keyboard.offsetHeight + borderWidth,
+                targetSegment.offsetHeight * 3 - keyboard.offsetHeight + borderWidth
             );
         } else {
             keyboard.scrollLeft = Math.min(
@@ -46,23 +48,20 @@
     }
 
     function handleKeyDown(note: Tone.Unit.Frequency): void {
-        if (activeNotes.includes(note)) return;
-
-        dispatch('keyDown', { note });
-        // add note to activeNotes (not using push() to force Svelte to update)
-        activeNotes = [...activeNotes, note];
-
-        console.log(activeNotes);
-        console.log(activeNotes.includes(note));
+        if (melody[currentSubdiv].includes(note)) {
+            // stop playing note
+            handleKeyUp(note);
+            // remove note from melody (using filter() to force Svelte to update)
+            melody[currentSubdiv] = melody[currentSubdiv].filter(e => e !== note);
+        } else {
+            dispatch('keyDown', { note });
+            // add note to melody (not using push() to force Svelte to update)
+            melody[currentSubdiv] = [...melody[currentSubdiv], note];
+        }
     }
 
     function handleKeyUp(note: Tone.Unit.Frequency): void {
         dispatch('keyUp', { note });
-
-        // remove note from activeNotes (using filter() to force Svelte to update)
-        activeNotes = activeNotes.filter(note => note !== note);
-
-        console.log(activeNotes);
     }
 
     /* === LIFECYCLES ========================= */
@@ -76,14 +75,17 @@
 
 <svelte:window on:resize={checkOrientation} />
 
-<div class="keyboard" bind:this={keyboard}>
+<div
+    class="keyboard"
+    style="--_border-width: {borderWidth}px"
+    bind:this={keyboard}>
     {#each notesOfSegment as segment, i}
         <ol id={"segment-" + i} class="segment">
             {#each segment as note}
                 <li
                     class="note"
                     class:flat={note.toString().charAt(1) === "b"}
-                    class:active={activeNotes.includes(note)}>
+                    class:active={melody[currentSubdiv].includes(note)}>
                     <button
                         on:pointerdown={() => handleKeyDown(note)}
                         on:pointerup={() => handleKeyUp(note)}
@@ -102,7 +104,6 @@
     .keyboard {
         // internal variables
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
-        --_border-width: 2px;
         --_border-radius: 7px;
         --_whiteNotes: 7;
 

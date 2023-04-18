@@ -109,6 +109,31 @@
     ];
 
     /* === FUNCTIONS ========================== */
+    function readyReels(): void {
+        Tone.Transport.loopEnd = "0:0:" + melody.length;
+
+        // initialize/update notesToPlay
+        melody.forEach((subdiv, index) =>{
+            const time = "0:0:" + index;
+            notesToPlay[index] = {
+                time,
+                note: subdiv,
+                index
+            };
+        });      
+
+        // dispose of part if it already exists
+        if (melodyPart) melodyPart.dispose();
+
+        melodyPart = new Tone.Part(((time, details) => {
+            currentSubdiv = details.index;
+            synth.triggerAttackRelease(details.note, "16n", time);
+
+            // call readyReels() again on last note, this will create a new part with updated notesToPlay
+            if (details.index === notesToPlay.length - 1) readyReels();
+        }), notesToPlay).start(0);
+    }
+
     async function scrollTapes() {
         if (!browser) return;
 
@@ -171,25 +196,10 @@
 
         // set transporter properties
         Tone.Transport.bpm.value = bpm;
-
-        melody.forEach((subdiv, index) =>{
-            const time = "0:0:" + index;
-            notesToPlay[index] = {
-                time,
-                note: subdiv,
-                index
-            };
-        });
-
-        melodyPart = new Tone.Part(((time, details) => {
-            console.log("index: " + details.index);
-            currentSubdiv = details.index;
-            // console.log(JSON.stringify(note) + " @ " + Tone.Time(time).toBarsBeatsSixteenths());
-            synth.triggerAttackRelease(details.note, "16n", time);
-        }), notesToPlay).start(0);
-
         Tone.Transport.loop = true;
-        Tone.Transport.loopEnd = "0:0:" + notesToPlay.length;
+        Tone.Transport.loopEnd = "0:0:" + melody.length;
+
+        // readyReels();
 
         return () => {
             // cancel tapesFrame on destroy
@@ -218,6 +228,7 @@
     on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
     on:play = {async () => {
         await Tone.start();
+        readyReels();
 
         if (hasManuallyScrolled) {
             // reset manual scroll
@@ -246,7 +257,9 @@
     </div>
 
     <Keyboard
+        {currentSubdiv}
         {currentKbSegment}
+        bind:melody = {melody}
         {notes}
         {notesOfSegment}
         on:keyDown = {e => synth.triggerAttack(e.detail.note)}
