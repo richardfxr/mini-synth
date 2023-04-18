@@ -1,9 +1,10 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
-    import { createEventDispatcher } from 'svelte';
+    import { onMount, createEventDispatcher } from 'svelte';
     import type * as Tone from 'tone';
 
     /* === PROPS ============================== */
+    export let currentKbSegment: 0 | 1 | 2;
     export let charOf: { [key: Tone.Unit.Frequency]: String };
     export let notesOfSegment: Tone.Unit.Frequency[][];
 
@@ -12,8 +13,20 @@
 
     /* === VARIABLES ========================== */
     let activeNotes: Tone.Unit.Frequency[] = [];
+    let keyboard: HTMLElement;
+    let isReady = false;
+
+    /* === REACTIVE DECLARATION =============== */
+    // call scrollToCurrentSegment() when currentKbSegment changes
+    $: currentKbSegment ? scrollToCurrentSegment() : scrollToCurrentSegment();
 
     /* === FUNCTIONS ========================== */
+    function scrollToCurrentSegment(): void {
+        if (!isReady) return;
+        console.log("keyboard: " + keyboard);
+        keyboard.children[currentKbSegment].scrollIntoView({ behavior: "auto", block: "center", inline: "center" });
+    }
+
     function handleKeyDown(note: Tone.Unit.Frequency): void {
         if (activeNotes.includes(note)) return;
 
@@ -33,11 +46,17 @@
 
         console.log(activeNotes);
     }
+
+    /* === LIFECYCLES ========================= */
+    onMount(() => {
+        isReady = true;
+        scrollToCurrentSegment();
+    });
 </script>
 
 
 
-<div class="keyboard">
+<div class="keyboard" bind:this={keyboard}>
     {#each notesOfSegment as segment, i}
         <ol id={"segment-" + i} class="segment">
             {#each segment as note}
@@ -65,13 +84,15 @@
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
         --_border-width: 2px;
         --_border-radius: 7px;
+        --_whiteNotes: 7;
 
         flex-grow: 1;
         display: flex;
         flex-flow: row nowrap;
 
         border-radius: var(--_border-radius);
-        overflow-x: scroll;
+        overflow: hidden;
+        scroll-behavior: smooth;
 
         // prevent text highlighting on drag
         -webkit-user-select:none;
@@ -86,10 +107,7 @@
         width: calc(var(--_whiteNotes) / 7 * var(--_octave-width));
         background-color: var(--clr-250);
 
-        &#segment-0 {
-            // internal variables
-            --_whiteNotes: 7;
-
+        &#segment-0 {          
             border-radius: var(--_border-radius) 0 0 var(--_border-radius);
 
             .note:first-child button {
@@ -97,15 +115,7 @@
             }
         }
 
-        &#segment-1 {
-            // internal variables
-            --_whiteNotes: 8;
-        }
-
         &#segment-2 {
-            // internal variables
-            --_whiteNotes: 6;
-
             border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
 
             .note:last-child button {
@@ -186,8 +196,6 @@
             height: var(--_keyboard-height);
 
             border-radius: var(--_border-radius);
-            overflow-x: hidden;
-            overflow-y: scroll;
         }
 
         .segment {

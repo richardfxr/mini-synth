@@ -69,6 +69,12 @@
     }
 
     /* === BREAKPOINTS ======================== */
+    @media (orientation: portrait) {
+        .keyboardControls {
+            flex-direction: column-reverse;
+        }
+    }
+    
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         .keyboardControls {
             flex-direction: row;
