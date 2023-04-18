@@ -8,10 +8,13 @@
    ============================================ */
 
 // === BREAKPOINTS ============================
+$breakpoint-tablet: 700px;
 
 :root {
    /* === CSS VARIABLES ====================== */
-   
+   --inputs-maxWidth: 1000px;
+   --inputs-height: calc(100vh - 50px);
+   --inputs-maxHeight: 400px;
 
    /* === COLORS ============================= */
 
@@ -21,4 +24,12 @@
        --clr-#{$name}: #{$value};
    }
    color-scheme: light;
+}
+
+/* === BREAKPOINTS ======================== */
+@media (orientation: portrait) {
+   :root{
+      /* === CSS VARIABLES ====================== */
+      --inputs-maxWidth: 500px;
+   }
 }
