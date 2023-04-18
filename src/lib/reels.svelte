@@ -11,6 +11,7 @@
     export let subdivWidth: number;
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
+    export let charOf: { [key: Tone.Unit.Frequency]: String };
     export let hasManuallyScrolled: boolean; // bind
 
     tweenedProgress.subscribe(() => {
@@ -35,6 +36,7 @@
     <div
         class="tapes"
         class:dragging={dragging}
+        style="--subdivWidth: {subdivWidth}px"
         bind:this={tapes}
         on:scroll={() => {
             // update progress if it is not updating scroll
@@ -85,7 +87,7 @@
                     class="subdiv"
                     class:active={i === currentSubdiv}>
                     {#each subdiv as note}
-                        <p>{note}</p>
+                        <p>{charOf[note]}</p>
                     {/each}
                 </div>
             {/each}
@@ -167,7 +169,7 @@
 
     .tracks {
         display: grid;
-        grid-template-columns: repeat(var(--melodyLength), 50px);
+        grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
         background-color: var(--clr-100);
 
         // prevent text highlighting on drag
@@ -186,6 +188,7 @@
 
             p {
                 color: var(--clr-0);
+                text-align: center;
 
                 background-color: var(--clr-800);
                 padding: 3px;

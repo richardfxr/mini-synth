@@ -12,7 +12,7 @@
     import Keyboard from '$lib/keyboard.svelte';
 
     /* === CONSTANTS ========================== */
-    const subdivWidth = 50;
+    const subdivWidth = 28;
     const charOf: { [key: Tone.Unit.Frequency]: String } = {
         C3: "A",
         Db3: "B",
@@ -238,6 +238,7 @@
     {subdivWidth}
     bind:currentSubdiv = {currentSubdiv}
     {melody}
+    {charOf}
     bind:hasManuallyScrolled = {hasManuallyScrolled}
     on:pause = {() => Tone.Transport.pause()} />
 
