@@ -88,7 +88,9 @@
                     class="subdiv"
                     class:active={i === currentSubdiv}>
                     {#each subdiv as note}
-                        <p>{notes.indexOf(note) + 1}</p>
+                        <p class="note-{notes.indexOf(note) % 12}">
+                            {notes.indexOf(note) + 1}
+                        </p>
                     {/each}
                 </div>
             {/each}
@@ -171,7 +173,7 @@
     .track {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
-        background-color: var(--clr-100);
+        background-color: var(--clr-0);
 
         // prevent text highlighting on drag
         -webkit-user-select:none;
@@ -190,16 +192,21 @@
             overflow: hidden;
 
             &.active {
-                background-color: var(--clr-150);
+                background-color: var(--clr-100);
             }
 
             p {
-                color: var(--clr-0);
+                color: var(--clr-1000);
                 text-align: center;
 
-                background-color: var(--clr-800);
                 padding: 3px;
-                border-radius: 2px;
+                border-radius: var(--borderRadius-sm);
+
+                @for $i from 0 through 11 {
+                    &.note-#{$i} {
+                        background-color: var(--clr-note-#{$i});
+                    }
+                }
             }
         }
     }

@@ -81,9 +81,9 @@
     bind:this={keyboard}>
     {#each notesOfSegment as segment, i}
         <ol id={"segment-" + i} class="segment">
-            {#each segment as note}
+            {#each segment as note, j}
                 <li
-                    class="note"
+                    class="note note-{j % 12}"
                     class:flat={note.toString().charAt(1) === "b"}
                     class:active={melody[currentSubdiv].includes(note)}>
                     <button
@@ -106,6 +106,7 @@
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
         --_border-radius: 7px;
         --_whiteNotes: 7;
+        --_label-width: 3ch;
 
         flex-grow: 1;
         display: flex;
@@ -170,15 +171,21 @@
                         background-color 0.1s ease;
 
             span {
-                font-size: 1.5rem;
+                width: var(--_label-width);
+
+                color: var(--clr-1000);
+                font-size: 1.3rem;
                 font-weight: 600;
-                padding-bottom: 10px;
+
+                padding: 5px;
+                margin-bottom: 12px;
+                background-color: var(--_clr-note);
+                border-radius: var(--borderRadius-sm);
             }
         }
 
         &.active button {
-            color: var(--clr-700);
-            background-color: var(--clr-150);
+            background-color: var(--_clr-note);
         }
 
         &.flat {
@@ -201,8 +208,13 @@
             }
 
             &.active button {
-                color: var(--clr-150);
-                background-color: var(--clr-900);
+                background-color: var(--_clr-note);
+            }
+        }
+
+        @for $i from 0 through 11 {
+            &.note-#{$i} {
+                --_clr-note: var(--clr-note-#{$i});
             }
         }
     }
@@ -259,8 +271,8 @@
                 border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
 
                 span {
-                    padding-right: 10px;
-                    padding-bottom: 0;
+                    margin-right: 10px;
+                    margin-bottom: 0;
                 }
             }
 
