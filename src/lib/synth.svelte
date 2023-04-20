@@ -160,6 +160,17 @@
 </script>
 
 
+
+<svelte:head>
+    <!--
+        disable zoom, this is an accessibility concern but multi-touch is
+        unusable without it
+    -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no">
+</svelte:head>
+
 <Reels
     {playbackState}
     {tweening}
