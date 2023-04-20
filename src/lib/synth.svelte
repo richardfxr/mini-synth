@@ -214,7 +214,8 @@
         {notes}
         {notesOfSegment}
         on:keyDown = {e => synth.triggerAttack(e.detail.note)}
-        on:keyUp = {e => synth.triggerRelease(e.detail.note)}/>
+        on:keyUp = {e => synth.triggerRelease(e.detail.note)}
+        on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
     </div>
 
 

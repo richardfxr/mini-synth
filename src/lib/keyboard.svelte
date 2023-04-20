@@ -18,8 +18,13 @@
     let keyboard: HTMLElement;
     let isReady = false;
     let isPortrait = false;
+    let activeNotes: Tone.Unit.Frequency[] = [];
+    let hasPlayedNote = false;
+    let autoSkip = false;
 
     /* === REACTIVE DECLARATION =============== */
+    // call newSubdiv() when currentSubdiv changes
+    $: currentSubdiv ? newSubdiv() : newSubdiv();
     // call scrollToCurrentSegment() when currentKbSegment changes
     $: currentKbSegment ? scrollToCurrentSegment() : scrollToCurrentSegment();
 
@@ -27,6 +32,26 @@
     function checkOrientation(): void {
         isPortrait = window.matchMedia("(orientation: portrait)").matches;
         scrollToCurrentSegment();
+    }
+
+    function newSubdiv(): void {
+        // release all notes and reset activeNotes
+        activeNotes.forEach(note => handleKeyUp(note));
+        activeNotes = [];
+        hasPlayedNote = false;
+        console.log("new subdiv: " + currentSubdiv);
+
+        if (
+            melody[currentSubdiv].length === 0 &&
+            currentSubdiv + 1 < melody.length &&
+            melody[currentSubdiv + 1 ].length === 0) {
+            // enable autoSkip if currentSubdiv started empty and next subdiv is also empty
+            autoSkip = true;
+            console.log("autoSkip: true");
+        } else {
+            autoSkip = false;
+            console.log("autoSkip: false");
+        }
     }
 
     function scrollToCurrentSegment(): void {
@@ -55,6 +80,8 @@
             melody[currentSubdiv] = melody[currentSubdiv].filter(e => e !== note);
         } else {
             dispatch('keyDown', { note });
+            activeNotes.push(note);
+            hasPlayedNote = true;
             // add note to melody (not using push() to force Svelte to update)
             melody[currentSubdiv] = [...melody[currentSubdiv], note];
         }
@@ -62,11 +89,21 @@
 
     function handleKeyUp(note: Tone.Unit.Frequency): void {
         dispatch('keyUp', { note });
+        const index = activeNotes.indexOf(note);
+        if (index > -1) {
+            activeNotes.splice(index, 1);
+        }
+
+        if (activeNotes.length === 0 && autoSkip && hasPlayedNote) {
+            // skip to next subdiv if autoSkip and all notes have been released
+            dispatch('nextSubDiv');
+        }
     }
 
     /* === LIFECYCLES ========================= */
     onMount(() => {
         checkOrientation();
+        newSubdiv();
         isReady = true;
     });
 </script>
