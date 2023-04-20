@@ -83,6 +83,7 @@
             id="melody"
             class="track"
             style="--melodyLength: {melody.length}">
+            <div class="trackMarker">⇥</div>
             {#each melody as subdiv, i}
                 <div
                     class="subdiv"
@@ -94,6 +95,7 @@
                     {/each}
                 </div>
             {/each}
+            <div class="trackMarker">⇤</div>
         </div>
         <div class="trackPadding"></div>
     </div>
@@ -103,11 +105,17 @@
 
 <style lang="scss">
     .reels {
+        // internal variables
+        --_clr-scrollbar: var(--clr-100);
+        --_clr-thumb: var(--clr-500);
+        --_trackMarker-width: 25px;
+
         position: sticky;
         top: 0;
         z-index: 1000;
 
         background-color: var(--clr-0);
+        border-bottom: solid var(--border-width) var(--clr-0);
         
         &::before {
             // playhead
@@ -124,17 +132,11 @@
     }
 
     .tapes {
-        // internal variables
-        --_clr-scrollbar: var(--clr-100);
-        --_clr-thumb: var(--clr-500);
-
         display: flex;
         flex-flow: row nowrap;
         position: relative;
         overflow-x: auto;
         overflow-y: hidden;
-
-        padding: 10px 0;
 
         cursor: grab;
 
@@ -168,12 +170,18 @@
     .trackPadding {
         width: 50%;
         flex-shrink: 0;
+        background-color: var(--clr-100);
     }
 
     .track {
         display: grid;
-        grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
+        grid-template-columns: var(--_trackMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackMarker-width);
         background-color: var(--clr-0);
+        position: relative;
+        z-index: 2;
+
+        // offset trackMarker at each end
+        margin: 0 calc(-1 * var(--_trackMarker-width));
 
         // prevent text highlighting on drag
         -webkit-user-select:none;
@@ -183,13 +191,27 @@
             height: var(--melody-height);
         }
 
+        .trackMarker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: var(--clr-0);
+            background-color: var(--clr-800);
+        }
+
         .subdiv {
             display: flex;
             flex-direction: column;
             gap: 1px;
-            padding: 10px 0.5px;
+            position: relative;
 
-            overflow: hidden;
+            padding: 10px 0;
+            border-right: dashed calc(0.5 * var(--border-width)) var(--clr-100);
+            border-left: dashed calc(0.5 * var(--border-width)) var(--clr-100);
+
+            overflow-x: visible;
+            overflow-y: hidden;
 
             &.active {
                 background-color: var(--clr-100);
