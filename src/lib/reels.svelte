@@ -32,7 +32,9 @@
 
 
 
-<div class="reels">
+<div
+    class="reels"
+    style="--melodyLength: {melody.length}">
     <div
         class="tapes"
         class:dragging={dragging}
@@ -78,25 +80,40 @@
                 dragging = false;
             }
         }}>
+
         <div class="trackPadding"></div>
-        <div
-            id="melody"
-            class="track"
-            style="--melodyLength: {melody.length}">
-            <div class="trackMarker">⇥</div>
-            {#each melody as subdiv, i}
-                <div
-                    class="subdiv"
-                    class:active={i === currentSubdiv}>
-                    {#each subdiv as note}
-                        <p class="note-{notes.indexOf(note) % 12}">
-                            {notes.indexOf(note) + 1}
-                        </p>
-                    {/each}
+
+        <div class="tracks">
+            <div class="trackMarkers">
+                {#each melody as _}
+                    <div class="subdiv"></div>
+                {/each}
+            </div>
+            <div
+                id="melody"
+                class="track">
+                <div class="trackTerminal">⇥</div>
+                <div class="noteMarkers">
+                    <div class="noteMarker"></div>
+                    <div class="noteMarker"></div>
+                    <div class="noteMarker"></div>
+                    <div class="noteMarker"></div>
                 </div>
-            {/each}
-            <div class="trackMarker">⇤</div>
+                {#each melody as subdiv, i}
+                    <div
+                        class="subdiv"
+                        class:active={i === currentSubdiv}>
+                        {#each subdiv as note}
+                            <p class="note-{notes.indexOf(note) % 12}">
+                                <span>{notes.indexOf(note) + 1}</span>
+                            </p>
+                        {/each}
+                    </div>
+                {/each}
+                <div class="trackTerminal">⇤</div>
+            </div>
         </div>
+        
         <div class="trackPadding"></div>
     </div>
 </div>
@@ -106,28 +123,50 @@
 <style lang="scss">
     .reels {
         // internal variables
-        --_clr-scrollbar: var(--clr-100);
+        --_clr-scrollbar: var(--clr-0);
         --_clr-thumb: var(--clr-500);
-        --_trackMarker-width: 25px;
+        --_trackTerminal-width: 25px;
+        --_noteMarker-width: 8px;
+        --_note-height: 22px;
 
         position: sticky;
-        top: 0;
+        top: calc(-1 * (var(--reels-pad-top) + var(--trackMarker-height)) + var(--border-width-thick));
         z-index: 1000;
 
-        background-color: var(--clr-0);
-        border-bottom: solid var(--border-width) var(--clr-0);
-        
-        &::before {
+        background-color: var(--clr-100);
+        border-bottom: solid var(--border-width-thick) var(--clr-100);
+
+        &::before, &::after {
             // playhead
             content: "";
             pointer-events: none;
             position: absolute;
-            top: 0;
-            bottom: -5px;
-            left: calc(50% - 0.5px);
-            width: 2px;
-            z-index: 1000;
             background-color: red;
+        }
+
+        &::before {
+            // playhead circle
+            --_size: 10px;
+
+            top: calc(var(--reels-pad-top) + 0.5 * var(--trackMarker-height) - 0.5 * var(--_size));
+            left: calc(50% - 0.5 * var(--_size));
+            width: var(--_size);
+            height: var(--_size);
+            z-index: 1001;
+
+            border-radius: var(--borderRadius-round);
+        }
+        
+        &::after {
+            // playhead bar
+            top: calc(var(--reels-pad-top) + 0.5 * var(--trackMarker-height));
+            bottom: -8px;
+            left: calc(50% - 0.5 * var(--border-width-thick) - var(--border-width-thin));
+            width: calc(var(--border-width-thick) + 2 * var(--border-width-thin));
+            z-index: 1000;
+            
+            border: solid var(--border-width-thin) var(--clr-0);
+            box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
         }
     }
 
@@ -135,10 +174,11 @@
         display: flex;
         flex-flow: row nowrap;
         position: relative;
-        overflow-x: auto;
-        overflow-y: hidden;
 
         cursor: grab;
+
+        padding: var(--reels-pad-top) 0 var(--border-width-thick) 0;
+        overflow-x: auto;
 
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
@@ -170,18 +210,52 @@
     .trackPadding {
         width: 50%;
         flex-shrink: 0;
-        background-color: var(--clr-100);
+    }
+
+    .trackMarkers {
+        display: grid;
+        grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
+        height: var(--trackMarker-height);
+
+        padding: var(--pad-sm) 0;
+
+        .subdiv {
+            position: relative;
+            height: 100%;
+
+            &:first-child::before,
+            &:nth-child(4n)::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+
+                width: var(--border-width);
+                background-color: var(--clr-250);
+            }
+
+            &:first-child::before {
+                left: calc(-0.5 * var(--border-width));
+            }
+
+            &:nth-child(4n)::before {
+                right: calc(-0.5 * var(--border-width));
+            }
+        }
     }
 
     .track {
         display: grid;
-        grid-template-columns: var(--_trackMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackMarker-width);
-        background-color: var(--clr-0);
+        grid-template-columns: var(--_trackTerminal-width) var(--_noteMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackTerminal-width);
+        background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
-        // offset trackMarker at each end
-        margin: 0 calc(-1 * var(--_trackMarker-width));
+        border-top: solid var(--border-width) var(--clr-800);
+        border-bottom: solid var(--border-width) var(--clr-800);
+        // offset trackTerminal at each end
+        margin-right: calc(-1 * var(--_trackTerminal-width));
+        margin-left: calc(-1 * (var(--_trackTerminal-width) + var(--_noteMarker-width)));
 
         // prevent text highlighting on drag
         -webkit-user-select:none;
@@ -191,7 +265,7 @@
             height: var(--melody-height);
         }
 
-        .trackMarker {
+        .trackTerminal {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -200,29 +274,50 @@
             background-color: var(--clr-800);
         }
 
+        .noteMarkers {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--border-width);
+
+            padding: var(--border-width-thick) 0;
+            border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+            overflow: hidden;
+
+            .noteMarker {
+                flex-shrink: 0;
+                width: var(--border-width);
+                height: var(--_note-height);
+                
+                background-color: var(--clr-350);
+            }
+        }
+
         .subdiv {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: var(--border-width);
             position: relative;
 
-            padding: 10px 0;
-            border-right: dashed calc(0.5 * var(--border-width)) var(--clr-100);
-            border-left: dashed calc(0.5 * var(--border-width)) var(--clr-100);
+            padding: var(--border-width-thick) 0;
+            border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+            border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
 
             overflow-x: visible;
             overflow-y: hidden;
 
             &.active {
-                background-color: var(--clr-100);
+                background-color: var(--clr-0);
             }
 
             p {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: var(--_note-height);
+
                 color: var(--clr-1000);
                 text-align: center;
-
-                padding: 3px;
-                border-radius: var(--borderRadius-sm);
 
                 @for $i from 0 through 11 {
                     &.note-#{$i} {

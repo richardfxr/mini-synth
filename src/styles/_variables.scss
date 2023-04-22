@@ -12,14 +12,22 @@ $breakpoint-tablet: 700px;
 
 :root {
    /* === CSS VARIABLES ====================== */
-   --melody-height: 88px;
+   --reels-pad-top: 4px;
+   --trackMarker-height: 25px;
+   --melody-height: 80px;
    --reels-height: 110px;
    --inputs-maxWidth: 1000px;
    --inputs-height: calc(100vh - 50px);
    --inputs-maxHeight: 400px;
 
-   --border-width: 2px;
+   --pad-md: 6px;
+   --pad-sm: 4px;
+
+   --border-width-thick: 2px;
+   --border-width: 1.5px;
+   --border-width-thin: 1px;
    --borderRadius-sm: 3px;
+   --borderRadius-round: 9e5px;
 
    /* === COLORS ============================= */
 

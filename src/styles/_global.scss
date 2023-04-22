@@ -16,3 +16,9 @@ GLOBAL
     font-weight: 500;
     line-height: 1em;
 }
+
+:global {
+    html, body {
+        background-color: var(--clr-100);
+    }
+}
