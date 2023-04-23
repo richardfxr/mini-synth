@@ -212,6 +212,10 @@
         flex-shrink: 0;
     }
 
+    .tracks {
+        animation: tracksLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+    }
+
     .trackMarkers {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
@@ -326,6 +330,18 @@
                     }
                 }
             }
+        }
+    }
+
+    /* === ANIMATIONS ========================= */
+    @keyframes tracksLoad {
+        from {
+            transform: translateX(100px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
     }
 </style>
