@@ -185,6 +185,8 @@
 <Controls
     {playbackState}
     {currentSubdiv}
+    {tweenedProgress}
+    {playbackProgress}
     melodyLength = {melody.length}
     on:skipToBeginning = {async () => await skipTo(0)}
     on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
