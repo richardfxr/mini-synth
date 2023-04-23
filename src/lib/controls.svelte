@@ -236,6 +236,8 @@
 
         button {
             &.skip {
+                --_clr-border: var(--clr-250);
+                
                 scale: 1.21;
 
                 &::before {
