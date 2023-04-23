@@ -12,6 +12,7 @@
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
     export let notes: Tone.Unit.Frequency[];
+    export let beats: string[][];
     export let hasManuallyScrolled: boolean; // bind
 
     tweenedProgress.subscribe(() => {
@@ -84,11 +85,14 @@
         <div class="trackPadding"></div>
 
         <div class="tracks">
+            <!-- track marks above tracks -->
             <div class="trackMarkers">
                 {#each melody as _}
                     <div class="subdiv"></div>
                 {/each}
             </div>
+
+            <!-- melody track -->
             <div
                 id="melody"
                 class="track">
@@ -106,6 +110,30 @@
                         {#each subdiv as note}
                             <p class="note-{notes.indexOf(note) % 12}">
                                 <span>{notes.indexOf(note) + 1}</span>
+                            </p>
+                        {/each}
+                    </div>
+                {/each}
+                <div class="trackTerminal">⇤</div>
+            </div>
+
+            <!-- beats track -->
+            <div
+                id="beats"
+                class="track">
+                <div class="trackTerminal">⇥</div>
+                <div class="noteMarkers">
+                    <div class="noteMarker"></div>
+                    <div class="noteMarker"></div>
+                    <div class="noteMarker"></div>
+                </div>
+                {#each beats as subdiv, i}
+                    <div
+                        class="subdiv"
+                        class:active={i === currentSubdiv}>
+                        {#each subdiv as beat}
+                            <p class="beat-{beat}">
+                                <span>{beat}</span>
                             </p>
                         {/each}
                     </div>
@@ -255,7 +283,6 @@
         position: relative;
         z-index: 2;
 
-        border-top: solid var(--border-width) var(--clr-800);
         border-bottom: solid var(--border-width) var(--clr-800);
         // offset trackTerminal at each end
         margin-right: calc(-1 * var(--_trackTerminal-width));
@@ -267,6 +294,11 @@
 
         &#melody {
             height: var(--melody-height);
+            border-top: solid var(--border-width) var(--clr-800);
+        }
+
+        &#beats {
+            height: var(--beats-height);
         }
 
         .trackTerminal {
@@ -324,9 +356,17 @@
                 color: var(--clr-1000);
                 text-align: center;
 
+                // note colors
                 @for $i from 0 through 11 {
                     &.note-#{$i} {
                         background-color: var(--clr-note-#{$i});
+                    }
+                }
+
+                // beat colors
+                @each $beat, $index in $beats {
+                    &.beat-#{$beat} {
+                        background-color: var(--clr-note-#{$index});
                     }
                 }
             }

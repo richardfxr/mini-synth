@@ -13,6 +13,7 @@
 
     /* === PROPS ============================== */
     export let melody: Tone.Unit.Frequency[][] = Array(24).fill([]);
+    export let beats: string[][] = Array(24).fill([]);
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 35;
@@ -41,10 +42,13 @@
     let playbackProgress: number = 0;
 
     let synth: Tone.PolySynth;
+    let players: Tone.Players;
+    let playersVol: Tone.Volume;
     let bpm: Tone.Unit.BPM = 80;
-    let now: number;
     let melodyPart: Tone.Part;
-    let notesToPlay: {time: Tone.Unit.Time, note: Tone.Unit.Frequency[], index: number}[] = [];
+    let notesToPlay: { time: Tone.Unit.Time, note: Tone.Unit.Frequency[], index: number }[] = [];
+    let beatsPart: Tone.Part;
+    let beatsToPlay: { time: Tone.Unit.Time, samples: string[] }[] = [];
     let tapesFrame: number;
 
     let currentSubdiv: number = 0;
@@ -71,10 +75,20 @@
                 note: subdiv,
                 index
             };
-        });      
+        });
 
-        // dispose of part if it already exists
+        // initialize/update beatsToPlay
+        beats.forEach((subdiv, index) =>{
+            const time = "0:0:" + index;
+            beatsToPlay[index] = {
+                time,
+                samples: subdiv
+            };
+        });
+
+        // dispose of parts if they already exists
         if (melodyPart) melodyPart.dispose();
+        if (beatsPart) beatsPart.dispose();
 
         melodyPart = new Tone.Part(((time, details) => {
             currentSubdiv = details.index;
@@ -83,6 +97,12 @@
             // call readyReels() again on last note, this will create a new part with updated notesToPlay
             if (details.index === notesToPlay.length - 1) readyReels();
         }), notesToPlay).start(0);
+
+        beatsPart = new Tone.Part(((time, details) => {
+            details.samples.forEach(value => {
+                players.player(value).start(time);
+            });
+        }), beatsToPlay).start(0);
     }
 
     async function scrollTapes() {
@@ -135,15 +155,26 @@
 
     /* === LIFECYCLES ========================= */
     onMount(() => {
-        // set now
-        now = Tone.now();
-
         // initialize synth
         synth = new Tone.PolySynth(Tone.Synth, {
 			oscillator: {
 				partials: [0, 2, 3, 4],
 			}
 		}).toDestination();
+
+        // initialize players
+        players = new Tone.Players({
+            urls: {
+                "hh": "/audio/CR78/hihat.wav",
+                "kc": "/audio/CR78/kick.wav",
+                "sn": "/audio/KPR77/snare.wav",
+                "t1": "/audio/CR78/tom1.wav",
+                "t2": "/audio/CR78/tom2.wav",
+                "t3": "/audio/CR78/tom3.wav",
+            },
+        });
+        playersVol = new Tone.Volume(-4.5).toDestination();
+        players.connect(playersVol);
 
         // set transporter properties
         Tone.Transport.bpm.value = bpm;
@@ -179,6 +210,7 @@
     bind:currentSubdiv = {currentSubdiv}
     {melody}
     {notes}
+    {beats}
     bind:hasManuallyScrolled = {hasManuallyScrolled}
     on:pause = {() => Tone.Transport.pause()} />
 
@@ -191,6 +223,7 @@
     on:skipToBeginning = {async () => await skipTo(0)}
     on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
     on:play = {async () => {
+        await Tone.loaded();
         await Tone.start();
         readyReels();
 

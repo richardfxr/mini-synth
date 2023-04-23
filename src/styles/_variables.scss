@@ -10,12 +10,23 @@
 // === BREAKPOINTS ============================
 $breakpoint-tablet: 700px;
 
+// beats color map
+$beats: (
+   "hh": "0",
+   "kc": "2",
+   "sn": "4",
+   "t1": "6",
+   "t2": "8",
+   "t3": "10",
+);
+
 :root {
    /* === CSS VARIABLES ====================== */
    --reels-pad-top: 4px;
    --trackMarker-height: 25px;
    --melody-height: 80px;
-   --reels-height: 110px;
+   --beats-height: 55px;
+   --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));
    --inputs-maxWidth: 1000px;
    --inputs-height: calc(100vh - 50px);
    --inputs-maxHeight: 400px;

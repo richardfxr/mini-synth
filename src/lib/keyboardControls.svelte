@@ -39,7 +39,7 @@
         flex-direction: column;
         gap: 10px;
         position: sticky;
-        top: calc(var(--reels-height) + 10px);
+        top: calc(var(--reels-height) + var(--border-width-thick));
     }
 
     button {
