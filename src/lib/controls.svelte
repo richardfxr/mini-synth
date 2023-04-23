@@ -128,14 +128,24 @@
         transition: border-color 0.2s ease;
 
         button {
+            // internal variables 
+            --_clr-background: var(--clr-100);
+            --_clr-border: var(--clr-250);
+            
             position: relative;
             height: var(--_button-size);
 
-            background-color: var(--clr-100);
+            background-color: var(--_clr-background);
             padding-top: 10px;
             padding-bottom: 10px;
-            border: solid var(--border-width) var(--clr-250);
+            border: solid var(--border-width) var(--_clr-border);
             border-radius: 200px;
+
+            transition: background-color 0.2s ease,
+                        border-color 0.2s ease,
+                        scale 0.2s ease,
+                        transform 0.2s ease,
+                        opacity 0.2s ease;
 
             &.main {
                 width: 90px;
@@ -153,10 +163,7 @@
                 z-index: 1;
 
                 border: none;
-                transition: scale 0.2s ease;
                 animation: skipLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
-                animation-delay: 0.02s;
-                animation-fill-mode: forwards;
 
                 &::before {
                     // spool
@@ -175,7 +182,7 @@
                 }
 
                 &::after {
-                    // fake background and border
+                    // fake background and border to go above spool (::before)
                     content: "";
                     position: absolute;
                     top: 0;
@@ -184,9 +191,12 @@
                     right: 0;
                     z-index: -1;
 
-                    background-color: var(--clr-100);
-                    border: solid var(--border-width) var(--clr-250);
+                    background-color: var(--_clr-background);
+                    border: solid var(--border-width) var(--_clr-border);
                     border-radius: var(--borderRadius-round);
+
+                    transition: background-color 0.2s ease,
+                                border-color 0.2s ease;
                 }
 
                 p {
@@ -200,9 +210,23 @@
 
             &.subdiv {
                 z-index: 2;
-                transition: transform 0.2s ease,
-                            opacity 0.2s ease;
-                animation: subdivLoad 0.2s ease-out 1;
+                animation: subdivLoad 0.2s cubic-bezier(0, .36, .34, 1) 1;
+            }
+
+            &:hover {
+                --_clr-border: var(--clr-350);
+            }
+
+            &:active {
+                --_clr-background: var(--clr-0);
+                --_clr-border: var(--clr-600);
+            }
+
+            &:disabled {
+                --_clr-background: var(--clr-100);
+                --_clr-border: var(--clr-150);
+
+                cursor: not-allowed;
             }
         }
     }
