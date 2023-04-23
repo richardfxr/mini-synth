@@ -28,8 +28,11 @@
 
     <div class="playback">
         <button
-            class="small sprocket"
-            style="--_spool-scale: {1.1 + playbackProgress * 1.4}"
+            class="small skip"
+            style="
+                --_dir: 1;
+                --_spool-scale: {1.1 + playbackProgress * 1.4};
+            "
             on:click = {() => dispatch('skipToBeginning')}
             disabled = {playbackState === "started" || currentSubdiv <= 0}>
             <p>⇤</p>
@@ -37,8 +40,8 @@
         </button>
 
         <button
-            id="prevSubdiv"
-            class="small"
+            class="small subdiv"
+            style="--_dir: 1"
             on:click = {() => dispatch('prevSubdiv')}
             disabled = {playbackState === "started" || currentSubdiv <= 0}>
             ←
@@ -55,16 +58,19 @@
         </button>
 
         <button
-            id="nextSubdiv"
-            class="small"
+            class="small subdiv"
+            style="--_dir: -1"
             on:click = {() => dispatch('nextSubdiv')}
             disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
             →
         </button>
 
         <button
-            class="small sprocket"
-            style="--_spool-scale: {2.5 - playbackProgress * 1.4}"
+            class="small skip"
+            style="
+                --_dir: -1;
+                --_spool-scale: {2.5 - playbackProgress * 1.4};
+            "
             on:click = {() => dispatch('skipToEnd')}
             disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
             <p>⇥</p>
@@ -85,7 +91,7 @@
 <style lang="scss">
     .controls {
         // internal variables
-        --_button-size: 38px;
+        --_button-size: 44px;
 
         display: flex;
         flex-direction: column;
@@ -115,11 +121,11 @@
         gap: 4px;
 
         padding: 6px;
-        border: solid var(--border-width) var(--clr-250);
+        border: solid var(--border-width) var(--clr-150);
         border-radius: var(--borderRadius-round);
 
         overflow: hidden;
-        transition: border-color 0.15s ease;
+        transition: border-color 0.2s ease;
 
         button {
             position: relative;
@@ -134,7 +140,7 @@
             &.main {
                 width: 90px;
                 color: red;
-                z-index: 2;
+                z-index: 3;
             }
 
             &.small {
@@ -143,10 +149,14 @@
                 padding-right: 10px;
             }
 
-            &.sprocket {
-                transition: scale 0.2s ease;
+            &.skip {
                 z-index: 1;
+
                 border: none;
+                transition: scale 0.2s ease;
+                animation: skipLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+                animation-delay: 0.02s;
+                animation-fill-mode: forwards;
 
                 &::before {
                     // spool
@@ -183,14 +193,16 @@
                     transition: opacity 0.25s ease;
                 }
 
-                :global(svg#sprocket) {
+                :global(svg.sprocket) {
                     opacity: 0;
                 }
             }
 
-            &#prevSubdiv, &#nextSubdiv {
+            &.subdiv {
+                z-index: 2;
                 transition: transform 0.2s ease,
                             opacity 0.2s ease;
+                animation: subdivLoad 0.2s ease-out 1;
             }
         }
     }
@@ -199,8 +211,8 @@
         border-color: var(--clr-800);
 
         button {
-            &.sprocket {
-                scale: 1.22;
+            &.skip {
+                scale: 1.21;
 
                 &::before {
                     scale: var(--_spool-scale);
@@ -210,19 +222,14 @@
                     opacity: 0;
                 }
 
-                :global(svg#sprocket) {
+                :global(svg.sprocket) {
                     opacity: 1;
                     transform: rotate(var(--_sprocket-rotation));
                 }
             }
 
-            &#prevSubdiv {
-                transform: translateX(10px);
-                opacity: 0;
-            }
-
-            &#nextSubdiv {
-                transform: translateX(-10px);
+            &.subdiv {
+                transform: translateX(calc(var(--_dir) * 10px));
                 opacity: 0;
             }
         }
@@ -240,12 +247,35 @@
         & > div {
             width: 13px;
             height: var(--border-width);
-            background-color: var(--clr-250);
+            background-color: var(--clr-150);
             transition: background-color 0.15s ease;
 
             &.active {
                 background-color: var(--clr-800);
             }
+        }
+    }
+
+    /* === ANIMATIONS ========================= */
+    @keyframes skipLoad {
+        from {
+            transform: translateX(calc(var(--_dir) * 50px));
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes subdivLoad {
+        from {
+            transform: translateX(calc(var(--_dir) * 20px));
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
     }
 </style>
