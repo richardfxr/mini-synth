@@ -83,28 +83,27 @@
     .tape {
         // internal variables
         --_clr-border: var(--clr-350);
-        --_tapeTerminal-start-width: 25px;
-        --_tapeTerminal-end-width: 20px;
         --_noteMarker-width: 8px;
         --_note-height: 22px;
         --_repeatDots-size: 5px;
 
         display: grid;
         grid-template-columns:
-            var(--_tapeTerminal-start-width)
+            var(--tapeTerminal-start-width)
             var(--_noteMarker-width)
             repeat(var(--melodyLength), var(--subdivWidth))
-            var(--_tapeTerminal-end-width);
+            var(--tapeTerminal-end-width);
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
         border-bottom: solid var(--border-width) var(--_clr-border);
         // offset tapeTerminal at each end
-        margin-right: calc(-1 * var(--_tapeTerminal-end-width));
-        margin-left: calc(-1 * (var(--_tapeTerminal-start-width) + var(--_noteMarker-width)));
+        margin-right: calc(-1 * var(--tapeTerminal-end-width));
+        margin-left: calc(-1 * (var(--tapeTerminal-start-width) + var(--_noteMarker-width)));
 
-        transition: border-color var(--trans-fast) ease;
+        transition: border-color var(--trans-fast) ease,
+                    width 2s ease-in-out;
 
         // prevent text highlighting on drag
         -webkit-user-select:none;

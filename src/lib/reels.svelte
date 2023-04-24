@@ -112,7 +112,21 @@
 
         </div>
         
-        <div class="tapePadding"></div>
+        <div class="tapePadding end">
+            <button
+                class="add"
+                on:click={() => dispatch('addQuarter')}>
+                <span class="visuallyHidden">add 4 sixteenth notes</span>
+                +
+            </button>
+            <button
+                class="remove"
+                disabled={melody.length <= 4}
+                on:click={() => dispatch('removeQuarter')}>
+                <span class="visuallyHidden">remove 4 sixteenth notes</span>
+                -
+            </button>
+        </div>
     </div>
 </div>
 
@@ -205,6 +219,67 @@
     .tapePadding {
         width: 50%;
         flex-shrink: 0;
+
+        &.end {
+            // internal variables
+            --_width: 44px;
+            --_height: 60px;
+
+            // add and remove buttons at the end of the tapes
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: var(--pad-sm);
+
+            padding-top: var(--tapeMarker-height);
+            // prevent buttons from being blocked by tape terminals
+            padding-left: calc(var(--tapeTerminal-end-width) + var(--pad-md));
+
+            button {
+                position: relative;
+                width: var(--_width);
+                height: var(--_height);
+
+                background-color: var(--clr-100);
+                border: solid var(--border-width) var(--clr-250);
+
+                transition: background-color var(--trans-normal) ease,
+                            border-color var(--trans-normal) ease;
+
+                &.add {
+                    border-radius: 
+                        calc(0.5 * var(--_width))
+                        calc(0.5 * var(--_width))
+                        var(--borderRadius-sm)
+                        var(--borderRadius-sm);
+                }
+
+                &.remove {
+                    border-radius: 
+                        var(--borderRadius-sm)
+                        var(--borderRadius-sm)
+                        calc(0.5 * var(--_width))
+                        calc(0.5 * var(--_width));
+                }
+
+                &:hover {
+                    border-color: var(--clr-350);
+                }
+
+                &:active {
+                    background-color: var(--clr-0);
+                    border-color: var(--clr-600);
+                }
+
+                &:disabled {
+                    background-color: var(--clr-100);
+                    border-color: var(--clr-150);
+
+                    cursor: not-allowed;
+                }
+            }
+        }
     }
 
     .tapes {

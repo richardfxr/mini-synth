@@ -170,6 +170,38 @@
         tweening = false;
     }
 
+    async function addSubdiv(length: number): Promise<void> {
+        if (length <= 0) return;
+
+        const subDivToSkipTo = melody.length;
+        const subDivsToAdd = Array(length).fill([]);
+
+        // add subdivs to melody and beats
+        // (not using push() to force Svelte to update)
+        melody = [...melody, ...subDivsToAdd];
+        beats = [...beats, ...subDivsToAdd];
+
+        // skip to first added subDiv
+        await skipTo(subDivToSkipTo);
+    }
+
+    async function removeSubdiv(length: number): Promise<void> {
+        if (
+            length <= 0 ||
+            melody.length - length < 1
+        ) return;
+
+        // skip to last subDiv (after removal)
+        await skipTo(melody.length - 1 - length);
+
+        // add subdivs to melody and beats
+        // (reassigns each array to force Svelte to update)
+        melody.splice(-1 * length)
+        melody = melody;
+        beats.splice(-1 * length)
+        beats = beats;
+    }
+
     /* === LIFECYCLES ========================= */
     onMount(() => {
         // initialize synth
@@ -221,7 +253,9 @@
     {notes}
     {beats}
     bind:hasManuallyScrolled = {hasManuallyScrolled}
-    on:pause = {() => Tone.Transport.pause()} />
+    on:pause = {() => Tone.Transport.pause()}
+    on:addQuarter = {async () => await addSubdiv(4)}
+    on:removeQuarter = {async () => await removeSubdiv(4)} />
 
 <Controls
     {playbackState}
