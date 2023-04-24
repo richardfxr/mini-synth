@@ -102,9 +102,9 @@
 
     /* === LIFECYCLES ========================= */
     onMount(() => {
+        isReady = true;
         checkOrientation();
         newSubdiv();
-        isReady = true;
     });
 </script>
 
