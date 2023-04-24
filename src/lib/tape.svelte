@@ -1,36 +1,38 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import type * as Tone from 'tone';
-    import type { TrackName, Track } from '$lib/synth.svelte';
+    import type { TapeName, Tape } from '$lib/synth.svelte';
 
     /* === PROPS ============================== */
-    export let trackName: TrackName;
-    export let track: Track;
+    export let tapeName: TapeName;
+    export let tape: Tape;
     export let notes: Tone.Unit.Frequency[] = [];
     export let currentSubdiv: number;
-    export let currentTrack: TrackName; // bind
+    export let currentTape: TapeName; // bind
+    export let dragging: boolean;
 </script>
 
 
 
 <article
-    id={trackName}
-    class="track"
-    class:active={currentTrack === trackName}>
+    id={tapeName}
+    class="tape"
+    class:active={currentTape === tapeName}
+    class:dragging>
 
-    <!-- invisible radio input that covers the whole track -->
+    <!-- invisible radio input that covers the whole tape -->
     <label>
         <input
             class="visuallyHidden"
             type="radio"
-            bind:group={currentTrack}
-            name="track"
-            value={trackName}>
-        <span class="visuallyHidden">Melody track</span>
+            bind:group={currentTape}
+            name="tape"
+            value={tapeName}>
+        <span class="visuallyHidden">Melody tape</span>
     </label>
 
-    <!-- start track terminal -->
-    <div class="trackTerminal start">⇥</div>
+    <!-- start tape terminal -->
+    <div class="tapeTerminal start">⇥</div>
 
     <!-- vertical note markers -->
     <div class="noteMarkers">
@@ -40,9 +42,9 @@
         <div class="noteMarker"></div>
     </div>
 
-    {#if trackName === "melody"}
+    {#if tapeName === "melody"}
         <!-- melody subdivs -->
-        {#each track as subdiv, i}
+        {#each tape as subdiv, i}
             <div
                 class="subdiv"
                 class:active={i === currentSubdiv}>
@@ -55,7 +57,7 @@
         {/each}
     {:else}
         <!-- beats subdivs -->
-        {#each track as subdiv, i}
+        {#each tape as subdiv, i}
             <div
                 class="subdiv"
                 class:active={i === currentSubdiv}>
@@ -68,8 +70,8 @@
         {/each}
     {/if}
 
-    <!-- end track terminal -->
-    <div class="trackTerminal end">
+    <!-- end tape terminal -->
+    <div class="tapeTerminal end">
         <div class="repeatDots"></div>
         <div class="repeatLine"></div>
     </div>
@@ -78,29 +80,29 @@
 
 
 <style lang="scss">
-    .track {
+    .tape {
         // internal variables
         --_clr-border: var(--clr-350);
-        --_trackTerminal-start-width: 25px;
-        --_trackTerminal-end-width: 20px;
+        --_tapeTerminal-start-width: 25px;
+        --_tapeTerminal-end-width: 20px;
         --_noteMarker-width: 8px;
         --_note-height: 22px;
         --_repeatDots-size: 5px;
 
         display: grid;
         grid-template-columns:
-            var(--_trackTerminal-start-width)
+            var(--_tapeTerminal-start-width)
             var(--_noteMarker-width)
             repeat(var(--melodyLength), var(--subdivWidth))
-            var(--_trackTerminal-end-width);
+            var(--_tapeTerminal-end-width);
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
         border-bottom: solid var(--border-width) var(--_clr-border);
-        // offset trackTerminal at each end
-        margin-right: calc(-1 * var(--_trackTerminal-end-width));
-        margin-left: calc(-1 * (var(--_trackTerminal-start-width) + var(--_noteMarker-width)));
+        // offset tapeTerminal at each end
+        margin-right: calc(-1 * var(--_tapeTerminal-end-width));
+        margin-left: calc(-1 * (var(--_tapeTerminal-start-width) + var(--_noteMarker-width)));
 
         transition: border-color var(--trans-fast) ease;
 
@@ -137,6 +139,10 @@
                 }
             }
         }
+
+        &.dragging label {
+            cursor: grabbing;
+        }
     }
 
     label {
@@ -150,12 +156,12 @@
         cursor: grab;
 
         input {
-            // prevent track scroll on radio input
+            // prevent tape scroll on radio input
             visibility: hidden;
         }
     }
 
-    .trackTerminal {
+    .tapeTerminal {
         display: flex;
         align-items: center;
         justify-content: center;

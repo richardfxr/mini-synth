@@ -3,15 +3,15 @@
     import { createEventDispatcher } from 'svelte';
     import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
-    import type { TrackName } from '$lib/synth.svelte';
-    import Track from '$lib/track.svelte';
+    import type { TapeName } from '$lib/synth.svelte';
+    import Tape from '$lib/tape.svelte';
 
     /* === PROPS ============================== */
     export let playbackState: Tone.PlaybackState;
     export let tweening: boolean;
     export let tweenedProgress: Tweened<number>;
     export let subdivWidth: number;
-    export let currentTrack: TrackName; // bind
+    export let currentTape: TapeName; // bind
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
     export let notes: Tone.Unit.Frequency[];
@@ -40,7 +40,7 @@
     class="reels"
     style="--melodyLength: {melody.length}">
     <div
-        class="tapes"
+        class="spools"
         class:dragging={dragging}
         style="--subdivWidth: {subdivWidth}px"
         bind:this={tapes}
@@ -85,32 +85,34 @@
             }
         }}>
 
-        <div class="trackPadding"></div>
+        <div class="tapePadding"></div>
 
-        <div class="tracks">
-            <!-- track marks above tracks -->
-            <div class="trackMarkers">
+        <div class="tapes">
+            <!-- tape marks above tapes -->
+            <div class="tapeMarkers">
                 {#each melody as _}
                     <div class="subdiv"></div>
                 {/each}
             </div>
 
-            <Track
-                trackName = "melody"
-                track = {melody}
+            <Tape
+                tapeName = "melody"
+                tape = {melody}
                 {notes}
                 {currentSubdiv}
-                bind:currentTrack = {currentTrack} />
+                bind:currentTape = {currentTape}
+                {dragging} />
 
-            <Track
-                trackName = "beats"
-                track = {beats}
+            <Tape
+                tapeName = "beats"
+                tape = {beats}
                 {currentSubdiv}
-                bind:currentTrack = {currentTrack} />
+                bind:currentTape = {currentTape}
+                {dragging} />
 
         </div>
         
-        <div class="trackPadding"></div>
+        <div class="tapePadding"></div>
     </div>
 </div>
 
@@ -123,7 +125,7 @@
         --_clr-thumb: var(--clr-500);
 
         position: sticky;
-        top: calc(-1 * (var(--reels-pad-top) + var(--trackMarker-height)) + var(--border-width-thick));
+        top: calc(-1 * (var(--reels-pad-top) + var(--tapeMarker-height)) + var(--border-width-thick));
         z-index: 1000;
 
         background-color: var(--clr-100);
@@ -141,7 +143,7 @@
             // playhead circle
             --_size: 10px;
 
-            top: calc(var(--reels-pad-top) + 0.5 * var(--trackMarker-height) - 0.5 * var(--_size));
+            top: calc(var(--reels-pad-top) + 0.5 * var(--tapeMarker-height) - 0.5 * var(--_size));
             left: calc(50% - 0.5 * var(--_size));
             width: var(--_size);
             height: var(--_size);
@@ -152,7 +154,7 @@
         
         &::after {
             // playhead bar
-            top: calc(var(--reels-pad-top) + 0.5 * var(--trackMarker-height));
+            top: calc(var(--reels-pad-top) + 0.5 * var(--tapeMarker-height));
             bottom: -8px;
             left: calc(50% - 0.5 * var(--border-width-thick) - var(--border-width-thin));
             width: calc(var(--border-width-thick) + 2 * var(--border-width-thin));
@@ -163,7 +165,7 @@
         }
     }
 
-    .tapes {
+    .spools {
         display: flex;
         flex-flow: row nowrap;
         position: relative;
@@ -176,7 +178,7 @@
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
 
-        &.dragging, &.dragging .track label {
+        &.dragging {
             cursor: grabbing;
         }
 
@@ -200,19 +202,19 @@
         }
     }
 
-    .trackPadding {
+    .tapePadding {
         width: 50%;
         flex-shrink: 0;
     }
 
-    .tracks {
-        animation: tracksLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+    .tapes {
+        animation: tapesLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
     }
 
-    .trackMarkers {
+    .tapeMarkers {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
-        height: var(--trackMarker-height);
+        height: var(--tapeMarker-height);
 
         padding: var(--pad-sm) 0;
 
@@ -242,7 +244,7 @@
     }
 
     /* === ANIMATIONS ========================= */
-    @keyframes tracksLoad {
+    @keyframes tapesLoad {
         from {
             transform: translateX(100px);
             opacity: 0;

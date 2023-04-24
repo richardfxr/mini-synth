@@ -23,7 +23,7 @@ $beats: (
 :root {
    /* === CSS VARIABLES ====================== */
    --reels-pad-top: 4px;
-   --trackMarker-height: 25px;
+   --tapeMarker-height: 25px;
    --melody-height: 80px;
    --beats-height: 55px;
    --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));

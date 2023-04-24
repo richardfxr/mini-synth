@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
     /* === TYPES ============================== */
-    export type TrackName = "melody" | "beats";
-    export type Track = Tone.Unit.Frequency[][] | string[][];
+    export type TapeName = "melody" | "beats";
+    export type Tape = Tone.Unit.Frequency[][] | string[][];
 </script>
 
 <script lang="ts">
@@ -67,7 +67,7 @@
     let beatsToPlay: { time: Tone.Unit.Time, samples: string[] }[] = [];
     let tapesFrame: number;
 
-    let currentTrack: "melody" | "beats" = "melody";
+    let currentTape: TapeName = "melody";
     let currentSubdiv: number = 0;
     let currentKbSegment: 0 | 1 | 2 = 0;
     let hasManuallyScrolled = false;
@@ -215,7 +215,7 @@
     {tweening}
     {tweenedProgress}
     {subdivWidth}
-    bind:currentTrack = {currentTrack}
+    bind:currentTape = {currentTape}
     bind:currentSubdiv = {currentSubdiv}
     {melody}
     {notes}
@@ -251,7 +251,7 @@
     on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
     on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
-{#if currentTrack === "melody"}
+{#if currentTape === "melody"}
     <div id="melodyInputs" class="inputs" in:fade={{ duration: 200 }}>
         <div class="secondaryControls">
             <BPMslider
