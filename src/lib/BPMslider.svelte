@@ -1,11 +1,12 @@
 <script lang="ts">
     /* === PROPS ============================== */
     export let bpm: number; // bind
+    export let layout: "responsive" | "horizontal" = "responsive";
 </script>
 
 
 
-<div class="sliderWrapper">
+<div class="sliderWrapper {layout}">
     <label for="bpm" id="BPMlabel">BPM</label>
     <div class="rangePlaceholder">
         <input
@@ -25,7 +26,7 @@
 
 <style lang="scss">
     .sliderWrapper {
-        // internal variables
+        // internal variables (referencing a vertical range input)
         --_clr-track: var(--clr-150);
         --_clr-track-progress: red;
         --_clr-thumb: red;
@@ -38,6 +39,43 @@
         flex-direction: column-reverse;
         align-items: center;
         gap: 10px;
+
+        &.horizontal {
+            // internal variables
+            --_track-height: 100%;
+
+            flex-direction: row;
+            gap: 10px;
+            width: 100%;
+            max-width: var(--inputs-maxHeight);
+
+            .rangePlaceholder {
+                flex-grow: 1;
+                position: relative;
+                width: unset;
+                height: unset;
+            }
+            
+            #bpm {
+                // reset all styling
+                -webkit-appearance: none;
+                appearance: none;
+                background: transparent;
+                cursor: pointer;
+
+                width: var(--_track-height);
+                overflow: hidden;
+
+                // rotate range input to be vertical and adjust location
+                position: relative;
+                transform-origin: top left;
+                top: var(--_track-height);
+                transform: rotate(0deg);
+
+                // prevent scroll when draggin range input on touch screen
+                touch-action: none;
+            }
+        }
     }
 
     .rangePlaceholder {
@@ -138,13 +176,7 @@
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         .sliderWrapper {
             // internal variables
-            --_clr-track: var(--clr-150);
-            --_clr-track-progress: red;
-            --_clr-thumb: red;
             --_track-height: 100%;
-            --_track-width: 2px;
-            --_thumb-width: 20px;
-            --_thumb-height: 10px;
 
             flex-grow: 1;
             flex-direction: row;
