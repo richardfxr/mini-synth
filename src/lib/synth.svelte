@@ -1,3 +1,9 @@
+<script context="module" lang="ts">
+    /* === TYPES ============================== */
+    export type TrackName = "melody" | "beats";
+    export type Track = Tone.Unit.Frequency[][] | string[][];
+</script>
+
 <script lang="ts">
     /* === IMPORTS ============================ */
     import { onMount, tick } from 'svelte';
@@ -282,8 +288,6 @@
             on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
     </div>
 {/if}
-
-
 
 
 
