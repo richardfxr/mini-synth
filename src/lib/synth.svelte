@@ -2,6 +2,7 @@
     /* === IMPORTS ============================ */
     import { onMount, tick } from 'svelte';
     import { browser } from '$app/environment';
+    import { fade } from 'svelte/transition';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     import * as Tone from 'tone';
@@ -10,6 +11,7 @@
     import BPMslider from '$lib/BPMslider.svelte';
     import KeyboardControls from '$lib/keyboardControls.svelte';
     import Keyboard from '$lib/keyboard.svelte';
+    import Soundboard from '$lib/soundboard.svelte';
 
     /* === PROPS ============================== */
     export let melody: Tone.Unit.Frequency[][] = Array(24).fill([]);
@@ -28,6 +30,14 @@
         ["C4", "Db4", "D4", "Eb4", "E4", "F4", "Gb4", "G4", "Ab4", "A4", "Bb4", "B4"],
         ["C5", "Db5", "D5", "Eb5", "E5", "F5", "Gb5", "G5", "Ab5", "A5", "Bb5", "B5"],
     ];
+    const samples: { [key: string]: string} = {
+        "hh": "/audio/CR78/hihat.wav",
+        "kc": "/audio/CR78/kick.wav",
+        "sn": "/audio/KPR77/snare.wav",
+        "t1": "/audio/CR78/tom1.wav",
+        "t2": "/audio/CR78/tom2.wav",
+        "t3": "/audio/CR78/tom3.wav",
+    };
     const tweenedProgress = tweened(0, {
 		duration: (from, to) => {
             // min duration of 100 ms and increases by 0.1 ms per additional pixel
@@ -51,6 +61,7 @@
     let beatsToPlay: { time: Tone.Unit.Time, samples: string[] }[] = [];
     let tapesFrame: number;
 
+    let currentTrack: "melody" | "beats" = "melody";
     let currentSubdiv: number = 0;
     let currentKbSegment: 0 | 1 | 2 = 0;
     let hasManuallyScrolled = false;
@@ -163,16 +174,7 @@
 		}).toDestination();
 
         // initialize players
-        players = new Tone.Players({
-            urls: {
-                "hh": "/audio/CR78/hihat.wav",
-                "kc": "/audio/CR78/kick.wav",
-                "sn": "/audio/KPR77/snare.wav",
-                "t1": "/audio/CR78/tom1.wav",
-                "t2": "/audio/CR78/tom2.wav",
-                "t3": "/audio/CR78/tom3.wav",
-            },
-        });
+        players = new Tone.Players({ urls: samples });
         playersVol = new Tone.Volume(-4.5).toDestination();
         players.connect(playersVol);
 
@@ -207,6 +209,7 @@
     {tweening}
     {tweenedProgress}
     {subdivWidth}
+    bind:currentTrack = {currentTrack}
     bind:currentSubdiv = {currentSubdiv}
     {melody}
     {notes}
@@ -242,27 +245,44 @@
     on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
     on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
-<div class="inputs">
-    <div class="secondaryControls">
+{#if currentTrack === "melody"}
+    <div id="melodyInputs" class="inputs" in:fade={{ duration: 200 }}>
+        <div class="secondaryControls">
+            <BPMslider
+                bind:bpm = {bpm}
+                on:input = {() => Tone.Transport.bpm.value = bpm} />
+
+            <KeyboardControls
+                bind:currentKbSegment = {currentKbSegment}
+                {segmentIsPopulated} />
+        </div>
+
+        <Keyboard
+            {currentSubdiv}
+            {currentKbSegment}
+            bind:melody = {melody}
+            {notes}
+            {notesOfSegment}
+            on:keyDown = {e => synth.triggerAttack(e.detail.note)}
+            on:keyUp = {e => synth.triggerRelease(e.detail.note)}
+            on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
+    </div>
+{:else}
+    <div id="beatsInputs" class="inputs" in:fade={{ duration: 200 }}>
         <BPMslider
             bind:bpm = {bpm}
+            layout = "horizontal"
             on:input = {() => Tone.Transport.bpm.value = bpm} />
 
-        <KeyboardControls
-            bind:currentKbSegment = {currentKbSegment}
-            {segmentIsPopulated} />
+        <Soundboard
+            {currentSubdiv}
+            bind:beats = {beats}
+            {samples}
+            on:play = {e => players.player(e.detail.beat).start()}
+            on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
     </div>
+{/if}
 
-    <Keyboard
-        {currentSubdiv}
-        {currentKbSegment}
-        bind:melody = {melody}
-        {notes}
-        {notesOfSegment}
-        on:keyDown = {e => synth.triggerAttack(e.detail.note)}
-        on:keyUp = {e => synth.triggerRelease(e.detail.note)}
-        on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
-    </div>
 
 
 
@@ -270,14 +290,17 @@
 <style lang="scss">
     .inputs {
         display: flex;
-        flex-flow: row nowrap;
         gap: 20px;
         max-width: var(--inputs-maxWidth);
         height: var(--inputs-height);
         max-height: var(--inputs-maxHeight);
 
-        padding: 10px 0 10px 10px;
         margin: 0 auto;
+    }
+
+    #melodyInputs {
+        flex-flow: row nowrap;
+        padding: 10px 0 10px 10px;
 
         .secondaryControls {
             display: flex;
@@ -286,9 +309,15 @@
         }
     }
 
+    #beatsInputs {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
-        .inputs {
+        #melodyInputs {
             gap: 15px;
             height: unset;
             max-height: unset;
@@ -302,7 +331,7 @@
     }
     
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
-        .inputs {
+        #melodyInputs {
             flex-flow: column nowrap;
             gap: 15px;
             padding-left: 0;

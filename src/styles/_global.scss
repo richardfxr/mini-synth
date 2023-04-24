@@ -22,3 +22,18 @@ GLOBAL
         background-color: var(--clr-100);
     }
 }
+
+.visuallyHidden {
+    position: absolute;
+    white-space: nowrap;
+    clip: rect(0 0 0 0);
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    border: 0;
+    margin: 0;
+
+    overflow: hidden;
+}

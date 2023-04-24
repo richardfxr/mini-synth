@@ -9,6 +9,7 @@
     export let tweening: boolean;
     export let tweenedProgress: Tweened<number>;
     export let subdivWidth: number;
+    export let currentTrack: "melody" | "beats"; // bind
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
     export let notes: Tone.Unit.Frequency[];
@@ -93,9 +94,19 @@
             </div>
 
             <!-- melody track -->
-            <div
+            <article
                 id="melody"
-                class="track">
+                class="track"
+                class:active={currentTrack === 'melody'}>
+                <label>
+                    <input
+                        class="visuallyHidden"
+                        type="radio"
+                        bind:group={currentTrack}
+                        name="track"
+                        value="melody">
+                    <span class="visuallyHidden">Melody track</span>
+                </label>
                 <div class="trackTerminal">⇥</div>
                 <div class="noteMarkers">
                     <div class="noteMarker"></div>
@@ -115,12 +126,22 @@
                     </div>
                 {/each}
                 <div class="trackTerminal">⇤</div>
-            </div>
+            </article>
 
             <!-- beats track -->
-            <div
+            <article
                 id="beats"
-                class="track">
+                class="track"
+                class:active={currentTrack === 'beats'}>
+                <label>
+                    <input
+                        class="visuallyHidden"
+                        type="radio"
+                        bind:group={currentTrack}
+                        name="track"
+                        value="beats">
+                    <span class="visuallyHidden">Beats track</span>
+                </label>
                 <div class="trackTerminal">⇥</div>
                 <div class="noteMarkers">
                     <div class="noteMarker"></div>
@@ -139,7 +160,7 @@
                     </div>
                 {/each}
                 <div class="trackTerminal">⇤</div>
-            </div>
+            </article>
         </div>
         
         <div class="trackPadding"></div>
@@ -211,7 +232,7 @@
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
 
-        &.dragging {
+        &.dragging, &.dragging .track label {
             cursor: grabbing;
         }
 
@@ -277,16 +298,21 @@
     }
 
     .track {
+        // internal variable
+        --_clr-border: var(--clr-350);
+
         display: grid;
         grid-template-columns: var(--_trackTerminal-width) var(--_noteMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackTerminal-width);
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
-        border-bottom: solid var(--border-width) var(--clr-800);
+        border-bottom: solid var(--border-width) var(--_clr-border);
         // offset trackTerminal at each end
         margin-right: calc(-1 * var(--_trackTerminal-width));
         margin-left: calc(-1 * (var(--_trackTerminal-width) + var(--_noteMarker-width)));
+
+        transition: border-color var(--trans-fast) ease;
 
         // prevent text highlighting on drag
         -webkit-user-select:none;
@@ -294,11 +320,28 @@
 
         &#melody {
             height: var(--melody-height);
-            border-top: solid var(--border-width) var(--clr-800);
+            border-top: solid var(--border-width) var(--_clr-border);
+            border-bottom: solid var(--border-width) var(--clr-800);
         }
 
         &#beats {
             height: var(--beats-height);
+        }
+
+        label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+
+            cursor: grab;
+
+            input {
+                // prevent track scroll on radio input
+                visibility: hidden;
+            }
         }
 
         .trackTerminal {
@@ -307,7 +350,9 @@
             justify-content: center;
             font-size: 15px;
             color: var(--clr-0);
-            background-color: var(--clr-800);
+            background-color: var(--_clr-border);
+
+            transition: background-color var(--trans-fast) ease;
         }
 
         .noteMarkers {
@@ -355,7 +400,16 @@
 
                 color: var(--clr-1000);
                 text-align: center;
+                background-color: var(--clr-200);
 
+                transition: background-color var(--trans-fast) ease;
+            }
+        }
+
+        &.active {
+            --_clr-border: var(--clr-800);
+
+            .subdiv p {
                 // note colors
                 @for $i from 0 through 11 {
                     &.note-#{$i} {
