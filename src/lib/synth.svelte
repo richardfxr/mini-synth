@@ -107,6 +107,12 @@
         if (melodyPart) melodyPart.dispose();
         if (beatsPart) beatsPart.dispose();
 
+        beatsPart = new Tone.Part(((time, details) => {
+            details.samples.forEach(value => {
+                players.player(value).start(time);
+            });
+        }), beatsToPlay).start(0);
+
         melodyPart = new Tone.Part(((time, details) => {
             currentSubdiv = details.index;
             synth.triggerAttackRelease(details.note, "16n", time);
@@ -114,12 +120,6 @@
             // call readyReels() again on last note, this will create a new part with updated notesToPlay
             if (details.index === notesToPlay.length - 1) readyReels();
         }), notesToPlay).start(0);
-
-        beatsPart = new Tone.Part(((time, details) => {
-            details.samples.forEach(value => {
-                players.player(value).start(time);
-            });
-        }), beatsToPlay).start(0);
     }
 
     async function scrollTapes() {
