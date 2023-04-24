@@ -40,6 +40,11 @@ $beats: (
    --borderRadius-sm: 3px;
    --borderRadius-round: 9e5px;
 
+   --trans-fastest: 0.1s;
+   --trans-fast: 0.15s;
+   --trans-normal: 0.2s;
+   --trans-slow: 0.25s;
+
    /* === COLORS ============================= */
 
    /* light theme (default) */
