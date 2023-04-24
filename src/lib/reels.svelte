@@ -107,7 +107,7 @@
                         value="melody">
                     <span class="visuallyHidden">Melody track</span>
                 </label>
-                <div class="trackTerminal">⇥</div>
+                <div class="trackTerminal start">⇥</div>
                 <div class="noteMarkers">
                     <div class="noteMarker"></div>
                     <div class="noteMarker"></div>
@@ -125,7 +125,10 @@
                         {/each}
                     </div>
                 {/each}
-                <div class="trackTerminal">⇤</div>
+                <div class="trackTerminal end">
+                    <div class="repeatDots"></div>
+                    <div class="repeatLine"></div>
+                </div>
             </article>
 
             <!-- beats track -->
@@ -142,7 +145,7 @@
                         value="beats">
                     <span class="visuallyHidden">Beats track</span>
                 </label>
-                <div class="trackTerminal">⇥</div>
+                <div class="trackTerminal start">⇥</div>
                 <div class="noteMarkers">
                     <div class="noteMarker"></div>
                     <div class="noteMarker"></div>
@@ -159,7 +162,10 @@
                         {/each}
                     </div>
                 {/each}
-                <div class="trackTerminal">⇤</div>
+                <div class="trackTerminal end">
+                    <div class="repeatDots"></div>
+                    <div class="repeatLine"></div>
+                </div>
             </article>
         </div>
         
@@ -174,9 +180,11 @@
         // internal variables
         --_clr-scrollbar: var(--clr-0);
         --_clr-thumb: var(--clr-500);
-        --_trackTerminal-width: 25px;
+        --_trackTerminal-start-width: 25px;
+        --_trackTerminal-end-width: 20px;
         --_noteMarker-width: 8px;
         --_note-height: 22px;
+        --_repeatDots-size: 5px;
 
         position: sticky;
         top: calc(-1 * (var(--reels-pad-top) + var(--trackMarker-height)) + var(--border-width-thick));
@@ -302,15 +310,15 @@
         --_clr-border: var(--clr-350);
 
         display: grid;
-        grid-template-columns: var(--_trackTerminal-width) var(--_noteMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackTerminal-width);
+        grid-template-columns: var(--_trackTerminal-start-width) var(--_noteMarker-width) repeat(var(--melodyLength), var(--subdivWidth)) var(--_trackTerminal-end-width);
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
         border-bottom: solid var(--border-width) var(--_clr-border);
         // offset trackTerminal at each end
-        margin-right: calc(-1 * var(--_trackTerminal-width));
-        margin-left: calc(-1 * (var(--_trackTerminal-width) + var(--_noteMarker-width)));
+        margin-right: calc(-1 * var(--_trackTerminal-end-width));
+        margin-left: calc(-1 * (var(--_trackTerminal-start-width) + var(--_noteMarker-width)));
 
         transition: border-color var(--trans-fast) ease;
 
@@ -350,9 +358,57 @@
             justify-content: center;
             font-size: 15px;
             color: var(--clr-0);
-            background-color: var(--_clr-border);
 
-            transition: background-color var(--trans-fast) ease;
+            &.start {
+                background-color: var(--_clr-border);
+                transition: background-color var(--trans-fast) ease;
+            }
+
+            &.end {
+                flex-direction: row;
+                gap: 3px;
+
+                border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+                border-right: solid 4px var(--_clr-border);
+
+                transition: border-color var(--trans-fast) ease;
+
+                .repeatDots {
+                    position: relative;
+                    height: calc(2 * var(--_repeatDots-size) + 6px);
+                    width: var(--_repeatDots-size);
+
+                    &::before, &::after {
+                        // dots
+                        content: "";
+                        position: absolute;
+                        right: 0;
+                        left: 0;
+                        height: var(--_repeatDots-size);
+
+                        background-color: var(--_clr-border);
+                        border-radius: var(--borderRadius-round);
+
+                        transition: background-color var(--trans-fast) ease;
+                    }
+
+                    &::before {
+                        // top dot
+                        top: 0;
+                    }
+
+                    &::after {
+                        // bottom dot
+                        bottom: 0;
+                    }
+                }
+
+                .repeatLine {
+                    height: 100%;
+
+                    border-right: solid var(--border-width) var(--_clr-border);
+                }
+            }
         }
 
         .noteMarkers {
