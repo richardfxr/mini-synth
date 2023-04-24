@@ -292,16 +292,17 @@
         display: flex;
         gap: 20px;
         max-width: var(--inputs-maxWidth);
-        height: var(--inputs-height);
-        max-height: var(--inputs-maxHeight);
 
         margin: 0 auto;
     }
 
     #melodyInputs {
         flex-flow: row nowrap;
-        padding: 10px 0 10px 10px;
+        height: var(--inputs-height);
+        max-height: var(--inputs-maxHeight);
 
+        padding: 10px 0 10px 10px;
+        
         .secondaryControls {
             display: flex;
             flex-flow: row nowrap;
