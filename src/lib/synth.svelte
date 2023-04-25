@@ -242,6 +242,13 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no">
 </svelte:head>
 
+<div class="background">
+    <div class="cassetteHousing top">
+        <div>
+        </div>
+    </div>
+</div>
+
 <Reels
     {playbackState}
     {tweening}
@@ -257,33 +264,40 @@
     on:addQuarter = {async () => await addSubdiv(4)}
     on:removeQuarter = {async () => await removeSubdiv(4)} />
 
-<Controls
-    {playbackState}
-    {currentSubdiv}
-    {tweenedProgress}
-    {playbackProgress}
-    melodyLength = {melody.length}
-    on:skipToBeginning = {async () => await skipTo(0)}
-    on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
-    on:play = {async () => {
-        await Tone.loaded();
-        await Tone.start();
-        readyReels();
+<div class="cassetteHousing bottom">
+    <div>
+        <Controls
+            {playbackState}
+            {currentSubdiv}
+            {tweenedProgress}
+            {playbackProgress}
+            melodyLength = {melody.length}
+            on:skipToBeginning = {async () => await skipTo(0)}
+            on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
+            on:play = {async () => {
+                await Tone.loaded();
+                await Tone.start();
+                readyReels();
 
-        if (hasManuallyScrolled) {
-            // reset manual scroll
-            hasManuallyScrolled = false;
-            // start transport at current readhead location
-            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
-        } else {
-            Tone.Transport.start();
-        }
+                if (hasManuallyScrolled) {
+                    // reset manual scroll
+                    hasManuallyScrolled = false;
+                    // start transport at current readhead location
+                    Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+                } else {
+                    Tone.Transport.start();
+                }
 
-        startTapes();
-    }}
-    on:pause = {() => Tone.Transport.pause()}
-    on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
-    on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
+                startTapes();
+            }}
+            on:pause = {() => Tone.Transport.pause()}
+            on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
+            on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
+    </div>
+</div>
+
+
+
 
 {#if currentTape === "melody"}
     <div id="melodyInputs" class="inputs" in:fade={{ duration: 200 }}>
@@ -326,6 +340,70 @@
 
 
 <style lang="scss">
+    :root {
+        // internal variables
+        --_cassette-ani-duration: 0.25s;
+        --_cassette-ani-easing: cubic-bezier(.54,.12,.21,1);
+    }
+
+    .background {
+        position: relative;
+        z-index: 1001;
+        background-color: var(--clr-100);
+    }
+
+    .cassetteHousing {
+        // internal variables
+        --_border-radius: 10px;
+        
+
+        position: relative;
+
+        padding: 0 10px;
+        background-color: var(--clr-100);
+
+        & > div {
+            max-width: var(--cassetts-macxWidth);
+
+            border: solid var(--border-width) var(--clr-250);
+            margin: 0 auto;
+        }
+
+        &.top {
+            z-index: 1002;
+            padding-top: 10px;
+
+            animation: cassetteTopLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
+            animation-delay: var(--ani-delay-load);
+            animation-fill-mode: backwards;
+
+            div {
+                height: 70px;
+                border-bottom: none;
+                border-radius:
+                    var(--_border-radius)
+                    var(--_border-radius)
+                    0
+                    0;
+            }
+        } 
+
+        &.bottom > div {
+            z-index: 2;
+            padding-bottom: 50px;
+            border-top: none;
+            border-radius:
+                0
+                0
+                var(--_border-radius)
+                var(--_border-radius);
+
+            animation: cassetteBottomLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
+            animation-delay: var(--ani-delay-load);
+            animation-fill-mode: backwards;
+        }
+    }
+
     .inputs {
         display: flex;
         gap: 20px;
@@ -379,6 +457,25 @@
                 gap: 30px;
                 padding: 0 20px;
             }
+        }
+    }
+
+    /* === ANIMATIONS ========================= */
+    @keyframes cassetteTopLoad {
+        from {
+            transform: translateY(var(--cassettTop-translateY));
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes cassetteBottomLoad {
+        from {
+            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        }
+        to {
+            transform: translateY(0);
         }
     }
 </style>

@@ -135,7 +135,7 @@
 <style lang="scss">
     .reels {
         // internal variables
-        --_clr-scrollbar: var(--clr-0);
+        --_clr-scrollbar: var(--clr-200);
         --_clr-thumb: var(--clr-500);
 
         position: sticky;
@@ -144,6 +144,10 @@
 
         background-color: var(--clr-100);
         border-bottom: solid var(--border-width-thick) var(--clr-100);
+
+        animation: reelsLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+        animation-delay: var(--ani-delay-load);
+        animation-fill-mode: backwards;
 
         &::before, &::after {
             // playhead
@@ -188,6 +192,10 @@
 
         padding: var(--reels-pad-top) 0 var(--border-width-thick) 0;
         overflow-x: auto;
+
+        animation: spoolsLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+        animation-delay: var(--ani-delay-load);
+        animation-fill-mode: backwards;
 
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
@@ -282,10 +290,6 @@
         }
     }
 
-    .tapes {
-        animation: tapesLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
-    }
-
     .tapeMarkers {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
@@ -319,14 +323,23 @@
     }
 
     /* === ANIMATIONS ========================= */
-    @keyframes tapesLoad {
+    @keyframes reelsLoad {
         from {
-            transform: translateX(100px);
+            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
             opacity: 0;
         }
         to {
-            transform: translateX(0);
+            transform: translateY(0);
             opacity: 1;
+        }
+    }
+
+    @keyframes spoolsLoad {
+        from {
+            transform: translateX(100px);
+        }
+        to {
+            transform: translateX(0);
         }
     }
 </style>

@@ -22,6 +22,8 @@ $beats: (
 
 :root {
    /* === CSS VARIABLES ====================== */
+   --cassetts-macxWidth: 400px;
+   --cassettTop-translateY: 50px;
    --reels-pad-top: 4px;
    --tapeMarker-height: 25px;
    --tapeTerminal-start-width: 25px;
@@ -40,12 +42,15 @@ $beats: (
    --border-width: 1.5px;
    --border-width-thin: 1px;
    --borderRadius-sm: 3px;
+   --borderRadius-xl: 10px;
    --borderRadius-round: 9e5px;
 
    --trans-fastest: 0.1s;
    --trans-fast: 0.15s;
    --trans-normal: 0.2s;
    --trans-slow: 0.25s;
+
+   --ani-delay-load: 0.1s;
 
    /* === COLORS ============================= */
 

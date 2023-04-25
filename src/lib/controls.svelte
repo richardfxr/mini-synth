@@ -164,6 +164,8 @@
 
                 border: none;
                 animation: skipLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
+                animation-delay: var(--ani-delay-load);
+                animation-fill-mode: backwards;
 
                 &::before {
                     // spool
@@ -211,6 +213,8 @@
             &.subdiv {
                 z-index: 2;
                 animation: subdivLoad 0.2s cubic-bezier(0, .36, .34, 1) 1;
+                animation-delay: var(--ani-delay-load);
+                animation-fill-mode: backwards;
             }
 
             &:hover {
