@@ -2,14 +2,7 @@
     /* === IMPORTS ============================ */
     import { page } from '$app/stores';
     import Synth from "$lib/synth.svelte";
-    import type * as Tone from 'tone';
-
-    /* === TYPES ============================== */
-    type Song = {
-        title: string
-        melody: Tone.Unit.Frequency[][],
-        beats: string[][] 
-    };
+    import type { Song } from '../../../storage/db';
 
     /* === CONSTANTS ========================== */
     const slug = $page.params.slug;
@@ -120,6 +113,7 @@
                 ["sn", "kc"],
                 ["kc"],
             ],
+            bpm: 80,
         },
     };
 

@@ -1,17 +1,24 @@
-<script context="module" lang="ts">
-    /* === TYPES ============================== */
-    export type TapeName = "melody" | "beats";
-    export type Tape = Tone.Unit.Frequency[][] | string[][];
-</script>
-
 <script lang="ts">
     /* === IMPORTS ============================ */
+    // Svelte
     import { onMount, tick } from 'svelte';
+    import { goto } from '$app/navigation';
     import { browser } from '$app/environment';
     import { fly } from 'svelte/transition';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
+    // Tone
     import * as Tone from 'tone';
+    // Dexie
+    import { db } from "../storage/db";
+    // types
+    import type {
+        TempId,
+        TapeName,
+        Melody,
+        Beats
+    } from '../storage/db';
+    // components
     import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
     import Controls from '$lib/controls.svelte';
@@ -21,9 +28,10 @@
     import Soundboard from '$lib/soundboard.svelte';
 
     /* === PROPS ============================== */
+    export let id: TempId = null;
     export let title = "song #1";
-    export let melody: Tone.Unit.Frequency[][] = Array(24).fill([]);
-    export let beats: string[][] = Array(24).fill([]);
+    export let melody: Melody = Array(24).fill([]);
+    export let beats: Beats = Array(24).fill([]);
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 35;
@@ -83,6 +91,41 @@
     ];
 
     /* === FUNCTIONS ========================== */
+    async function newSong(): Promise<void> {
+        try {
+            const id = await db.songs.add({
+                title: title,
+                melody: melody,
+                beats: beats,
+                bpm: bpm,
+            });
+
+            goto('/song/' + id);
+        } catch (error) {
+            console.log("new song error: " + error);
+        }
+    }
+
+    async function getSong(): Promise<void> {
+        try {
+            // get song from database
+            let song = await db.songs.get(id);
+
+            if (!song)
+                throw new Error("song does not exist");
+
+            console.log("song: " + JSON.stringify(song));
+
+            // load song
+            title = song.title;
+            melody = song.melody;
+            beats = song.beats;
+            bpm = song.bpm;
+        } catch (error) {
+            console.log("song error: " + error);
+        }
+    }
+
     function readyReels(): void {
         Tone.Transport.loopEnd = "0:0:" + melody.length;
 
@@ -205,7 +248,7 @@
     }
 
     /* === LIFECYCLES ========================= */
-    onMount(() => {
+    onMount(async () => {
         // initialize synth
         synth = new Tone.PolySynth(Tone.Synth, {
 			oscillator: {
@@ -223,7 +266,12 @@
         Tone.Transport.loop = true;
         Tone.Transport.loopEnd = "0:0:" + melody.length;
 
-        // readyReels();
+        // get song from database
+        if (id === "new") {
+            await newSong();
+        } else if (id !== null) {
+            await getSong();
+        }
 
         return () => {
             // cancel tapesFrame on destroy

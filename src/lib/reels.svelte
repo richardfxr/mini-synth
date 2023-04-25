@@ -3,7 +3,7 @@
     import { createEventDispatcher } from 'svelte';
     import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
-    import type { TapeName } from '$lib/synth.svelte';
+    import type { TapeName } from '../storage/db';
     import Tape from '$lib/tape.svelte';
 
     /* === PROPS ============================== */
