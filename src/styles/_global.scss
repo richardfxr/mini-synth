@@ -25,6 +25,7 @@ GLOBAL
 
 .button {
     // internal variables 
+    --_clr: var(--clr-900);
     --_clr-background: var(--clr-100);
     --_clr-border: var(--clr-350);
     
@@ -32,6 +33,7 @@ GLOBAL
     width: var(--button-minSize);
     height: var(--button-minSize);
 
+    color: var(--_clr);
     background-color: var(--_clr-background);
     border: solid var(--border-width) var(--_clr-border);
     border-radius: 200px;
@@ -40,15 +42,18 @@ GLOBAL
                 border-color var(--trans-normal) ease;
     
     &:hover {
+        --_clr: var(--clr-1000);
         --_clr-border: var(--clr-350);
     }
 
     &:active {
+        --_clr: var(--clr-1000);
         --_clr-background: var(--clr-0);
         --_clr-border: var(--clr-600);
     }
 
     &:disabled {
+        --_clr: var(--clr-500);
         --_clr-background: var(--clr-100);
         --_clr-border: var(--clr-150);
 

@@ -297,6 +297,10 @@
             on:pause = {() => Tone.Transport.pause()}
             on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
             on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
+
+        <BPMslider
+            bind:bpm = {bpm}
+            on:input = {() => Tone.Transport.bpm.value = bpm} />
     </div>
 </div>
 
@@ -306,10 +310,6 @@
 {#if currentTape === "melody"}
     <div id="melodyInputs" class="inputs" in:fade={{ duration: 200 }}>
         <div class="secondaryControls">
-            <BPMslider
-                bind:bpm = {bpm}
-                on:input = {() => Tone.Transport.bpm.value = bpm} />
-
             <KeyboardControls
                 bind:currentKbSegment = {currentKbSegment}
                 {segmentIsPopulated} />
@@ -327,11 +327,6 @@
     </div>
 {:else}
     <div id="beatsInputs" class="inputs" in:fade={{ duration: 200 }}>
-        <BPMslider
-            bind:bpm = {bpm}
-            layout = "horizontal"
-            on:input = {() => Tone.Transport.bpm.value = bpm} />
-
         <Soundboard
             {currentSubdiv}
             bind:beats = {beats}
@@ -392,7 +387,6 @@
 
         &.bottom > div {
             z-index: 2;
-            padding-bottom: 50px;
             border-top: none;
             border-radius:
                 0
