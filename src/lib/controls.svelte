@@ -28,7 +28,7 @@
 
     <div class="playback">
         <button
-            class="small skip"
+            class="button small skip"
             style="
                 --_dir: 1;
                 --_spool-scale: {1.1 + playbackProgress * 1.4};
@@ -40,14 +40,14 @@
         </button>
 
         <button
-            class="small subdiv"
+            class="button small subdiv"
             style="--_dir: 1"
             on:click = {() => dispatch('prevSubdiv')}
             disabled = {playbackState === "started" || currentSubdiv <= 0}>
             ←
         </button>
 
-        <button class="main" on:click={() => {
+        <button class="button main" on:click={() => {
             playbackState === "started" ? dispatch('pause') : dispatch('play')
         }}>
             {#if playbackState === "started"}
@@ -58,7 +58,7 @@
         </button>
 
         <button
-            class="small subdiv"
+            class="button small subdiv"
             style="--_dir: -1"
             on:click = {() => dispatch('nextSubdiv')}
             disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
@@ -66,7 +66,7 @@
         </button>
 
         <button
-            class="small skip"
+            class="button small skip"
             style="
                 --_dir: -1;
                 --_spool-scale: {2.5 - playbackProgress * 1.4};
@@ -127,26 +127,7 @@
         overflow: hidden;
         transition: border-color 0.2s ease;
 
-        button {
-            // internal variables 
-            --_clr-background: var(--clr-100);
-            --_clr-border: var(--clr-250);
-            
-            position: relative;
-            height: var(--_button-size);
-
-            background-color: var(--_clr-background);
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border: solid var(--border-width) var(--_clr-border);
-            border-radius: 200px;
-
-            transition: background-color 0.2s ease,
-                        border-color 0.2s ease,
-                        scale 0.2s ease,
-                        transform 0.2s ease,
-                        opacity 0.2s ease;
-
+        .button {
             &.main {
                 width: 90px;
                 color: red;
@@ -166,6 +147,8 @@
                 animation: skipLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
                 animation-delay: var(--ani-delay-load);
                 animation-fill-mode: backwards;
+
+                transition: scale 0.2s ease;
 
                 &::before {
                     // spool
@@ -212,25 +195,15 @@
 
             &.subdiv {
                 z-index: 2;
+
+                transition: background-color 0.2s ease,
+                            border-color 0.2s ease,
+                            transform 0.2s ease,
+                            opacity 0.2s ease;
+
                 animation: subdivLoad 0.2s cubic-bezier(0, .36, .34, 1) 1;
                 animation-delay: var(--ani-delay-load);
                 animation-fill-mode: backwards;
-            }
-
-            &:hover {
-                --_clr-border: var(--clr-350);
-            }
-
-            &:active {
-                --_clr-background: var(--clr-0);
-                --_clr-border: var(--clr-600);
-            }
-
-            &:disabled {
-                --_clr-background: var(--clr-100);
-                --_clr-border: var(--clr-150);
-
-                cursor: not-allowed;
             }
         }
     }

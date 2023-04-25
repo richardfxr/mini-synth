@@ -114,13 +114,13 @@
         
         <div class="tapePadding end">
             <button
-                class="add"
+                class="button add"
                 on:click={() => dispatch('addQuarter')}>
                 <span class="visuallyHidden">add 4 sixteenth notes</span>
                 +
             </button>
             <button
-                class="remove"
+                class="button remove"
                 disabled={melody.length <= 4}
                 on:click={() => dispatch('removeQuarter')}>
                 <span class="visuallyHidden">remove 4 sixteenth notes</span>
@@ -245,15 +245,8 @@
             padding-left: calc(var(--tapeTerminal-end-width) + var(--pad-md));
 
             button {
-                position: relative;
                 width: var(--_width);
                 height: var(--_height);
-
-                background-color: var(--clr-100);
-                border: solid var(--border-width) var(--clr-250);
-
-                transition: background-color var(--trans-normal) ease,
-                            border-color var(--trans-normal) ease;
 
                 &.add {
                     border-radius: 
@@ -269,22 +262,6 @@
                         var(--borderRadius-sm)
                         calc(0.5 * var(--_width))
                         calc(0.5 * var(--_width));
-                }
-
-                &:hover {
-                    border-color: var(--clr-350);
-                }
-
-                &:active {
-                    background-color: var(--clr-0);
-                    border-color: var(--clr-600);
-                }
-
-                &:disabled {
-                    background-color: var(--clr-100);
-                    border-color: var(--clr-150);
-
-                    cursor: not-allowed;
                 }
             }
         }
