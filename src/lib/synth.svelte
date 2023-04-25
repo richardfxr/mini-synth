@@ -8,7 +8,7 @@
     /* === IMPORTS ============================ */
     import { onMount, tick } from 'svelte';
     import { browser } from '$app/environment';
-    import { fade } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     import * as Tone from 'tone';
@@ -308,7 +308,10 @@
 
 
 {#if currentTape === "melody"}
-    <div id="melodyInputs" class="inputs" in:fade={{ duration: 200 }}>
+    <div
+        id="melodyInputs"
+        class="inputs"
+        out:fly={{ y: 20, duration: 200 }}>
         <div class="secondaryControls">
             <KeyboardControls
                 bind:currentKbSegment = {currentKbSegment}
@@ -326,7 +329,10 @@
             on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
     </div>
 {:else}
-    <div id="beatsInputs" class="inputs" in:fade={{ duration: 200 }}>
+    <div
+        id="beatsInputs"
+        class="inputs"
+        out:fly={{ y: 20, duration: 200 }}>
         <Soundboard
             {currentSubdiv}
             bind:beats = {beats}
@@ -402,10 +408,14 @@
 
     .inputs {
         display: flex;
-        gap: 20px;
+        gap: var(--pad-2xl);
         max-width: var(--inputs-maxWidth);
 
         margin: 0 auto;
+
+        animation: inputsLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
+        animation-delay: 0.2s;
+        animation-fill-mode: backwards;
     }
 
     #melodyInputs {
@@ -413,7 +423,7 @@
         height: var(--inputs-height);
         max-height: var(--inputs-maxHeight);
 
-        padding: 10px 0 10px 10px;
+        padding: 10px 0 10px var(--pad-2xl);
         
         .secondaryControls {
             display: flex;
@@ -431,10 +441,9 @@
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
         #melodyInputs {
-            gap: 15px;
             height: unset;
             max-height: unset;
-            padding: 15px 0 15px 15px;
+            padding: var(--pad-2xl) 0 var(--pad-2xl) var(--pad-2xl);
 
             .secondaryControls {
                 flex-flow: column-reverse nowrap;
@@ -446,7 +455,6 @@
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         #melodyInputs {
             flex-flow: column nowrap;
-            gap: 15px;
             padding-left: 0;
 
             .secondaryControls {
@@ -472,6 +480,17 @@
         }
         to {
             transform: translateY(0);
+        }
+    }
+
+    @keyframes inputsLoad {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
         }
     }
 </style>
