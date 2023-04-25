@@ -4,10 +4,18 @@
     import Synth from "$lib/synth.svelte";
     import type * as Tone from 'tone';
 
+    /* === TYPES ============================== */
+    type Song = {
+        title: string
+        melody: Tone.Unit.Frequency[][],
+        beats: string[][] 
+    };
+
     /* === CONSTANTS ========================== */
     const slug = $page.params.slug;
-    const demos: { [key: string]: {melody: Tone.Unit.Frequency[][], beats: string[][] } } = {
+    const demos: { [key: string]: Song } = {
         "marble-machine": {
+            title: "Marble Machine - Wintergatan",
             melody: [
                 ["E3", "E5"],
                 [],
@@ -114,12 +122,16 @@
             ],
         },
     };
-    const melody = Object.hasOwn(demos, slug) ? demos[slug].melody : Array(24).fill([]);
-    const beats = Object.hasOwn(demos, slug) ? demos[slug].beats : Array(24).fill([]);
+
+    let song: Song | null = null;
+
+    if (Object.hasOwn(demos, slug)) 
+        song = demos[slug];
 </script>
 
 
 
 <Synth
-    {melody}
-    {beats}/>
+    title = {song?.title ? song.title : "demo"}
+    melody = {song?.melody ? song.melody : Array(24).fill([])}
+    beats = {song?.beats ? song.beats : Array(24).fill([])}/>

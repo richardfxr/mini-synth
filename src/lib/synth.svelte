@@ -12,6 +12,7 @@
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     import * as Tone from 'tone';
+    import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
     import Controls from '$lib/controls.svelte';
     import BPMslider from '$lib/BPMslider.svelte';
@@ -20,6 +21,7 @@
     import Soundboard from '$lib/soundboard.svelte';
 
     /* === PROPS ============================== */
+    export let title = "song #1";
     export let melody: Tone.Unit.Frequency[][] = Array(24).fill([]);
     export let beats: string[][] = Array(24).fill([]);
 
@@ -245,6 +247,8 @@
 <div class="background">
     <div class="cassetteHousing top">
         <div>
+            <CassetteHeader 
+                bind:title = {title} />
         </div>
     </div>
 </div>
@@ -355,7 +359,6 @@
     .cassetteHousing {
         // internal variables
         --_border-radius: 10px;
-        
 
         position: relative;
 
@@ -378,7 +381,6 @@
             animation-fill-mode: backwards;
 
             div {
-                height: 70px;
                 border-bottom: none;
                 border-radius:
                     var(--_border-radius)
