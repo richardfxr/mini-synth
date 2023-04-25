@@ -22,6 +22,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dexie": "^4.0.1-alpha.10",
 		"tone": "^14.7.77"
 	}
 }
