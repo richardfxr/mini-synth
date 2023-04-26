@@ -47,6 +47,7 @@
         style="--subdivWidth: {subdivWidth}px"
         bind:this={tapes}
         on:scroll={() => {
+            if (!isReady) return;
             // update progress if it is not updating scroll
             if (!tweening) {
                 tweenedProgress.set(tapes.scrollLeft);
@@ -64,12 +65,15 @@
             }
         }}
         on:pointerdown={() => {
+            if (!isReady) return;
             if (playbackState === "started") dispatch('pause');
         }}
         on:mousedown={() => {
+            if (!isReady) return;
             dragging = true;
         }}
         on:mousemove={(e) => {
+            if (!isReady) return;
             // drag only if primary mouse button is held down
             if (e.buttons === 1) {
                 dragging  = true;
