@@ -99,10 +99,10 @@
     ];
     $: isReady = songIsLoaded && introHasFinished;
     // update database on change
-    $: isReady && title && updateTitle();
-    $: isReady && melody && updateMelody();
-    $: isReady && beats && updateBeats();
-    $: isReady && bpm && updateBpm();
+    $: isReady && title && updateSong("title");
+    $: isReady && melody && updateSong("melody");
+    $: isReady && beats && updateSong("beats");
+    $: isReady && bpm && updateSong("bpm");
 
     /* === FUNCTIONS ========================== */
     async function newSong(): Promise<void> {
@@ -153,51 +153,35 @@
         }
     }
 
-    async function updateTitle() {
+    async function updateSong(property?: string) {
         if (!songIsLoaded) return;
 
-        try {
-            // @ts-ignore
-            const updated = await db.songs.update(id, { title });
-            if (updated < 1) 
-                throw new Error("Did not update any songs");
-        } catch (error) {
-            console.log("update error: " + error);
-        }
-    }
+        let updated = 0;
 
-    async function updateMelody() {
-        if (!songIsLoaded) return;
-        
         try {
-            // @ts-ignore
-            const updated = await db.songs.update(id, { melody });
-            if (updated < 1) 
-                throw new Error("Did not update any songs");
-        } catch (error) {
-            console.log("update error: " + error);
-        }
-    }
+            // update() calls have ts-ignore due to typing issue with Dexie
+            switch (property) {
+                case "title":
+                    // @ts-ignore
+                    updated = await db.songs.update(id, { title });
+                    break;
+                case "melody":
+                    // @ts-ignore
+                    updated = await db.songs.update(id, { melody });
+                    break;
+                case "beats":
+                    // @ts-ignore
+                    updated = await db.songs.update(id, { beats });
+                    break;
+                case "bpm":
+                    // @ts-ignore
+                    updated = await db.songs.update(id, { bpm });
+                    break;
+                default:
+                    // @ts-ignore
+                    updated = await db.songs.update(id, { title, melody, beats, bpm });
+            }
 
-    async function updateBeats() {
-        if (!songIsLoaded) return;
-        
-        try {
-            // @ts-ignore
-            const updated = await db.songs.update(id, { beats });
-            if (updated < 1) 
-                throw new Error("Did not update any songs");
-        } catch (error) {
-            console.log("update error: " + error);
-        }
-    }
-
-    async function updateBpm() {
-        if (!songIsLoaded) return;
-        
-        try {
-            // @ts-ignore
-            const updated = await db.songs.update(id, { bpm });
             if (updated < 1) 
                 throw new Error("Did not update any songs");
         } catch (error) {
