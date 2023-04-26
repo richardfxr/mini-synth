@@ -1,8 +1,14 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
+    // Svelte
+    import { onMount } from 'svelte';
     import { page } from '$app/stores';
-    import Synth from "$lib/synth.svelte";
+    // types
     import type { Song } from '../../../storage/db';
+    // stores
+    import { firstLoad } from "../../../storage/store";
+    // components
+    import Synth from "$lib/synth.svelte";
 
     /* === CONSTANTS ========================== */
     const slug = $page.params.slug;
@@ -121,6 +127,11 @@
 
     if (Object.hasOwn(demos, slug)) 
         song = demos[slug];
+
+    /* === LIFECYCLES ========================= */
+    onMount(() => {
+        $firstLoad = false;
+    });
 </script>
 
 

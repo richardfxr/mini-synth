@@ -9,12 +9,14 @@
 
 
 <header class="cassetteHeader">
-    <button
+    <a
+        href="/"
         id="menu"
         class="button"
         style="--_dir: 1">
-        M
-    </button>
+        <span class="visuallyHidden">menu</span>
+        <span>M</span>
+    </a>
 
     <input
         type="text"

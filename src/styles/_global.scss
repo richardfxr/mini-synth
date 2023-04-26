@@ -29,6 +29,9 @@ GLOBAL
     --_clr-background: var(--clr-100);
     --_clr-border: var(--clr-350);
     
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     width: var(--button-minSize);
     height: var(--button-minSize);
