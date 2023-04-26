@@ -21,7 +21,7 @@
 
     tweenedProgress.subscribe(() => {
         // set scrollLeft using progress (tweened)
-        if (tweening) {
+        if (tweening && tapes) {
             // console.log("progress: " + $progress);
             tapes.scrollLeft = $tweenedProgress;
         }

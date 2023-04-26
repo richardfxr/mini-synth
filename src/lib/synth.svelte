@@ -1,7 +1,7 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     // Svelte
-    import { onMount, tick } from 'svelte';
+    import { onMount, onDestroy, tick } from 'svelte';
     import { goto, beforeNavigate } from '$app/navigation';
     import { browser } from '$app/environment';
     import { fade, fly } from 'svelte/transition';
@@ -338,7 +338,15 @@
                 console.log("isReady: " + isReady);
             }, 200);
         }
-        
+
+        // get song from database
+        if (id === "new") {
+            await newSong();
+        } else {
+            await getSong();
+        }
+        songIsLoaded = true;
+
         // initialize synth
         synth = new Tone.PolySynth(Tone.Synth, {
 			oscillator: {
@@ -356,18 +364,6 @@
         Tone.Transport.loop = true;
         Tone.Transport.loopEnd = "0:0:" + melody.length;
 
-        // get song from database
-        if (id === "new") {
-            await newSong();
-        } else {
-            await getSong();
-        }
-
-        
-        songIsLoaded = true;
-        console.log("song is loaded");
-        console.log("isReady: " + isReady);
-
         return () => {
             // cancel tapesFrame on destroy
             cancelAnimationFrame(tapesFrame);
@@ -377,6 +373,13 @@
     beforeNavigate(() => {
         // unready on naviagation
         introHasFinished = false;
+    });
+
+    onDestroy(() => {
+        if (!browser) return;
+
+        Tone.Transport.stop();
+        Tone.Transport.cancel();
     });
 </script>
 
