@@ -332,7 +332,11 @@
             $firstLoad = false;
             introHasFinished = true;
         } else {
-            setTimeout(() => {introHasFinished = true}, 200);
+            setTimeout(() => {
+                introHasFinished = true;
+                console.log("intro has finished");
+                console.log("isReady: " + isReady);
+            }, 200);
         }
         
         // initialize synth
@@ -359,8 +363,10 @@
             await getSong();
         }
 
-        console.log("song is loaded");
+        
         songIsLoaded = true;
+        console.log("song is loaded");
+        console.log("isReady: " + isReady);
 
         return () => {
             // cancel tapesFrame on destroy
@@ -370,7 +376,7 @@
 
     beforeNavigate(() => {
         // unready on naviagation
-        songIsLoaded = false;
+        introHasFinished = false;
     });
 </script>
 
