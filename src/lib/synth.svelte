@@ -19,7 +19,12 @@
         Beats
     } from '../storage/db';
     // stores
-    import { firstLoad } from "../storage/store";
+    import {
+        firstLoad,
+        synth,
+        players,
+        playersVol
+    } from "../storage/store";
     // components
     import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
@@ -74,9 +79,6 @@
     let tweening = false;
     let playbackProgress: number = 0;
 
-    let synth: Tone.PolySynth;
-    let players: Tone.Players;
-    let playersVol: Tone.Volume;
     let melodyPart: Tone.Part;
     let notesToPlay: { time: Tone.Unit.Time, note: Tone.Unit.Frequency[], index: number }[] = [];
     let beatsPart: Tone.Part;
@@ -231,13 +233,13 @@
 
         beatsPart = new Tone.Part(((time, details) => {
             details.samples.forEach(value => {
-                players.player(value).start(time);
+                $players?.player(value).start(time);
             });
         }), beatsToPlay).start(0);
 
         melodyPart = new Tone.Part(((time, details) => {
             currentSubdiv = details.index;
-            synth.triggerAttackRelease(details.note, "16n", time);
+            $synth?.triggerAttackRelease(details.note, "16n", time);
 
             // call readyReels() again on last note, this will create a new part with updated notesToPlay
             if (details.index === notesToPlay.length - 1) readyReels();
@@ -336,7 +338,7 @@
                 introHasFinished = true;
                 console.log("intro has finished");
                 console.log("isReady: " + isReady);
-            }, 200);
+            }, 225);
         }
 
         // get song from database
@@ -348,26 +350,24 @@
         songIsLoaded = true;
 
         // initialize synth
-        synth = new Tone.PolySynth(Tone.Synth, {
-			oscillator: {
-				partials: [0, 2, 3, 4],
-			}
-		}).toDestination();
+        if ($synth === null) {
+            console.log("creating synth");
+            $synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: {
+                    partials: [0, 2, 3, 4],
+                }
+            }).toDestination();
+        }
 
         // initialize players
-        players = new Tone.Players({ urls: samples });
-        playersVol = new Tone.Volume(-4.5).toDestination();
-        players.connect(playersVol);
+        if ($players === null) $players = new Tone.Players({ urls: samples });
+        if ($playersVol === null) $playersVol = new Tone.Volume(-4.5).toDestination();
+        $players.connect($playersVol);
 
         // set transporter properties
         Tone.Transport.bpm.value = bpm;
         Tone.Transport.loop = true;
         Tone.Transport.loopEnd = "0:0:" + melody.length;
-
-        return () => {
-            // cancel tapesFrame on destroy
-            cancelAnimationFrame(tapesFrame);
-        };
     });
 
     beforeNavigate(() => {
@@ -376,10 +376,16 @@
     });
 
     onDestroy(() => {
+        // prevent onDestroy() from running on the server
         if (!browser) return;
 
+        cancelAnimationFrame(tapesFrame);
+
+        // Tone
         Tone.Transport.stop();
         Tone.Transport.cancel();
+        if (melodyPart) melodyPart.dispose();
+        if (beatsPart) beatsPart.dispose();
     });
 </script>
 
@@ -484,8 +490,8 @@
                 bind:melody = {melody}
                 {notes}
                 {notesOfSegment}
-                on:keyDown = {e => synth.triggerAttack(e.detail.note)}
-                on:keyUp = {e => synth.triggerRelease(e.detail.note)}
+                on:keyDown = {e => $synth?.triggerAttack(e.detail.note)}
+                on:keyUp = {e => $synth?.triggerRelease(e.detail.note)}
                 on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
         </div>
     {:else if isReady}
@@ -497,7 +503,7 @@
                 {currentSubdiv}
                 bind:beats = {beats}
                 {samples}
-                on:play = {e => players.player(e.detail.beat).start()}
+                on:play = {e => $players?.player(e.detail.beat).start()}
                 on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
         </div>
     {/if}
