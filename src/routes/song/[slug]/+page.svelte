@@ -15,10 +15,8 @@
 
     if (!isNaN(Number(slug))) {
         id = Number(slug);
-    } else if (slug === "new") {
-        id = "new";
     } else {
-        id = null;
+        id = "new";
     };
 </script>
 
