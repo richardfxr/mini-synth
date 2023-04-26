@@ -2,9 +2,9 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount, tick } from 'svelte';
-    import { goto } from '$app/navigation';
+    import { goto, beforeNavigate } from '$app/navigation';
     import { browser } from '$app/environment';
-    import { fly } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     // Tone
@@ -18,6 +18,8 @@
         Melody,
         Beats
     } from '../storage/db';
+    // stores
+    import { firstLoad } from "../storage/store";
     // components
     import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
@@ -28,10 +30,11 @@
     import Soundboard from '$lib/soundboard.svelte';
 
     /* === PROPS ============================== */
-    export let id: TempId = null;
+    export let id: TempId = "new";
     export let title = "song #1";
     export let melody: Melody = Array(24).fill([]);
     export let beats: Beats = Array(24).fill([]);
+    export let bpm: Tone.Unit.BPM = 80;
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 35;
@@ -63,6 +66,10 @@
 	});
 
     /* === VARIABLES ========================== */
+    let songIsLoaded = false;
+    let introHasFinished = false;
+    let songIsSaved = false;
+
     let playbackState: Tone.PlaybackState = "stopped";
     let tweening = false;
     let playbackProgress: number = 0;
@@ -70,7 +77,6 @@
     let synth: Tone.PolySynth;
     let players: Tone.Players;
     let playersVol: Tone.Volume;
-    let bpm: Tone.Unit.BPM = 80;
     let melodyPart: Tone.Part;
     let notesToPlay: { time: Tone.Unit.Time, note: Tone.Unit.Frequency[], index: number }[] = [];
     let beatsPart: Tone.Part;
@@ -89,30 +95,47 @@
         melody[currentSubdiv].some(e => notesOfSegment[1].includes(e)),
         melody[currentSubdiv].some(e => notesOfSegment[2].includes(e))
     ];
+    $: isReady = songIsLoaded && introHasFinished;
+    // update database on change
+    $: isReady && title && updateTitle();
+    $: isReady && melody && updateMelody();
+    $: isReady && beats && updateBeats();
+    $: isReady && bpm && updateBpm();
 
     /* === FUNCTIONS ========================== */
     async function newSong(): Promise<void> {
         try {
-            const id = await db.songs.add({
-                title: title,
-                melody: melody,
-                beats: beats,
-                bpm: bpm,
+            const realId = await db.songs.add({
+                title,
+                melody,
+                beats,
+                bpm
             });
 
-            goto('/song/' + id);
+            songIsSaved = true;
+
+            // update URL
+            id = realId;
+            goto('/song/' + id, { replaceState: true });
+
+            // update title
+            songIsLoaded = true;
+            title = "song #" + id;
         } catch (error) {
             console.log("new song error: " + error);
         }
+        
     }
 
     async function getSong(): Promise<void> {
         try {
             // get song from database
-            let song = await db.songs.get(id);
+            const song = await db.songs.get(id);
 
-            if (!song)
-                throw new Error("song does not exist");
+            if (!song) {
+                await newSong();
+                return;
+            }
 
             console.log("song: " + JSON.stringify(song));
 
@@ -121,8 +144,62 @@
             melody = song.melody;
             beats = song.beats;
             bpm = song.bpm;
+
+            songIsSaved = true
         } catch (error) {
             console.log("song error: " + error);
+        }
+    }
+
+    async function updateTitle() {
+        if (!songIsLoaded) return;
+
+        try {
+            // @ts-ignore
+            const updated = await db.songs.update(id, { title });
+            if (updated < 1) 
+                throw new Error("Did not update any songs");
+        } catch (error) {
+            console.log("update error: " + error);
+        }
+    }
+
+    async function updateMelody() {
+        if (!songIsLoaded) return;
+        
+        try {
+            // @ts-ignore
+            const updated = await db.songs.update(id, { melody });
+            if (updated < 1) 
+                throw new Error("Did not update any songs");
+        } catch (error) {
+            console.log("update error: " + error);
+        }
+    }
+
+    async function updateBeats() {
+        if (!songIsLoaded) return;
+        
+        try {
+            // @ts-ignore
+            const updated = await db.songs.update(id, { beats });
+            if (updated < 1) 
+                throw new Error("Did not update any songs");
+        } catch (error) {
+            console.log("update error: " + error);
+        }
+    }
+
+    async function updateBpm() {
+        if (!songIsLoaded) return;
+        
+        try {
+            // @ts-ignore
+            const updated = await db.songs.update(id, { bpm });
+            if (updated < 1) 
+                throw new Error("Did not update any songs");
+        } catch (error) {
+            console.log("update error: " + error);
         }
     }
 
@@ -249,6 +326,15 @@
 
     /* === LIFECYCLES ========================= */
     onMount(async () => {
+        console.log("onMount");
+        // time intro 
+        if ($firstLoad) {
+            $firstLoad = false;
+            introHasFinished = true;
+        } else {
+            setTimeout(() => {introHasFinished = true}, 200);
+        }
+        
         // initialize synth
         synth = new Tone.PolySynth(Tone.Synth, {
 			oscillator: {
@@ -269,14 +355,22 @@
         // get song from database
         if (id === "new") {
             await newSong();
-        } else if (id !== null) {
+        } else {
             await getSong();
         }
+
+        console.log("song is loaded");
+        songIsLoaded = true;
 
         return () => {
             // cancel tapesFrame on destroy
             cancelAnimationFrame(tapesFrame);
         };
+    });
+
+    beforeNavigate(() => {
+        // unready on naviagation
+        songIsLoaded = false;
     });
 </script>
 
@@ -292,103 +386,113 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no">
 </svelte:head>
 
-<div class="background">
-    <div class="cassetteHousing top">
+<div
+    class="synth"
+    in:fade={{ duration: 50, delay: 200 }}
+    out:fly={{ y: 20, duration: 200 }}>
+    <div class="background">
+        <div
+            class="cassetteHousing top"
+            class:isReady>
+            <div>
+                <CassetteHeader 
+                    bind:title = {title}
+                    {isReady}/>
+            </div>
+        </div>
+    </div>
+
+    <Reels
+        {playbackState}
+        {tweening}
+        {tweenedProgress}
+        {subdivWidth}
+        bind:currentTape = {currentTape}
+        bind:currentSubdiv = {currentSubdiv}
+        {melody}
+        {notes}
+        {beats}
+        bind:hasManuallyScrolled = {hasManuallyScrolled}
+        {isReady}
+        on:pause = {() => Tone.Transport.pause()}
+        on:addQuarter = {async () => await addSubdiv(4)}
+        on:removeQuarter = {async () => await removeSubdiv(4)} />
+
+    <div
+        class="cassetteHousing bottom"
+        class:isReady>
         <div>
-            <CassetteHeader 
-                bind:title = {title} />
+            <Controls
+                {playbackState}
+                {currentSubdiv}
+                {tweenedProgress}
+                {playbackProgress}
+                melodyLength = {melody.length}
+                {isReady}
+                on:skipToBeginning = {async () => await skipTo(0)}
+                on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
+                on:play = {async () => {
+                    await Tone.loaded();
+                    await Tone.start();
+                    readyReels();
+
+                    if (hasManuallyScrolled) {
+                        // reset manual scroll
+                        hasManuallyScrolled = false;
+                        // start transport at current readhead location
+                        Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+                    } else {
+                        Tone.Transport.start();
+                    }
+
+                    startTapes();
+                }}
+                on:pause = {() => Tone.Transport.pause()}
+                on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
+                on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
+
+            <BPMslider
+                bind:bpm = {bpm}
+                {isReady}
+                on:input = {() => Tone.Transport.bpm.value = bpm} />
         </div>
     </div>
-</div>
 
-<Reels
-    {playbackState}
-    {tweening}
-    {tweenedProgress}
-    {subdivWidth}
-    bind:currentTape = {currentTape}
-    bind:currentSubdiv = {currentSubdiv}
-    {melody}
-    {notes}
-    {beats}
-    bind:hasManuallyScrolled = {hasManuallyScrolled}
-    on:pause = {() => Tone.Transport.pause()}
-    on:addQuarter = {async () => await addSubdiv(4)}
-    on:removeQuarter = {async () => await removeSubdiv(4)} />
+    {#if isReady && currentTape === "melody"}
+        <div
+            id="melodyInputs"
+            class="inputs"
+            out:fly={{ y: 20, duration: 200 }}>
+            <div class="secondaryControls">
+                <KeyboardControls
+                    bind:currentKbSegment = {currentKbSegment}
+                    {segmentIsPopulated} />
+            </div>
 
-<div class="cassetteHousing bottom">
-    <div>
-        <Controls
-            {playbackState}
-            {currentSubdiv}
-            {tweenedProgress}
-            {playbackProgress}
-            melodyLength = {melody.length}
-            on:skipToBeginning = {async () => await skipTo(0)}
-            on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
-            on:play = {async () => {
-                await Tone.loaded();
-                await Tone.start();
-                readyReels();
-
-                if (hasManuallyScrolled) {
-                    // reset manual scroll
-                    hasManuallyScrolled = false;
-                    // start transport at current readhead location
-                    Tone.Transport.start("+0", "0:0:" + currentSubdiv);
-                } else {
-                    Tone.Transport.start();
-                }
-
-                startTapes();
-            }}
-            on:pause = {() => Tone.Transport.pause()}
-            on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
-            on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
-
-        <BPMslider
-            bind:bpm = {bpm}
-            on:input = {() => Tone.Transport.bpm.value = bpm} />
-    </div>
-</div>
-
-
-
-
-{#if currentTape === "melody"}
-    <div
-        id="melodyInputs"
-        class="inputs"
-        out:fly={{ y: 20, duration: 200 }}>
-        <div class="secondaryControls">
-            <KeyboardControls
-                bind:currentKbSegment = {currentKbSegment}
-                {segmentIsPopulated} />
+            <Keyboard
+                {currentSubdiv}
+                {currentKbSegment}
+                bind:melody = {melody}
+                {notes}
+                {notesOfSegment}
+                on:keyDown = {e => synth.triggerAttack(e.detail.note)}
+                on:keyUp = {e => synth.triggerRelease(e.detail.note)}
+                on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
         </div>
-
-        <Keyboard
-            {currentSubdiv}
-            {currentKbSegment}
-            bind:melody = {melody}
-            {notes}
-            {notesOfSegment}
-            on:keyDown = {e => synth.triggerAttack(e.detail.note)}
-            on:keyUp = {e => synth.triggerRelease(e.detail.note)}
-            on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
-    </div>
-{:else}
-    <div
-        id="beatsInputs"
-        class="inputs"
-        out:fly={{ y: 20, duration: 200 }}>
-        <Soundboard
-            {currentSubdiv}
-            bind:beats = {beats}
-            {samples}
-            on:play = {e => players.player(e.detail.beat).start()}
-            on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
-    </div>
-{/if}
+    {:else if isReady}
+        <div
+            id="beatsInputs"
+            class="inputs"
+            out:fly={{ y: 20, duration: 200 }}>
+            <Soundboard
+                {currentSubdiv}
+                bind:beats = {beats}
+                {samples}
+                on:play = {e => players.player(e.detail.beat).start()}
+                on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
+        </div>
+    {/if}
+</div>
 
 
 
@@ -425,9 +529,10 @@
             z-index: 1002;
             padding-top: 10px;
 
-            animation: cassetteTopLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
-            animation-delay: var(--ani-delay-load);
-            animation-fill-mode: backwards;
+            transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+
+            // load state
+            transform: translateY(var(--cassettTop-translateY));
 
             div {
                 border-bottom: none;
@@ -437,7 +542,7 @@
                     0
                     0;
             }
-        } 
+        }
 
         &.bottom > div {
             z-index: 2;
@@ -448,9 +553,17 @@
                 var(--_border-radius)
                 var(--_border-radius);
 
-            animation: cassetteBottomLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
-            animation-delay: var(--ani-delay-load);
-            animation-fill-mode: backwards;
+            transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+
+            // load state
+            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        }
+
+        &.isReady {
+            &.top, &.bottom > div {
+                // default state
+                transform: translateY(0);
+            }
         }
     }
 
@@ -513,24 +626,6 @@
     }
 
     /* === ANIMATIONS ========================= */
-    @keyframes cassetteTopLoad {
-        from {
-            transform: translateY(var(--cassettTop-translateY));
-        }
-        to {
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes cassetteBottomLoad {
-        from {
-            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-        }
-        to {
-            transform: translateY(0);
-        }
-    }
-
     @keyframes inputsLoad {
         from {
             transform: translateY(20px);

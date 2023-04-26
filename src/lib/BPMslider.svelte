@@ -1,7 +1,7 @@
 <script lang="ts">
     /* === PROPS ============================== */
     export let bpm: number; // bind
-    export let layout: "responsive" | "horizontal" = "responsive";
+    export let isReady: boolean;
 
     /* === CONSTANTS ========================== */
     const min = 60;
@@ -10,7 +10,9 @@
 
 
 
-<div class="sliderWrapper {layout}">
+<div
+    class="sliderWrapper"
+    class:isReady>
     <input
         type="range"
         id="rangeInput"
@@ -78,9 +80,10 @@
         width: var(--_track-width);
         overflow: hidden;
 
-        animation: opacityLoad var(--trans-slow) ease 1;
-        animation-delay: var(--ani-delay-load);
-        animation-fill-mode: backwards;
+        transition: opacity var(--trans-slow) var(--trans-cubic-1);
+
+        // load state
+        opacity: 0;
         
         &::-webkit-slider-runnable-track {
             position: relative;
@@ -146,15 +149,19 @@
         gap: var(--pad-xl);
 
         .button {
-            animation: buttonLoad var(--trans-slow) cubic-bezier(0, .36, .34, 1) 1;
-            animation-delay: var(--ani-delay-load);
-            animation-fill-mode: backwards;
+            transition: transform var(--trans-slow) var(--trans-cubic-1),
+                        opacity var(--trans-slow) var(--trans-cubic-1);
+                
+            // load state
+            transform: translateX(calc(var(--_dir) * 25px));
+            opacity: 0;
         }
 
         label {
-            animation: opacityLoad var(--trans-slow) ease 1;
-            animation-delay: var(--ani-delay-load);
-            animation-fill-mode: backwards;
+            transition: opacity var(--trans-slow) var(--trans-cubic-1);
+
+            // load state
+            opacity: 0;
             
             span {
                 display: inline-block;
@@ -167,26 +174,23 @@
         }
     }
 
-    
-
-    /* === ANIMATIONS ========================= */
-    @keyframes opacityLoad {
-        from {
-            opacity: 0;
-        }
-        to {
+    .sliderWrapper.isReady {
+        #rangeInput {
+            // default state
             opacity: 1;
         }
-    }
 
-    @keyframes buttonLoad {
-        from {
-            transform: translateX(calc(var(--_dir) * 25px));
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+        .controls {
+            .button {
+                // default state
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            label {
+                //defult state
+                opacity: 1;
+            }
         }
     }
 </style>

@@ -2,13 +2,12 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import { page } from '$app/stores';
+    // Dexie
+    import { db } from "../../../storage/db";
     // types
     import type { Song } from '../../../storage/db';
-    // stores
-    import { firstLoad } from "../../../storage/store";
-    // components
-    import Synth from "$lib/synth.svelte";
 
     /* === CONSTANTS ========================== */
     const slug = $page.params.slug;
@@ -129,14 +128,23 @@
         song = demos[slug];
 
     /* === LIFECYCLES ========================= */
-    onMount(() => {
-        $firstLoad = false;
+    onMount(async () => {
+        if (song) {
+            // create new song in database
+            try {
+                const id = await db.songs.add({
+                    title: song.title,
+                    melody: song.melody,
+                    beats: song.beats,
+                    bpm: song.bpm,
+                });
+
+                goto('/song/' + id, { replaceState: true });
+            } catch (error) {
+                console.log("new song error: " + error);
+            }
+        } else {
+            goto('/', { replaceState: true });
+        }
     });
 </script>
-
-
-
-<Synth
-    title = {song?.title ? song.title : "demo"}
-    melody = {song?.melody ? song.melody : Array(24).fill([])}
-    beats = {song?.beats ? song.beats : Array(24).fill([])}/>

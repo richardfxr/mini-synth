@@ -11,6 +11,7 @@
     export let tweenedProgress: Tweened<number>;
     export let playbackProgress: number;
     export let melodyLength: number;
+    export let isReady: boolean;
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
@@ -21,6 +22,7 @@
 <div
     class="controls"
     class:playing={playbackState === "started"}
+    class:isReady
     style="--_sprocket-rotation: {-1 * $tweenedProgress}deg">
     <div class="timecode">
         <p>{Math.floor(currentSubdiv / 16)}:{Math.floor(currentSubdiv / 4) % 4}:{currentSubdiv % 4}</p>
@@ -33,8 +35,8 @@
                 --_dir: 1;
                 --_spool-scale: {1.1 + playbackProgress * 1.4};
             "
-            on:click = {() => dispatch('skipToBeginning')}
-            disabled = {playbackState === "started" || currentSubdiv <= 0}>
+            disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+            on:click = {() => dispatch('skipToBeginning')}>
             <p>⇤</p>
             <Sprocket />
         </button>
@@ -42,14 +44,15 @@
         <button
             class="button small subdiv"
             style="--_dir: 1"
-            on:click = {() => dispatch('prevSubdiv')}
-            disabled = {playbackState === "started" || currentSubdiv <= 0}>
+            disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+            on:click = {() => dispatch('prevSubdiv')}>
             ←
         </button>
 
-        <button class="button main" on:click={() => {
-            playbackState === "started" ? dispatch('pause') : dispatch('play')
-        }}>
+        <button
+            class="button main"
+            disabled = {!isReady}
+            on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
             {#if playbackState === "started"}
                 <span>Pause</span>
             {:else}
@@ -60,8 +63,8 @@
         <button
             class="button small subdiv"
             style="--_dir: -1"
-            on:click = {() => dispatch('nextSubdiv')}
-            disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
+            disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+            on:click = {() => dispatch('nextSubdiv')}>
             →
         </button>
 
@@ -71,8 +74,8 @@
                 --_dir: -1;
                 --_spool-scale: {2.5 - playbackProgress * 1.4};
             "
-            on:click = {() => dispatch('skipToEnd')}
-            disabled = {playbackState === "started" || currentSubdiv >= melodyLength - 1}>
+            disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+            on:click = {() => dispatch('skipToEnd')}>
             <p>⇥</p>
             <Sprocket />
         </button>
@@ -142,13 +145,14 @@
 
             &.skip {
                 z-index: 1;
-
                 border: none;
-                animation: skipLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
-                animation-delay: var(--ani-delay-load);
-                animation-fill-mode: backwards;
+                transition: scale var(--trans-normal) ease,
+                            transform var(--trans-normal) var(--trans-cubic-1),
+                            opacity var(--trans-normal) var(--trans-cubic-1);
 
-                transition: scale 0.2s ease;
+                // load state
+                transform: translateX(calc(var(--_dir) * 50px));
+                opacity: 0;
 
                 &::before {
                     // spool
@@ -196,43 +200,13 @@
             &.subdiv {
                 z-index: 2;
 
-                transition: background-color 0.2s ease,
-                            border-color 0.2s ease,
-                            transform 0.2s ease,
-                            opacity 0.2s ease;
-
-                animation: subdivLoad 0.2s cubic-bezier(0, .36, .34, 1) 1;
-                animation-delay: var(--ani-delay-load);
-                animation-fill-mode: backwards;
-            }
-        }
-    }
-
-    .playing .playback {
-        border-color: var(--clr-800);
-
-        button {
-            &.skip {
-                --_clr-border: var(--clr-250);
+                transition: background-color var(--trans-normal) ease,
+                            border-color var(--trans-normal) ease,
+                            transform var(--trans-normal) var(--trans-cubic-1),
+                            opacity var(--trans-normal) var(--trans-cubic-1);
                 
-                scale: 1.21;
-
-                &::before {
-                    scale: var(--_spool-scale);
-                }
-
-                p {
-                    opacity: 0;
-                }
-
-                :global(svg.sprocket) {
-                    opacity: 1;
-                    transform: rotate(var(--_sprocket-rotation));
-                }
-            }
-
-            &.subdiv {
-                transform: translateX(calc(var(--_dir) * 10px));
+                // load state
+                transform: translateX(calc(var(--_dir) * 20px));
                 opacity: 0;
             }
         }
@@ -259,26 +233,43 @@
         }
     }
 
-    /* === ANIMATIONS ========================= */
-    @keyframes skipLoad {
-        from {
-            transform: translateX(calc(var(--_dir) * 50px));
-            opacity: 0;
+    .controls.isReady {
+        .playback .button {
+            &.skip, &.subdiv {
+                // default state
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
 
-    @keyframes subdivLoad {
-        from {
-            transform: translateX(calc(var(--_dir) * 20px));
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+        &.playing .playback {
+            border-color: var(--clr-800);
+
+            button {
+                &.skip {
+                    --_clr-border: var(--clr-250);
+                    
+                    scale: 1.21;
+
+                    &::before {
+                        scale: var(--_spool-scale);
+                    }
+
+                    p {
+                        opacity: 0;
+                    }
+
+                    :global(svg.sprocket) {
+                        opacity: 1;
+                        transform: rotate(var(--_sprocket-rotation));
+                    }
+                }
+
+                &.subdiv {
+                    transform: translateX(calc(var(--_dir) * 10px));
+                    opacity: 0;
+                }
+            }
         }
     }
 </style>

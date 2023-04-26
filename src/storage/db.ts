@@ -4,7 +4,7 @@ import type * as Tone from 'tone';
 
 /* === TYPES ============================== */
 // song
-export type TempId = number | null | "new";
+export type TempId = number | "new";
 export type TapeName = "melody" | "beats";
 export type Melody = Tone.Unit.Frequency[][];
 export type Beats = string[][];
@@ -14,7 +14,7 @@ export interface Song {
     title: string;
     melody: Melody;
     beats: Beats;
-    bpm: number;
+    bpm: Tone.Unit.BPM;
 };
 
 /* === CLASSES ============================ */

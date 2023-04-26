@@ -1,12 +1,9 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     // Svelte
-    import { onMount } from 'svelte';
     import { page } from '$app/stores';
     // types
     import type { TempId } from '../../../storage/db';
-    // stores
-    import { firstLoad } from "../../../storage/store";
     // components
     import Synth from "$lib/synth.svelte";
 
@@ -23,11 +20,6 @@
     } else {
         id = null;
     };
-
-    /* === LIFECYCLES ========================= */
-    onMount(() => {
-        $firstLoad = false;
-    });
 </script>
 
 

@@ -1,6 +1,7 @@
 <script lang="ts">
     /* === PROPS ============================== */
     export let title: string; // bind
+    export let isReady: boolean;
 
     /* === VARIABLES ========================== */
     let titleInput: HTMLInputElement;
@@ -8,7 +9,9 @@
 
 
 
-<header class="cassetteHeader">
+<header
+    class="cassetteHeader"
+    class:isReady>
     <a
         href="/"
         id="menu"
@@ -22,12 +25,14 @@
         type="text"
         autocomplete="off"
         placeholder="song title"
+        disabled={!isReady}
         bind:this={titleInput}
         bind:value={title}>
     
     <button
         class="button"
-        style="--_dir: -1">
+        style="--_dir: -1"
+        disabled={!isReady}>
     </button>
 </header>
 
@@ -49,9 +54,12 @@
     .button {
         flex-shrink: 0;
 
-        animation: buttonLoad var(--trans-slow) cubic-bezier(0, .36, .34, 1) 1;
-        animation-delay: var(--ani-delay-load);
-        animation-fill-mode: backwards;
+        transition: transform var(--trans-slow) var(--trans-cubic-1),
+                    opacity var(--trans-slow) var(--trans-cubic-1);
+
+        // load state
+        transform: translateX(calc(var(--_dir) * 35px));
+        opacity: 0;
     }
 
     input {
@@ -64,33 +72,26 @@
         border: none;
         border-bottom: solid var(--border-width) var(--clr-350);
 
-        transition: border-color var(--trans-normal) ease;
-        animation: inputLoad var(--trans-slow) ease 1;
-        animation-delay: var(--ani-delay-load);
-        animation-fill-mode: backwards;
+        transition: border-color var(--trans-normal) ease,
+                    opacity var(--trans-slow) var(--trans-cubic-1);
 
+        // load state
+        opacity: 0;
+        
         &:focus {
             border-color: var(--clr-600);
         }
     }
 
-    /* === ANIMATIONS ========================= */
-    @keyframes buttonLoad {
-        from {
-            transform: translateX(calc(var(--_dir) * 35px));
-            opacity: 0;
-        }
-        to {
+    .cassetteHeader.isReady {
+        .button {
+            // default state
             transform: translateX(0);
             opacity: 1;
         }
-    }
 
-    @keyframes inputLoad {
-        from {
-            opacity: 0;
-        }
-        to {
+        input {
+            // default state
             opacity: 1;
         }
     }

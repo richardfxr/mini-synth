@@ -2,6 +2,7 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
+    import { fly } from 'svelte/transition';
     import { goto } from '$app/navigation';
     // Dexie
     import { liveQuery } from "dexie";
@@ -36,24 +37,56 @@
 
 
 
-{#if $songs}
-    <ul class="songs">
-        {#each $songs as song}
-            <li>
-                <a href={"/song/" + song.id}>{song.title}</a>
-            </li>
-        {/each}
-    </ul>
-{/if}
+<div
+    class="index"
+    in:fly={{ y: -20, duration: 200, delay: 200 }}
+    out:fly={{ y: -20, duration: 200 }}>
+    {#if $songs}
+        <ul class="songs">
+            {#each $songs as song}
+                <li>
+                    <a href={"/song/" + song.id}>{song.title}</a>
+                </li>
+            {/each}
+        </ul>
+    {/if}
+
+    <a
+        href="/song/new"
+        class="button new">
+        <span>new</span>
+    </a>
+</div>
+
 
 
 
 <style lang="scss">
     .songs {
+        // animation: songsLoad var(--trans-normal) var(--trans-cubic-1) 1;
+        // animation-delay: 250ms;
+        // animation-fill-mode: backwards;
+
         a {
             display: block;
             padding: var(--pad-xl);
             border-bottom: solid var(--border-width) var(--clr-250);
+        }
+    }
+
+    .new.button {
+        width: 8ch;
+    }
+
+    /* === ANIMATIONS ========================= */
+    @keyframes songsLoad {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
         }
     }
 </style>

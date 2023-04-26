@@ -17,6 +17,7 @@
     export let notes: Tone.Unit.Frequency[];
     export let beats: string[][];
     export let hasManuallyScrolled: boolean; // bind
+    export let isReady: boolean;
 
     tweenedProgress.subscribe(() => {
         // set scrollLeft using progress (tweened)
@@ -38,6 +39,7 @@
 
 <div
     class="reels"
+    class:isReady
     style="--melodyLength: {melody.length}">
     <div
         class="spools"
@@ -101,20 +103,23 @@
                 {notes}
                 {currentSubdiv}
                 bind:currentTape = {currentTape}
-                {dragging} />
+                {dragging}
+                {isReady} />
 
             <Tape
                 tapeName = "beats"
                 tape = {beats}
                 {currentSubdiv}
                 bind:currentTape = {currentTape}
-                {dragging} />
+                {dragging}
+                {isReady} />
 
         </div>
         
         <div class="tapePadding end">
             <button
                 class="button add"
+                disabled={!isReady}
                 on:click={() => dispatch('addQuarter')}>
                 <span class="visuallyHidden">add 4 sixteenth notes</span>
                 +
@@ -145,9 +150,12 @@
         background-color: var(--clr-100);
         border-bottom: solid var(--border-width-thick) var(--clr-100);
 
-        animation: reelsLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
-        animation-delay: var(--ani-delay-load);
-        animation-fill-mode: backwards;
+        transition: transform var(--trans-slow) var(--trans-cubic-1),
+                    opacity var(--trans-slow) var(--trans-cubic-1);
+
+        // load state
+        transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        opacity: 0;
 
         &::before, &::after {
             // playhead
@@ -193,12 +201,13 @@
         padding: var(--reels-pad-top) 0 var(--border-width-thick) 0;
         overflow-x: auto;
 
-        animation: spoolsLoad 0.25s cubic-bezier(0, .36, .34, 1) 1;
-        animation-delay: var(--ani-delay-load);
-        animation-fill-mode: backwards;
-
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
+
+        transition: transform var(--trans-slow) var(--trans-cubic-1);
+
+        // load state
+        transform: translateX(100px);
 
         &.dragging {
             cursor: grabbing;
@@ -299,23 +308,13 @@
         }
     }
 
-    /* === ANIMATIONS ========================= */
-    @keyframes reelsLoad {
-        from {
-            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
+    .reels.isReady {
+        // default state
+        transform: translateY(0);
+        opacity: 1;
 
-    @keyframes spoolsLoad {
-        from {
-            transform: translateX(100px);
-        }
-        to {
+        .spools {
+            // default state
             transform: translateX(0);
         }
     }

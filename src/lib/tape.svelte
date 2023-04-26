@@ -1,7 +1,7 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import type * as Tone from 'tone';
-    import type { TapeName, Tape } from '$lib/synth.svelte';
+    import type { TapeName, Tape } from '../storage/db';
 
     /* === PROPS ============================== */
     export let tapeName: TapeName;
@@ -10,6 +10,7 @@
     export let currentSubdiv: number;
     export let currentTape: TapeName; // bind
     export let dragging: boolean;
+    export let isReady: boolean;
 </script>
 
 
@@ -18,7 +19,8 @@
     id={tapeName}
     class="tape"
     class:active={currentTape === tapeName}
-    class:dragging>
+    class:dragging
+    class:isReady>
 
     <!-- invisible radio input that covers the whole tape -->
     <label>
@@ -27,7 +29,8 @@
             type="radio"
             bind:group={currentTape}
             name="tape"
-            value={tapeName}>
+            value={tapeName}
+            disabled={!isReady}>
         <span class="visuallyHidden">Melody tape</span>
     </label>
 

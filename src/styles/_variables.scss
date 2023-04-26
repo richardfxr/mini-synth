@@ -53,6 +53,7 @@ $beats: (
    --trans-fast: 0.15s;
    --trans-normal: 0.2s;
    --trans-slow: 0.25s;
+   --trans-cubic-1: cubic-bezier(0, .36, .34, 1);
 
    --ani-delay-load: 0.1s;
 
