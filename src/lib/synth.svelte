@@ -40,6 +40,7 @@
     export let melody: Melody = Array(24).fill([]);
     export let beats: Beats = Array(24).fill([]);
     export let bpm: Tone.Unit.BPM = 80;
+    export let sean = false; // for sean, to make editing a little easier
 
     /* === CONSTANTS ========================== */
     const subdivWidth = 35;
@@ -438,6 +439,18 @@
                 }}>
                 D
             </button>
+            {#if sean}
+                <button
+                    class="button"
+                    style="--_dir: 1"
+                    disabled={!isReady}
+                    on:click={() => {
+                        melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
+                        beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
+                    }}>
+                    +
+                </button>
+            {/if}
         </div>
         <div class="housing">
             <Controls
@@ -488,6 +501,22 @@
                 <span class="visuallyHidden">Melody tape</span>
                 A
             </label>
+            {#if sean}
+                <button
+                    class="button"
+                    style="--_dir: -1"
+                    disabled={!isReady || melody.length <= 1}
+                    on:click={async () => {
+                        if (currentSubdiv >= melody.length - 1) {
+                            await removeSubdiv(1);
+                        } else {
+                            melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
+                        beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
+                        }
+                    }}>
+                    -
+                </button>
+            {/if}
         </div>
     </div>
 
