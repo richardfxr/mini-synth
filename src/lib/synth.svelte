@@ -85,12 +85,16 @@
     let beatsToPlay: { time: Tone.Unit.Time, samples: string[] }[] = [];
     let tapesFrame: number;
 
-    let currentTape: TapeName = "melody";
+    let currentTapeName: TapeName = "melody";
     let currentSubdiv: number = 0;
+    let autoSkip = true;
+    let autoSkipping = false;
     let currentKbSegment: 0 | 1 | 2 = 0;
     let hasManuallyScrolled = false;
 
     /* === REACTIVE DECLARATIONS ============== */
+    // reference to the currently active tape
+    $: currentTape = currentTapeName === "melody" ? melody : beats;
     // if each of the three keyboard segments is populated (has at least one note played)
     $: segmentIsPopulated = [
         melody[currentSubdiv].some(e => notesOfSegment[0].includes(e)),
@@ -391,9 +395,9 @@
     out:fly={{ y: 20, duration: 200 }}>
     <div class="background">
         <div
-            class="cassetteHousing top"
+            class="cassette top"
             class:isReady>
-            <div>
+            <div class="housing">
                 <CassetteHeader 
                     bind:title = {title}
                     {isReady}/>
@@ -406,7 +410,7 @@
         {tweening}
         {tweenedProgress}
         {subdivWidth}
-        bind:currentTape = {currentTape}
+        bind:currentTapeName = {currentTapeName}
         bind:currentSubdiv = {currentSubdiv}
         {melody}
         {notes}
@@ -418,9 +422,18 @@
         on:removeQuarter = {async () => await removeSubdiv(4)} />
 
     <div
-        class="cassetteHousing bottom"
+        class="cassette bottom"
         class:isReady>
-        <div>
+        <div id="left" class="sideButton">
+            <button
+                class="button"
+                style="--_dir: 1"
+                disabled={!isReady || currentTape[currentSubdiv].length === 0}
+                on:click={() => currentTape[currentSubdiv] = []}>
+                D
+            </button>
+        </div>
+        <div class="housing">
             <Controls
                 {playbackState}
                 {currentSubdiv}
@@ -455,9 +468,24 @@
                 {isReady}
                 on:input = {() => Tone.Transport.bpm.value = bpm} />
         </div>
+        <div id="right" class="sideButton">
+            <label
+                class="button"
+                style="--_dir: -1"
+                class:active={autoSkip}
+                class:autoSkipping>
+                <input
+                    class="visuallyHidden"
+                    type="checkbox"
+                    bind:checked={autoSkip}
+                    disabled={!isReady}>
+                <span class="visuallyHidden">Melody tape</span>
+                A
+            </label>
+        </div>
     </div>
 
-    {#if isReady && currentTape === "melody"}
+    {#if isReady && currentTapeName === "melody"}
         <div
             id="melodyInputs"
             class="inputs"
@@ -474,9 +502,14 @@
                 bind:melody = {melody}
                 {notes}
                 {notesOfSegment}
+                {autoSkip}
                 on:keyDown = {e => $synth?.triggerAttack(e.detail.note)}
                 on:keyUp = {e => $synth?.triggerRelease(e.detail.note)}
-                on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)}/>
+                on:nextSubDiv = {async () => {
+                    autoSkipping = true;
+                    await skipTo(currentSubdiv + 1);
+                    autoSkipping = false;
+                }}/>
         </div>
     {:else if isReady}
         <div
@@ -487,8 +520,13 @@
                 {currentSubdiv}
                 bind:beats = {beats}
                 {samples}
+                {autoSkip}
                 on:play = {e => $players?.player(e.detail.beat).start()}
-                on:nextSubDiv = {async () => await skipTo(currentSubdiv + 1)} />
+                on:nextSubDiv = {async () => {
+                    autoSkipping = true;
+                    await skipTo(currentSubdiv + 1)
+                    autoSkipping= false;
+                }} />
         </div>
     {/if}
 </div>
@@ -508,18 +546,18 @@
         background-color: var(--clr-100);
     }
 
-    .cassetteHousing {
+    .cassette {
         // internal variables
         --_border-radius: 10px;
 
         position: relative;
 
         padding: 0 10px;
-        background-color: var(--clr-100);
 
-        & > div {
-            max-width: var(--cassetts-macxWidth);
+        .housing {
+            max-width: $cassetts-maxWidth;
 
+            background-color: var(--clr-100);
             border: solid var(--border-width) var(--clr-250);
             margin: 0 auto;
         }
@@ -527,13 +565,14 @@
         &.top {
             z-index: 1002;
             padding-top: 10px;
+            background-color: var(--clr-100);
 
             transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
 
             // load state
             transform: translateY(var(--cassettTop-translateY));
 
-            div {
+            .housing {
                 border-bottom: none;
                 border-radius:
                     var(--_border-radius)
@@ -543,25 +582,62 @@
             }
         }
 
-        &.bottom > div {
-            z-index: 2;
-            border-top: none;
-            border-radius:
-                0
-                0
-                var(--_border-radius)
-                var(--_border-radius);
+        &.bottom {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            gap: var(--pad-xl);
+            padding: 0;
 
-            transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+            .housing {
+                flex-grow: 1;
+                z-index: 2;
 
-            // load state
-            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+                border-top: none;
+                border-radius:
+                    0
+                    0
+                    var(--_border-radius)
+                    var(--_border-radius);
+                margin: 0;
+
+                transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+
+                // load state
+                transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+            }
+
+            .sideButton {
+                padding-top: var(--pad-md);
+
+                .button {
+                    position: sticky;
+                    top: calc(var(--reels-height) + var(--pad-md));
+
+                    transition: transform var(--trans-normal) var(--trans-cubic-1),
+                                opacity var(--trans-normal) var(--trans-cubic-1);
+
+                    // load state
+                    transform: translateX(calc(var(--_dir) * 50px));
+                    opacity: 0;
+
+                    &.autoSkipping {
+                        background-color: orange;
+                    }
+                }
+            }
         }
 
         &.isReady {
-            &.top, &.bottom > div {
+            &.top, &.bottom .housing {
                 // default state
                 transform: translateY(0);
+            }
+
+            &.bottom .sideButton .button {
+                // default state
+                transform: translateY(0);
+                opacity: 1;
             }
         }
     }
@@ -620,6 +696,33 @@
             .secondaryControls {
                 gap: 30px;
                 padding: 0 20px;
+            }
+        }
+    }
+
+    @media (max-width: calc($cassetts-maxWidth + 20px + 88px)) {
+        .cassette.bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            grid-template-areas: 
+                "housing housing"
+                "leftButton rightButton";
+            max-width: calc($cassetts-maxWidth + 2 * var(--pad-xl));
+            
+            padding: 0 var(--pad-xl);
+            margin: 0 auto;
+            
+            .housing {
+                grid-area: housing;
+            }
+
+            .sideButton {
+                padding: 0;
+
+                &#right {
+                    margin-left: auto;
+                }
             }
         }
     }

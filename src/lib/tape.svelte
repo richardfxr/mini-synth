@@ -8,7 +8,7 @@
     export let tape: Tape;
     export let notes: Tone.Unit.Frequency[] = [];
     export let currentSubdiv: number;
-    export let currentTape: TapeName; // bind
+    export let currentTapeName: TapeName; // bind
     export let dragging: boolean;
     export let isReady: boolean;
 </script>
@@ -18,7 +18,7 @@
 <article
     id={tapeName}
     class="tape"
-    class:active={currentTape === tapeName}
+    class:active={currentTapeName === tapeName}
     class:dragging
     class:isReady>
 
@@ -27,7 +27,7 @@
         <input
             class="visuallyHidden"
             type="radio"
-            bind:group={currentTape}
+            bind:group={currentTapeName}
             name="tape"
             value={tapeName}
             disabled={!isReady}>

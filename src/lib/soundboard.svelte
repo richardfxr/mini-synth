@@ -7,6 +7,7 @@
     export let currentSubdiv: number;
     export let beats: string[][]; // bind
     export let samples: { [key: string]: string};
+    export let autoSkip: boolean;
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
@@ -14,7 +15,6 @@
     /* === VARIABLES ========================== */
     let activeNotes: string[] = [];
     let hasPlayedNote = false;
-    let autoSkip = false;
 
     /* === REACTIVE DECLARATION =============== */
     // call newSubdiv() when currentSubdiv changes
@@ -25,18 +25,6 @@
         // reset activeNotes and hasPlayedNote
         activeNotes = [];
         hasPlayedNote = false;
-
-        if (
-            beats[currentSubdiv].length === 0 &&
-            currentSubdiv + 1 < beats.length &&
-            beats[currentSubdiv + 1 ].length === 0) {
-            // enable autoSkip if currentSubdiv started empty and next subdiv is also empty
-            autoSkip = true;
-            console.log("autoSkip: true");
-        } else {
-            autoSkip = false;
-            console.log("autoSkip: false");
-        }
     }
 
     function handleButtonDown(beat: string): void {

@@ -11,7 +11,7 @@
     export let tweening: boolean;
     export let tweenedProgress: Tweened<number>;
     export let subdivWidth: number;
-    export let currentTape: TapeName; // bind
+    export let currentTapeName: TapeName; // bind
     export let currentSubdiv: number; // bind
     export let melody: Tone.Unit.Frequency[][];
     export let notes: Tone.Unit.Frequency[];
@@ -106,7 +106,7 @@
                 tape = {melody}
                 {notes}
                 {currentSubdiv}
-                bind:currentTape = {currentTape}
+                bind:currentTapeName = {currentTapeName}
                 {dragging}
                 {isReady} />
 
@@ -114,7 +114,7 @@
                 tapeName = "beats"
                 tape = {beats}
                 {currentSubdiv}
-                bind:currentTape = {currentTape}
+                bind:currentTapeName = {currentTapeName}
                 {dragging}
                 {isReady} />
 

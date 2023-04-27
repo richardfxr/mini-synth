@@ -49,7 +49,7 @@ GLOBAL
         --_clr-border: var(--clr-350);
     }
 
-    &:active {
+    &:active, &.active {
         --_clr: var(--clr-1000);
         --_clr-background: var(--clr-0);
         --_clr-border: var(--clr-600);

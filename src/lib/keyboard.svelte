@@ -9,6 +9,7 @@
     export let melody: Tone.Unit.Frequency[][]; // bind
     export let notes: Tone.Unit.Frequency[];
     export let notesOfSegment: Tone.Unit.Frequency[][];
+    export let autoSkip: boolean;
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
@@ -20,7 +21,6 @@
     let isPortrait = false;
     let activeNotes: Tone.Unit.Frequency[] = [];
     let hasPlayedNote = false;
-    let autoSkip = false;
 
     /* === REACTIVE DECLARATION =============== */
     // call newSubdiv() when currentSubdiv changes
@@ -39,19 +39,6 @@
         activeNotes.forEach(note => handleKeyUp(note));
         activeNotes = [];
         hasPlayedNote = false;
-        console.log("new subdiv: " + currentSubdiv);
-
-        if (
-            melody[currentSubdiv].length === 0 &&
-            currentSubdiv + 1 < melody.length &&
-            melody[currentSubdiv + 1 ].length === 0) {
-            // enable autoSkip if currentSubdiv started empty and next subdiv is also empty
-            autoSkip = true;
-            console.log("autoSkip: true");
-        } else {
-            autoSkip = false;
-            console.log("autoSkip: false");
-        }
     }
 
     function scrollToCurrentSegment(): void {

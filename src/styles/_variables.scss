@@ -10,6 +10,9 @@
 // === BREAKPOINTS ============================
 $breakpoint-tablet: 700px;
 
+// === SASS VARIABLES =========================
+$cassetts-maxWidth: 400px;
+
 // beats color map
 $beats: (
    "hh": "0",
@@ -23,7 +26,7 @@ $beats: (
 :root {
    /* === CSS VARIABLES ====================== */
    --button-minSize: 44px;
-   --cassetts-macxWidth: 400px;
+   --cassetts-maxWidth: 400px;
    --cassettTop-translateY: 50px;
    --reels-pad-top: 4px;
    --tapeMarker-height: 25px;
