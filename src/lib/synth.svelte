@@ -513,7 +513,11 @@
                 on:keyUp = {e => $synth?.triggerRelease(e.detail.note)}
                 on:nextSubDiv = {async () => {
                     autoSkipping = true;
-                    await skipTo(currentSubdiv + 1);
+                    if (currentSubdiv + 1 >= melody.length) {
+                        await addSubdiv(4);
+                    } else {
+                        await skipTo(currentSubdiv + 1);
+                    }
                     autoSkipping = false;
                 }}/>
         </div>
@@ -530,7 +534,11 @@
                 on:play = {e => $players?.player(e.detail.beat).start()}
                 on:nextSubDiv = {async () => {
                     autoSkipping = true;
-                    await skipTo(currentSubdiv + 1)
+                    if (currentSubdiv + 1 >= melody.length) {
+                        await addSubdiv(4);
+                    } else {
+                        await skipTo(currentSubdiv + 1);
+                    }
                     autoSkipping= false;
                 }} />
         </div>
