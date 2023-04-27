@@ -593,12 +593,17 @@
             flex-flow: row nowrap;
             justify-content: center;
             gap: var(--pad-xl);
-            padding: 0;
+            position: sticky;
+            top: calc(var(--reels-height) - $cassetteBottom-height + $cassetteBottom-visible);
+            z-index: 999;
+
+            padding: 0 0 var(--pad-xl) 0;
 
             .housing {
                 flex-grow: 1;
                 z-index: 2;
 
+                padding-bottom: var(--pad-sm);
                 border-top: none;
                 border-radius:
                     0
@@ -665,7 +670,7 @@
         height: var(--inputs-height);
         max-height: var(--inputs-maxHeight);
 
-        padding: 10px 0 10px var(--pad-2xl);
+        padding: 0 0 0 var(--pad-2xl);
         
         .secondaryControls {
             display: flex;
@@ -677,7 +682,7 @@
     #beatsInputs {
         flex-direction: column;
         align-items: center;
-        padding: 15px;
+        padding: var(--pad-2xl) var(--pad-xl) 0 var(--pad-xl);
     }
 
     /* === BREAKPOINTS ======================== */
@@ -685,7 +690,7 @@
         #melodyInputs {
             height: unset;
             max-height: unset;
-            padding: var(--pad-2xl) 0 var(--pad-2xl) var(--pad-2xl);
+            padding: var(--pad-2xl) 0 var(--pad-2xl) var(--pad-xl);
 
             .secondaryControls {
                 flex-flow: column-reverse nowrap;
@@ -714,6 +719,7 @@
             grid-template-areas: 
                 "housing housing"
                 "leftButton rightButton";
+            gap: var(--pad-md);
             max-width: calc($cassetts-maxWidth + 2 * var(--pad-xl));
             
             padding: 0 var(--pad-xl);

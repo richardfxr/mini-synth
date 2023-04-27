@@ -66,7 +66,7 @@
         gap: var(--pad-sm);
         width: 100%;
 
-        padding: var(--pad-xl) var(--pad-3xl) var(--pad-2xl) var(--pad-3xl);
+        padding: var(--pad-3xl) var(--pad-3xl) var(--pad-xl) var(--pad-3xl);
     }
     
     #rangeInput {

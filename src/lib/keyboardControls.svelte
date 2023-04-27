@@ -39,7 +39,7 @@
         flex-direction: column;
         gap: 10px;
         position: sticky;
-        top: calc(var(--reels-height) + var(--border-width-thick));
+        top: calc(var(--reels-height) + $cassetteBottom-visible + var(--border-width-thick));
     }
 
     button {
@@ -86,6 +86,12 @@
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         .keyboardControls {
             flex-direction: row;
+        }
+    }
+
+    @media (max-width: calc($cassetts-maxWidth + 20px + 88px)) {
+        .keyboardControls {
+            top: calc(var(--reels-height) + $cassetteBottom-visible + 2 * var(--pad-md) + 44px);
         }
     }
 </style>

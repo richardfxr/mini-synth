@@ -99,8 +99,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: sticky;
+        top: var(--reels-height);
+        z-index: 2;
 
-        padding-bottom: 10px;
+        background-color: var(--clr-100);
     }
 
     .timecode {
