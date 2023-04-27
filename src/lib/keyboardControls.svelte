@@ -37,7 +37,7 @@
     .keyboardControls {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: var(--pad-sm);
         position: sticky;
         top: calc(var(--reels-height) + $cassetteBottom-visible + var(--border-width-thick));
     }
