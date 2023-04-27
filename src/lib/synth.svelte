@@ -429,7 +429,13 @@
                 class="button"
                 style="--_dir: 1"
                 disabled={!isReady || currentTape[currentSubdiv].length === 0}
-                on:click={() => currentTape[currentSubdiv] = []}>
+                on:click={() => {
+                    if (currentTapeName === "melody") {
+                        melody[currentSubdiv] = [];
+                    } else {
+                        beats[currentSubdiv] = [];
+                    }
+                }}>
                 D
             </button>
         </div>
