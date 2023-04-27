@@ -12,8 +12,9 @@ $breakpoint-tablet: 700px;
 
 // === SASS VARIABLES =========================
 $cassetts-maxWidth: 400px;
+$cassette-border-radius: 10px;
 $cassetteBottom-height: 184px;
-$cassetteBottom-visible: 67px;
+$cassetteBottom-visible: 65px;
 
 // beats color map
 $beats: (
@@ -38,7 +39,7 @@ $beats: (
    --beats-height: 55px;
    --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));
    --inputs-maxWidth: 1000px;
-   --inputs-height: calc(100vh - var(--reels-height) - 67px);
+   --inputs-height: calc(100vh - var(--reels-height) - 62px);
    --inputs-maxHeight: 400px;
 
    --pad-3xl: 20px;
@@ -46,6 +47,7 @@ $beats: (
    --pad-xl: 10px;
    --pad-md: 6px;
    --pad-sm: 4px;
+   --pad-xs: 2px;
 
    --border-width-thick: 2px;
    --border-width: 1.5px;

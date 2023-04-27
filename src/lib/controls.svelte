@@ -104,6 +104,11 @@
         z-index: 2;
 
         background-color: var(--clr-100);
+        border-radius:
+            0
+            0
+            $cassette-border-radius
+            $cassette-border-radius;
     }
 
     .timecode {

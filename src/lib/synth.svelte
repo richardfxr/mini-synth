@@ -590,9 +590,6 @@
     }
 
     .cassette {
-        // internal variables
-        --_border-radius: 10px;
-
         position: relative;
 
         padding: 0 10px;
@@ -618,8 +615,8 @@
             .housing {
                 border-bottom: none;
                 border-radius:
-                    var(--_border-radius)
-                    var(--_border-radius)
+                    $cassette-border-radius
+                    $cassette-border-radius
                     0
                     0;
             }
@@ -640,13 +637,13 @@
                 flex-grow: 1;
                 z-index: 2;
 
-                padding-bottom: var(--pad-sm);
+                padding-bottom: var(--pad-xs);
                 border-top: none;
                 border-radius:
                     0
                     0
-                    var(--_border-radius)
-                    var(--_border-radius);
+                    $cassette-border-radius
+                    $cassette-border-radius;
                 margin: 0;
 
                 transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
@@ -704,6 +701,7 @@
 
     #melodyInputs {
         flex-flow: row nowrap;
+        min-height: 129px;
         height: var(--inputs-height);
         max-height: var(--inputs-maxHeight);
 
