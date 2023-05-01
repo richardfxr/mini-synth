@@ -138,6 +138,10 @@
         overflow: hidden;
         transition: border-color 0.2s ease;
 
+        // prevent buttons from overflowing on iOS 15 Safari
+        // by establishing new stacking order
+        isolation: isolate;
+
         .button {
             &.main {
                 width: 90px;
