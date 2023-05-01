@@ -33,6 +33,7 @@
     /* === VARIABLES ========================== */
     let tapes: HTMLElement;
     let dragging = false;
+    let radioPointerDown = false
 </script>
 
 
@@ -77,6 +78,8 @@
             // drag only if primary mouse button is held down
             if (e.buttons === 1) {
                 dragging  = true;
+                // remove radio pointerDown to prevent radios from triggering on drag
+                radioPointerDown = false;
                 let newScrollLeft = tapes.scrollLeft - e.movementX;
 
                 // limit newScrollLeft to be between 0 and melody.length
@@ -108,6 +111,7 @@
                 {currentSubdiv}
                 bind:currentTapeName = {currentTapeName}
                 {dragging}
+                bind:radioPointerDown = {radioPointerDown}
                 {isReady} />
 
             <Tape
@@ -116,6 +120,7 @@
                 {currentSubdiv}
                 bind:currentTapeName = {currentTapeName}
                 {dragging}
+                bind:radioPointerDown = {radioPointerDown}
                 {isReady} />
 
         </div>

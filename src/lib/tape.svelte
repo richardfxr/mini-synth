@@ -10,6 +10,7 @@
     export let currentSubdiv: number;
     export let currentTapeName: TapeName; // bind
     export let dragging: boolean;
+    export let radioPointerDown: boolean; // bind
     export let isReady: boolean;
 </script>
 
@@ -20,18 +21,30 @@
     class="tape"
     class:active={currentTapeName === tapeName}
     class:dragging
-    class:isReady>
+    class:isReady
+    on:pointerdown={() => {
+        // register pointer down event
+        // this will be reset if the user drags the reel
+        radioPointerDown = true
+    }}
+    on:pointerup={() => {
+        if (radioPointerDown) {
+            // check radio if radioPointerDown was registered
+            // (user was not simply dragging the reel)
+            currentTapeName = tapeName;
+        }
+        radioPointerDown = false;   
+    }}>
 
-    <!-- invisible radio input that covers the whole tape -->
-    <label>
+    <!-- visually hidden radio input for track switching -->
+    <label class="visuallyHidden">
         <input
-            class="visuallyHidden"
             type="radio"
-            bind:group={currentTapeName}
             name="tape"
             value={tapeName}
+            bind:group={currentTapeName}
             disabled={!isReady}>
-        <span class="visuallyHidden">Melody tape</span>
+        {tapeName} tape
     </label>
 
     <!-- start tape terminal -->
@@ -144,22 +157,6 @@
 
         &.dragging label {
             cursor: grabbing;
-        }
-    }
-
-    label {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 100;
-
-        cursor: grab;
-
-        input {
-            // prevent tape scroll on radio input
-            visibility: hidden;
         }
     }
 
