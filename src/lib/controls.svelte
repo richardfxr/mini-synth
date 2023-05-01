@@ -120,8 +120,8 @@
         margin-bottom: -5px;
 
         p {
-            font-family: 'Cousine', monospace;
-            font-weight: 400;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
         }
     }
 

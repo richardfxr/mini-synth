@@ -11,6 +11,8 @@
 $breakpoint-tablet: 700px;
 
 // === SASS VARIABLES =========================
+$page-maxWidth: 1200px;
+$subdiv-width: 35px;
 $cassetts-maxWidth: 400px;
 $cassette-border-radius: 10px;
 $cassetteBottom-height: 184px;
@@ -45,6 +47,7 @@ $beats: (
    --pad-3xl: 20px;
    --pad-2xl: 15px;
    --pad-xl: 10px;
+   --pad-lg: 8px;
    --pad-md: 6px;
    --pad-sm: 4px;
    --pad-xs: 2px;
