@@ -21,6 +21,11 @@ GLOBAL
     html, body {
         background-color: var(--clr-100);
     }
+
+    body {
+        // prevent zoom-in on iOS Safari as meta tags are ignored
+        touch-action: pan-y;
+    }
 }
 
 .button {
