@@ -147,8 +147,7 @@
     {#if $songs}
         <ul
             class="songs"
-            class:isReady
-            out:fly={{ y: 70, duration: 200 }}>
+            class:isReady>
             {#each $songs as song}
                 <Song
                     bind:selectedSongs = {selectedSongs}
