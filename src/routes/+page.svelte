@@ -14,6 +14,8 @@
     import SongLi from '$lib/songLi.svelte';
     // icons
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
+    import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
+    import DuplicateIcon from '$lib/SVGs/duplicateIcon.svelte';
 
     /* === VARIABLES ========================== */
     let songs: Song[] = [];
@@ -136,17 +138,17 @@
                 disabled={selectedSongs.length === 0 || working}
                 on:click={duplicateSelectedSongs}>
                 <span class="visuallyHidden">duplicate selected songs</span>
-                <span>C</span>
+                <DuplicateIcon />
             </button>
         </li>
         <li id="delete">
             <button
-                class="button"
+                class="button warn"
                 class:disabled={selectedSongs.length === 0}
                 disabled={selectedSongs.length === 0 || working}
                 on:click={deleteSelectedSongs}>
                 <span class="visuallyHidden">delete selected songs</span>
-                <span>D</span>
+                <TrashCanIcon />
             </button>
         </li>
     </ul>

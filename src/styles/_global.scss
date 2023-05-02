@@ -67,6 +67,15 @@ GLOBAL
 
         cursor: not-allowed;
     }
+
+    &.warn {
+        // internal variables 
+        --_clr: red;
+
+        &:disabled {
+            --_clr: #ff9d9d;
+        }
+    }
 }
 
 .icon {

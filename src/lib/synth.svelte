@@ -42,6 +42,9 @@
     import KeyboardControls from '$lib/keyboardControls.svelte';
     import Keyboard from '$lib/keyboard.svelte';
     import Soundboard from '$lib/soundboard.svelte';
+    // icons
+    import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
+    import AutoSkipIcon from '$lib/SVGs/autoSkipIcon.svelte';
 
     /* === PROPS ============================== */
     export let id: TempId = "new";
@@ -430,7 +433,7 @@
         class:isReady>
         <div id="left" class="sideButton">
             <button
-                class="button"
+                class="button warn"
                 style="--_dir: 1"
                 disabled={!isReady || currentTape[currentSubdiv].length === 0}
                 on:click={() => {
@@ -440,7 +443,7 @@
                         beats[currentSubdiv] = [];
                     }
                 }}>
-                D
+                <TrashCanIcon />
             </button>
             {#if sean}
                 <button
@@ -502,7 +505,7 @@
                     bind:checked={autoSkip}
                     disabled={!isReady}>
                 <span class="visuallyHidden">Melody tape</span>
-                A
+                <AutoSkipIcon />
             </label>
             {#if sean}
                 <button
