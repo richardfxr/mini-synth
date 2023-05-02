@@ -81,6 +81,8 @@
 
     /* === LIFECYCLES ========================= */
     onMount(async () => {
+        console.log("index onMount");
+        console.log("$songs: " + JSON.stringify($songs));
         // time intro 
         if ($firstLoad) {
             introHasFinished = true;
@@ -93,6 +95,9 @@
         const retrievedSongs = await db.songs.toArray();
         songsAreLoaded = true;
 
+        console.log("retrievedSongs: ", retrievedSongs);
+        console.log("$songs: " + JSON.stringify($songs));
+
         if ($firstLoad && (!retrievedSongs || retrievedSongs.length === 0)) {
             // go to new song on first load with no songs
             $firstLoad = false;
@@ -100,6 +105,9 @@
         } else {
             $firstLoad = false;
         }
+
+        console.log("onMount finished");
+        console.log("$songs: " + JSON.stringify($songs));
     });
 
     beforeNavigate(() => {
