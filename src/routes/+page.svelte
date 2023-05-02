@@ -25,14 +25,22 @@
     let introHasFinished = false;
     let songsAreLoaded = false;
 
+    let searchInput: HTMLInputElement;
+    let searchQuery = "";
+
     /* === REACTIVE DECLARATIONS ============== */
     $: isReady = songsAreLoaded && introHasFinished;
+    $: filteredSongs = 
+        songs && searchQuery === "" ?
+            songs :
+            songs ?
+                songs.filter(song => song.title.toLowerCase().includes(searchQuery.toLowerCase())) :
+                null;
 
     /* === FUNCTIONS ========================== */
     async function getSongs(): Promise<void> {
         try {
             songs = await db.songs.toArray();
-            songsAreLoaded = true;
             console.log("songs: ", songs);
         } catch (error) {
             console.log(error);
@@ -112,6 +120,7 @@
             $firstLoad = false;
         }
 
+        songsAreLoaded = true;
         console.log("onMount finished");
     });
 
@@ -159,11 +168,37 @@
         </li>
     </ul>
 
-    {#if songs.length > 0}
+    <div class="search">
+        <form on:submit|preventDefault={() => searchInput.blur()}>
+            <label for="search__input">
+                <span class="visuallyHidden">search songs</span>
+            </label>
+
+            <input
+                id="search__input"
+                type="search"
+                autocomplete="off"
+                placeholder=""
+                disabled={!isReady}
+                bind:this={searchInput}
+                bind:value={searchQuery}>
+
+            <button
+                class="button"
+                type="reset"
+                on:click|preventDefault={() => searchQuery = ""}>
+                <span class="visuallyHidden">reset search</span>
+            </button>
+        </form>
+    </div>
+    
+    
+
+    {#if songs.length > 0 && filteredSongs}
         <ul
             class="songs"
             class:isReady>
-            {#each songs as song}
+            {#each filteredSongs as song}
                 <SongLi
                     bind:selectedSongs = {selectedSongs}
                     {newSongs}
@@ -249,9 +284,47 @@
         }
     }
 
-    .songs {
+    .search {
+        background-color: var(--clr-100);
         border-top: solid var(--border-width) var(--clr-150);
+        border-bottom: solid var(--border-width) var(--clr-150);
 
+        transition: background-color var(--trans-fast) ease;
+
+        form {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            max-width: $page-maxWidth;
+
+            padding: 0 var(--pad-2xl);
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            color: var(--clr-900);
+            font-size: 1.3rem;
+            font-weight: 500;
+            line-height: 1em;
+
+            padding: var(--pad-2xl) 0;
+
+            transition: color var(--trans-fast) ease;
+
+            &::placeholder {
+                color: var(--clr-700);
+
+                transition: color var(--trans-fast) ease;
+            }
+
+            &::-webkit-search-cancel-button {
+                -webkit-appearance: none;
+            }
+        }
+    }
+
+    .songs {
         // load state
         transform: translateY(70px);
         opacity: 0;

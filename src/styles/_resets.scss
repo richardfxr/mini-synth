@@ -71,6 +71,11 @@ RESET
         -webkit-appearance: none;
         background: transparent;
         margin: 0;
+
+        &[type="search"] {
+            padding: 0;
+            border: none;
+        }
     }
 
     ol, ul {
