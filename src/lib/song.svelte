@@ -13,6 +13,7 @@
     export let selectedSongs: number[];
     export let newSongs: number[];
     export let song: Song;
+    export let isReady: boolean;
 
     /* === VARIABLES ========================== */
     let songListItem: HTMLLIElement;
@@ -41,6 +42,7 @@
     class="song"
     class:active={song.id !== undefined ? selectedSongs.includes(song.id) : false}
     class:new={song.id !== undefined ? newSongs.includes(song.id) : false}
+    class:isReady
     bind:this={songListItem}>
     <div>
         <label>
@@ -265,7 +267,6 @@
         position: relative;
         z-index: 1;
 
-        background-color: var(--_clr-bg);
         border-right: solid var(--border-width) var(--_clr-border);
         margin-right: calc($_cassette-extrusion-inset + var(--border-width) + var(--pad-sm));
         overflow: hidden;
@@ -283,7 +284,11 @@
             background-color: var(--clr-800);
             padding: var(--pad-xs) var(--pad-xl);
 
-            transition: background-color var(--trans-fast) ease;
+            // load state
+            transform: translateX(70px);
+
+            transition: background-color var(--trans-fast) ease,
+                        transform var(--trans-normal) var(--trans-cubic-1);
 
             span {
                 font-family: inherit;
@@ -292,10 +297,16 @@
 
         .tapes {
             min-width: 100%;
+
+            background-color: var(--_clr-bg);
             border-top: solid var(--border-width) var(--_clr-border);
             border-bottom: solid var(--border-width) var(--_clr-border);
 
-            transition: border-color var(--trans-fast) ease;
+            // load state
+            transform: translateX(70px);
+
+            transition: border-color var(--trans-fast) ease,
+                        transform var(--trans-normal) var(--trans-cubic-1);
 
             .tape {
                 display: grid;
@@ -398,6 +409,15 @@
         }
     }
 
+    .song.isReady {
+        .tapesAndLength {
+            .length, .tapes {
+                // default state
+                transform: translateX(0);
+            }
+        }
+    }
+
     /* === BREAKPOINTS ======================== */
     @media (max-width: 770px) {
         .song > div {
@@ -424,6 +444,16 @@
             margin-top: 0;
             margin-bottom: var(--pad-2xl);
             margin-left: var(--pad-2xl);
+        }
+    }
+
+    /* === ANIMATIONS ========================= */
+    @keyframes tapeLoad {
+        from {
+            transform: translateX(100px);
+        }
+        to {
+            transform: translateX(0);
         }
     }
 </style>

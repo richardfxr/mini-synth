@@ -2,8 +2,8 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
+    import { goto, beforeNavigate } from '$app/navigation';
     import { fade, fly } from 'svelte/transition';
-    import { goto } from '$app/navigation';
     // Dexie
     import { liveQuery } from "dexie";
     import { db } from "../storage/db";
@@ -16,7 +16,11 @@
     let selectedSongs: number[] = [];
     let newSongs: number[] = [];
     let working = false;
+    let introHasFinished = false;
+    let songsAreLoaded = false;
 
+    /* === REACTIVE DECLARATIONS ============== */
+    $: isReady = songsAreLoaded && introHasFinished;
     $: songs = liveQuery(async () => {
         //
         // Query Dexie's API
@@ -75,7 +79,17 @@
 
     /* === LIFECYCLES ========================= */
     onMount(async () => {
+        // time intro 
+        if ($firstLoad) {
+            introHasFinished = true;
+        } else {
+            setTimeout(() => {
+                introHasFinished = true;
+            }, 225);
+        }
+
         const retrievedSongs = await db.songs.toArray();
+        songsAreLoaded = true;
 
         if ($firstLoad && (!retrievedSongs || retrievedSongs.length === 0)) {
             // go to new song on first load with no songs
@@ -85,6 +99,11 @@
             $firstLoad = false;
         }
     });
+
+    beforeNavigate(() => {
+        // unready on naviagation
+        introHasFinished = false;
+    });
 </script>
 
 
@@ -92,9 +111,9 @@
 <div
     class="index"
     in:fade={{ duration: 50, delay: 200 }}
-    out:fly={{ y: -20, duration: 200 }}>
+    out:fade={{ duration: 200 }}>
 
-    <ul class="actions">
+    <ul class="actions" class:isReady={introHasFinished}>
         <li id="new">
             <a
                 href="/song/new"
@@ -126,12 +145,16 @@
     </ul>
 
     {#if $songs}
-        <ul class="songs">
+        <ul
+            class="songs"
+            class:isReady
+            out:fly={{ y: 70, duration: 200 }}>
             {#each $songs as song}
                 <Song
                     bind:selectedSongs = {selectedSongs}
                     {newSongs}
-                    {song} />
+                    {song}
+                    {isReady} />
             {/each}
         </ul>
     {/if}
@@ -169,6 +192,18 @@
         // allow click through
         pointer-events: none;
 
+        // load state
+        transform: translateY(calc(-0.5 * var(--_actions-height)));
+        opacity: 0;
+
+        transition: transform var(--trans-normal) ease-in-out,
+                    opacity var(--trans-normal) ease-in-out;
+
+        &.isReady {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
         #new {
             order: 1;
 
@@ -202,18 +237,16 @@
 
     .songs {
         border-top: solid var(--border-width) var(--clr-150);
-        // animation: songsLoad var(--trans-normal) var(--trans-cubic-1) 1;
-        // animation-delay: 250ms;
-        // animation-fill-mode: backwards;
-    }
 
-    /* === ANIMATIONS ========================= */
-    @keyframes songsLoad {
-        from {
-            transform: translateY(-20px);
-            opacity: 0;
-        }
-        to {
+        // load state
+        transform: translateY(70px);
+        opacity: 0;
+
+        transition: transform var(--trans-normal) var(--trans-cubic-1),
+                    opacity var(--trans-normal) var(--trans-cubic-1);
+
+        &.isReady {
+            // default state
             transform: translateY(0);
             opacity: 1;
         }
