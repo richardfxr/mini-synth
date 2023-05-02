@@ -69,6 +69,11 @@ GLOBAL
     }
 }
 
+.icon {
+    width: $icon-size;
+    height: $icon-size;
+}
+
 .visuallyHidden {
     position: absolute;
     white-space: nowrap;

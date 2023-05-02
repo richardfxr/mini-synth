@@ -5,6 +5,9 @@
     import type * as Tone from 'tone';
     import type { TapeName } from '../storage/db';
     import Tape from '$lib/tape.svelte';
+    // icons
+    import MinusIcon from '$lib/SVGs/minusIcon.svelte';
+    import PlusIcon from '$lib/SVGs/plusIcon.svelte';
 
     /* === PROPS ============================== */
     export let playbackState: Tone.PlaybackState;
@@ -131,14 +134,14 @@
                 disabled={!isReady}
                 on:click={() => dispatch('addQuarter')}>
                 <span class="visuallyHidden">add 4 sixteenth notes</span>
-                +
+                <PlusIcon />
             </button>
             <button
                 class="button remove"
                 disabled={melody.length <= 4}
                 on:click={() => dispatch('removeQuarter')}>
                 <span class="visuallyHidden">remove 4 sixteenth notes</span>
-                -
+                <MinusIcon />
             </button>
         </div>
     </div>

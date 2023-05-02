@@ -1,4 +1,8 @@
 <script lang="ts">
+    /* === IMPORTS ============================ */
+    // icons
+    import MenuIcon from "$lib/SVGs/menuIcon.svelte";
+
     /* === PROPS ============================== */
     export let title: string; // bind
     export let isReady: boolean;
@@ -18,7 +22,7 @@
         class="button"
         style="--_dir: 1">
         <span class="visuallyHidden">menu</span>
-        <span>M</span>
+        <MenuIcon />
     </a>
 
     <input

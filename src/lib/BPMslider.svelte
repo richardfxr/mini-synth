@@ -1,4 +1,9 @@
 <script lang="ts">
+    /* === IMPORTS ============================ */
+    // icons
+    import MinusIcon from '$lib/SVGs/minusIcon.svelte';
+    import PlusIcon from '$lib/SVGs/plusIcon.svelte';
+
     /* === PROPS ============================== */
     export let bpm: number; // bind
     export let isReady: boolean;
@@ -29,7 +34,7 @@
             disabled={bpm <= min}
             on:click={() => {if (bpm > min) bpm--;}}>
             <span class="visuallyHidden">decrease 1 BPM</span>
-            -
+            <MinusIcon />
         </button>
         <label for="rangeInput">
             <span id="bpm">BPM: </span>
@@ -41,7 +46,7 @@
             disabled={bpm >= max}
             on:click={() => {if (bpm < max) bpm++;}}>
             <span class="visuallyHidden">increase 1 BPM</span>
-            +
+            <PlusIcon />
         </button>
     </div>
     

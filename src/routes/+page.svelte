@@ -11,6 +11,8 @@
     import { firstLoad } from "../storage/store";
     // components
     import Song from '$lib/song.svelte';
+    // icons
+    import PlusIcon from '$lib/SVGs/plusIcon.svelte';
 
     /* === VARIABLES ========================== */
     let selectedSongs: number[] = [];
@@ -119,7 +121,7 @@
                 href="/song/new"
                 class="button">
                 <span class="visuallyHidden">new song</span>
-                <span>+</span>
+                <PlusIcon />
             </a>
         </li>
         <li id="duplicate">

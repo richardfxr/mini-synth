@@ -3,6 +3,13 @@
     import { createEventDispatcher } from 'svelte';
     import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
+    // icons
+    import SkipToStartIcon from '$lib/SVGs/skipToStartIcon.svelte';
+    import PrevSubdiv from '$lib/SVGs/prevSubdiv.svelte';
+    import PlayIcon from '$lib/SVGs/playIcon.svelte';
+    import PuaseIcon from '$lib/SVGs/puaseIcon.svelte';
+    import NextSubdivIcon from '$lib/SVGs/nextSubdivIcon.svelte';
+    import SkipToEndIcon from '$lib/SVGs/skipToEndIcon.svelte';
     import Sprocket from '$lib/SVGs/sprocket.svelte';
 
     /* === PROPS ============================== */
@@ -37,7 +44,8 @@
             "
             disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
             on:click = {() => dispatch('skipToBeginning')}>
-            <p>⇤</p>
+            <span class="visuallyHidden">skip to start of track</span>
+            <SkipToStartIcon />
             <Sprocket />
         </button>
 
@@ -46,7 +54,8 @@
             style="--_dir: 1"
             disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
             on:click = {() => dispatch('prevSubdiv')}>
-            ←
+            <span class="visuallyHidden">previous subdivision</span>
+            <PrevSubdiv />
         </button>
 
         <button
@@ -54,9 +63,11 @@
             disabled = {!isReady}
             on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
             {#if playbackState === "started"}
-                <span>Pause</span>
+                <span class="visuallyHidden">pause</span>
+                <PuaseIcon />
             {:else}
-                <span>Play</span>
+                <span class="visuallyHidden">play</span>
+                <PlayIcon />
             {/if}
         </button>
 
@@ -65,7 +76,8 @@
             style="--_dir: -1"
             disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
             on:click = {() => dispatch('nextSubdiv')}>
-            →
+            <span class="visuallyHidden">next subdivision</span>
+            <NextSubdivIcon />
         </button>
 
         <button
@@ -76,7 +88,8 @@
             "
             disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
             on:click = {() => dispatch('skipToEnd')}>
-            <p>⇥</p>
+            <span class="visuallyHidden">skip to end of track</span>
+            <SkipToEndIcon />
             <Sprocket />
         </button>
     </div>
@@ -267,7 +280,7 @@
                         scale: var(--_spool-scale);
                     }
 
-                    p {
+                    :global(.icon) {
                         opacity: 0;
                     }
 
