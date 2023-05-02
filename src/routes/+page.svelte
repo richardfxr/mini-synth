@@ -2,7 +2,7 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
-    import { fly } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import { goto } from '$app/navigation';
     // Dexie
     import { liveQuery } from "dexie";
@@ -91,18 +91,8 @@
 
 <div
     class="index"
-    in:fly={{ y: -20, duration: 200, delay: 200 }}
+    in:fade={{ duration: 50, delay: 200 }}
     out:fly={{ y: -20, duration: 200 }}>
-    {#if $songs}
-        <ul class="songs">
-            {#each $songs as song}
-                <Song
-                    bind:selectedSongs = {selectedSongs}
-                    {newSongs}
-                    {song} />
-            {/each}
-        </ul>
-    {/if}
 
     <ul class="actions">
         <li id="new">
@@ -134,6 +124,17 @@
             </button>
         </li>
     </ul>
+
+    {#if $songs}
+        <ul class="songs">
+            {#each $songs as song}
+                <Song
+                    bind:selectedSongs = {selectedSongs}
+                    {newSongs}
+                    {song} />
+            {/each}
+        </ul>
+    {/if}
 </div>
 
 
@@ -146,34 +147,34 @@
 
     .index {
         // internal variables
-        --_actions-height: calc(var(--button-minSize) + var(--pad-lg) + var(--pad-2xl));
+        --_actions-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
 
         padding-bottom: var(--_actions-height);
-    }
-    .songs {
-        // animation: songsLoad var(--trans-normal) var(--trans-cubic-1) 1;
-        // animation-delay: 250ms;
-        // animation-fill-mode: backwards;
     }
 
     .actions {
         display: flex;
         flex-flow: row nowrap;
+        justify-content: flex-end;
         gap: var(--pad-sm);
-        position: fixed;
-        right: calc(50% - min(100%, $page-maxWidth) / 2);
-        bottom: 0;
+        position: sticky;
+        top: 0;
+        right: 0;
         z-index: 1000;
         max-width: $page-maxWidth;
 
-        padding: var(--pad-lg) var(--pad-2xl) var(--pad-2xl) var(--pad-2xl);
+        padding: var(--pad-2xl);
         margin: 0 auto;
+
+        // allow click through
+        pointer-events: none;
 
         #new {
             order: 1;
 
             .button {
                 width: 90px;
+                pointer-events: auto; 
             }
         }
 
@@ -185,9 +186,11 @@
                 transition: opacity var(--trans-normal) var(--trans-cubic-1),
                             transform var(--trans-normal) var(--trans-cubic-1);
 
+                pointer-events: auto;
+
                 &.disabled {
                     opacity: 0;
-                    transform: translateY(var(--_actions-height));
+                    transform: translateY(calc(-1 * var(--_actions-height)));
 
                     transition: opacity var(--trans-normal) cubic-bezier(.7,0,.93,.67),
                                 transform var(--trans-normal) cubic-bezier(.7,0,.93,.67);
@@ -195,6 +198,13 @@
             }
             
         }
+    }
+
+    .songs {
+        border-top: solid var(--border-width) var(--clr-150);
+        // animation: songsLoad var(--trans-normal) var(--trans-cubic-1) 1;
+        // animation-delay: 250ms;
+        // animation-fill-mode: backwards;
     }
 
     /* === ANIMATIONS ========================= */
