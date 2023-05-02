@@ -159,9 +159,9 @@
         background-color: var(--clr-100);
         border-bottom: solid var(--border-width-thick) var(--clr-100);
 
-        transition: transform var(--trans-slow) var(--trans-cubic-1),
-                    opacity var(--trans-slow) var(--trans-cubic-1);
-
+        transition: transform $cassette-ani-duration $cassette-ani-easing,
+                    opacity $cassette-ani-duration $cassette-ani-easing;
+        
         // load state
         transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
         opacity: 0;

@@ -580,12 +580,6 @@
 
 
 <style lang="scss">
-    :root {
-        // internal variables
-        --_cassette-ani-duration: 0.25s;
-        --_cassette-ani-easing: cubic-bezier(.54,.12,.21,1);
-    }
-
     .background {
         position: relative;
         z-index: 1001;
@@ -610,7 +604,7 @@
             padding-top: 10px;
             background-color: var(--clr-100);
 
-            transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+            transition: transform $cassette-ani-duration $cassette-ani-easing;
 
             // load state
             transform: translateY(var(--cassettTop-translateY));
@@ -649,7 +643,7 @@
                     $cassette-border-radius;
                 margin: 0;
 
-                transition: transform var(--_cassette-ani-duration) var(--_cassette-ani-easing);
+                transition: transform $cassette-ani-duration $cassette-ani-easing;
 
                 // load state
                 transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
@@ -697,7 +691,7 @@
 
         margin: 0 auto;
 
-        animation: inputsLoad var(--_cassette-ani-duration) var(--_cassette-ani-easing) 1;
+        animation: inputsLoad $cassette-ani-duration $cassette-ani-easing 1;
         animation-delay: 0.2s;
         animation-fill-mode: backwards;
     }
