@@ -33,6 +33,7 @@
         try {
             songs = await db.songs.toArray();
             songsAreLoaded = true;
+            console.log("songs: ", songs);
         } catch (error) {
             console.log(error);
         }
@@ -60,10 +61,13 @@
                 } else {
                     console.log("could not find song " + id);
                 }
+
+                await getSongs();
             });
         } catch (error) {
             console.log(error);
         }
+
         selectedSongs = [];
         working = false;
     }
@@ -76,9 +80,12 @@
             selectedSongs.forEach(async (id) => {
                 await db.songs.delete(id);
             });
+
+            await getSongs();
         } catch (error) {
             console.log(error);
         }
+
         selectedSongs = [];
         working = false;
     }
@@ -96,7 +103,6 @@
         }
 
         await getSongs();
-        console.log("songs: ", songs);
 
         if ($firstLoad && (!songs || songs.length === 0)) {
             // go to new song on first load with no songs
