@@ -51,7 +51,7 @@ GLOBAL
     
     &:hover {
         --_clr: var(--clr-1000);
-        --_clr-border: var(--clr-350);
+        --_clr-border: var(--clr-500);
     }
 
     &:active, &.active {
@@ -61,7 +61,7 @@ GLOBAL
     }
 
     &:disabled {
-        --_clr: var(--clr-500);
+        --_clr: var(--clr-400);
         --_clr-background: var(--clr-100);
         --_clr-border: var(--clr-150);
 
