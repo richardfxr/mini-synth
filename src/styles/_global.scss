@@ -24,7 +24,7 @@ GLOBAL
 
     body {
         // prevent zoom-in on iOS Safari as meta tags are ignored
-        // touch-action: pan-y;
+        touch-action: pan-y;
     }
 }
 
