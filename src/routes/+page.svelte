@@ -27,6 +27,15 @@
     $: isReady = songsAreLoaded && introHasFinished;
 
     /* === FUNCTIONS ========================== */
+    async function getSongs(): Promise<void> {
+        try {
+            songs = await db.songs.toArray();
+            songsAreLoaded = true;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function duplicateSelectedSongs() {
         if (working) return;
 
@@ -84,9 +93,7 @@
             }, 225);
         }
 
-        songs = await db.songs.toArray();
-        songsAreLoaded = true;
-
+        await getSongs();
         console.log("songs: ", songs);
 
         if ($firstLoad && (!songs || songs.length === 0)) {
