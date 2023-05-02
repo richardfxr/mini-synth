@@ -3,18 +3,20 @@
     // Svelte
     import { onMount } from 'svelte';
     import { goto, beforeNavigate } from '$app/navigation';
-    import { fade, fly } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     // Dexie
-    import { liveQuery } from "dexie";
     import { db } from "../storage/db";
     // stores
     import { firstLoad } from "../storage/store";
+    // types
+    import type { Song } from "../storage/db";
     // components
-    import Song from '$lib/song.svelte';
+    import SongLi from '$lib/songLi.svelte';
     // icons
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
 
     /* === VARIABLES ========================== */
+    let songs: Song[] = [];
     let selectedSongs: number[] = [];
     let newSongs: number[] = [];
     let working = false;
@@ -23,15 +25,6 @@
 
     /* === REACTIVE DECLARATIONS ============== */
     $: isReady = songsAreLoaded && introHasFinished;
-    $: songs = liveQuery(async () => {
-        //
-        // Query Dexie's API
-        //
-        const songs = await db.songs.toArray();
-
-        // Return result
-        return songs;
-    });
 
     /* === FUNCTIONS ========================== */
     async function duplicateSelectedSongs() {
@@ -82,7 +75,6 @@
     /* === LIFECYCLES ========================= */
     onMount(async () => {
         console.log("index onMount");
-        console.log("$songs: " + JSON.stringify($songs));
         // time intro 
         if ($firstLoad) {
             introHasFinished = true;
@@ -92,13 +84,12 @@
             }, 225);
         }
 
-        const retrievedSongs = await db.songs.toArray();
+        songs = await db.songs.toArray();
         songsAreLoaded = true;
 
-        console.log("retrievedSongs: ", retrievedSongs);
-        console.log("$songs: " + JSON.stringify($songs));
+        console.log("songs: ", songs);
 
-        if ($firstLoad && (!retrievedSongs || retrievedSongs.length === 0)) {
+        if ($firstLoad && (!songs || songs.length === 0)) {
             // go to new song on first load with no songs
             $firstLoad = false;
             goto('/song/new');
@@ -107,7 +98,6 @@
         }
 
         console.log("onMount finished");
-        console.log("$songs: " + JSON.stringify($songs));
     });
 
     beforeNavigate(() => {
@@ -154,12 +144,12 @@
         </li>
     </ul>
 
-    {#if $songs}
+    {#if songs.length > 0}
         <ul
             class="songs"
             class:isReady>
-            {#each $songs as song}
-                <Song
+            {#each songs as song}
+                <SongLi
                     bind:selectedSongs = {selectedSongs}
                     {newSongs}
                     {song}
