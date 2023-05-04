@@ -2,6 +2,9 @@
     /* === IMPORTS ============================ */
     import type * as Tone from 'tone';
     import type { TapeName, Tape } from '../storage/db';
+    // icons
+    import PianoIcon from '$lib/SVGs/pianoIcon.svelte';
+    import BeatsIcons from '$lib/SVGs/beatsIcons.svelte';
 
     /* === PROPS ============================== */
     export let tapeName: TapeName;
@@ -48,7 +51,13 @@
     </label>
 
     <!-- start tape terminal -->
-    <div class="tapeTerminal start">⇥</div>
+    <div class="tapeTerminal start">
+        {#if tapeName === "melody"}
+            <PianoIcon />
+        {:else}
+            <BeatsIcons />
+        {/if}
+    </div>
 
     <!-- vertical note markers -->
     <div class="noteMarkers">
