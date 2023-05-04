@@ -241,6 +241,8 @@
         display: flex;
         flex-direction: row;
         gap: 4px;
+        position: relative;
+        z-index: 1;
 
         background-color: var(--clr-100);
         padding: 0 4px;
