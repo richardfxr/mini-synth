@@ -11,11 +11,14 @@
     // types
     import type { Song } from "../storage/db";
     // components
+    import SearchBar from '$lib/searchBar.svelte';
     import SongLi from '$lib/songLi.svelte';
     // icons
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
     import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
     import DuplicateIcon from '$lib/SVGs/duplicateIcon.svelte';
+    import SearchIcon from '$lib/SVGs/searchIcon.svelte';
+    
 
     /* === VARIABLES ========================== */
     let songs: Song[] = [];
@@ -25,7 +28,6 @@
     let introHasFinished = false;
     let songsAreLoaded = false;
 
-    let searchInput: HTMLInputElement;
     let searchQuery = "";
 
     /* === REACTIVE DECLARATIONS ============== */
@@ -167,31 +169,10 @@
             </button>
         </li>
     </ul>
-
-    <div class="search">
-        <form on:submit|preventDefault={() => searchInput.blur()}>
-            <label for="search__input">
-                <span class="visuallyHidden">search songs</span>
-            </label>
-
-            <input
-                id="search__input"
-                type="search"
-                autocomplete="off"
-                placeholder=""
-                disabled={!isReady}
-                bind:this={searchInput}
-                bind:value={searchQuery}>
-
-            <button
-                class="button"
-                type="reset"
-                on:click|preventDefault={() => searchQuery = ""}>
-                <span class="visuallyHidden">reset search</span>
-            </button>
-        </form>
-    </div>
     
+    <SearchBar
+        bind:searchQuery = {searchQuery}
+        {isReady} />
     
 
     {#if songs.length > 0 && filteredSongs}
@@ -281,46 +262,6 @@
                 }
             }
             
-        }
-    }
-
-    .search {
-        background-color: var(--clr-100);
-        border-top: solid var(--border-width) var(--clr-150);
-        border-bottom: solid var(--border-width) var(--clr-150);
-
-        transition: background-color var(--trans-fast) ease;
-
-        form {
-            display: flex;
-            flex-flow: row nowrap;
-            align-items: center;
-            max-width: $page-maxWidth;
-
-            padding: 0 var(--pad-2xl);
-            margin: 0 auto;
-        }
-
-        input {
-            width: 100%;
-            color: var(--clr-900);
-            font-size: 1.3rem;
-            font-weight: 500;
-            line-height: 1em;
-
-            padding: var(--pad-2xl) 0;
-
-            transition: color var(--trans-fast) ease;
-
-            &::placeholder {
-                color: var(--clr-700);
-
-                transition: color var(--trans-fast) ease;
-            }
-
-            &::-webkit-search-cancel-button {
-                -webkit-appearance: none;
-            }
         }
     }
 
