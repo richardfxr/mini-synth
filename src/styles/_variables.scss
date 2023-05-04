@@ -41,6 +41,7 @@ $beats: (
    --tapeMarker-height: 25px;
    --tapeTerminal-start-width: 30px;
    --tapeTerminal-end-width: 20px;
+   --noteMarker-width: 8px;
    --melody-height: 80px;
    --beats-height: 55px;
    --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));

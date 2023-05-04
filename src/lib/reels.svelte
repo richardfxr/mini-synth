@@ -8,6 +8,7 @@
     // icons
     import MinusIcon from '$lib/SVGs/minusIcon.svelte';
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
+    import TapeArrows from '$lib/SVGs/tapeArrows.svelte';
 
     /* === PROPS ============================== */
     export let playbackState: Tone.PlaybackState;
@@ -97,7 +98,11 @@
             }
         }}>
 
-        <div class="tapePadding"></div>
+        <div class="tapePadding">
+            <div class="arrowsContainer">
+                <TapeArrows />
+            </div>
+        </div>
 
         <div class="tapes">
             <!-- tape marks above tapes -->
@@ -246,8 +251,18 @@
     }
 
     .tapePadding {
-        width: 50%;
         flex-shrink: 0;
+        position: relative;
+        width: 50%;
+
+        .arrowsContainer {
+            position: absolute;
+            top: var(--tapeMarker-height);
+            right: calc(var(--tapeTerminal-start-width) + var(--noteMarker-width) + var(--pad-md));
+            width: 30px;
+
+            color: var(--clr-350);
+        }
 
         &.end {
             // internal variables
