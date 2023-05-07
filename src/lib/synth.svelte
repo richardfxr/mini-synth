@@ -689,7 +689,6 @@
 
     .inputs {
         display: flex;
-        gap: var(--pad-2xl);
         max-width: var(--inputs-maxWidth);
 
         margin: 0 auto;
