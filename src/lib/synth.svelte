@@ -737,6 +737,7 @@
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         #melodyInputs {
             flex-flow: column nowrap;
+            min-height: calc(170px + var(--pad-2xl));
             padding-left: 0;
 
             .secondaryControls {

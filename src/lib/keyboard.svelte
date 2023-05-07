@@ -53,7 +53,7 @@
             );
         } else {
             keyboard.scrollLeft = Math.min(
-                targetSegment.offsetLeft,
+                targetSegment.offsetLeft + borderWidth,
                 targetSegment.offsetWidth * 3 - keyboard.offsetWidth
             );
         }
@@ -99,44 +99,78 @@
 
 <svelte:window on:resize={checkOrientation} />
 
-<div
-    class="keyboard"
-    style="--_border-width: {borderWidth}px"
-    bind:this={keyboard}>
-    {#each notesOfSegment as segment, i}
-        <ol id={"segment-" + i} class="segment">
-            {#each segment as note, j}
-                <li
-                    class="note note-{j % 12}"
-                    class:flat={note.toString().charAt(1) === "b"}
-                    class:active={melody[currentSubdiv].includes(note)}>
-                    <button
-                        on:pointerdown={() => handleKeyDown(note)}
-                        on:pointerup={() => handleKeyUp(note)}
-                        on:pointerleave={() => handleKeyUp(note)}>
-                        <span>{notes.indexOf(note) + 1}</span>
-                    </button>
-                </li>
-            {/each}
-        </ol>
-    {/each}
+<div class="wrapper" style="--_border-width: {borderWidth}px">
+    <div
+        class="keyboard"
+        bind:this={keyboard}>
+        {#each notesOfSegment as segment, i}
+            <ol id={"segment-" + i} class="segment">
+                {#each segment as note, j}
+                    <li
+                        class="note note-{j % 12}"
+                        class:flat={note.toString().charAt(1) === "b"}
+                        class:active={melody[currentSubdiv].includes(note)}>
+                        <button
+                            on:pointerdown={() => handleKeyDown(note)}
+                            on:pointerup={() => handleKeyUp(note)}
+                            on:pointerleave={() => handleKeyUp(note)}>
+                            <div class="shading"></div>
+                            <span>{notes.indexOf(note) + 1}</span>
+                        </button>
+                    </li>
+                {/each}
+            </ol>
+        {/each}
+    </div>
 </div>
 
 
 
+
+
 <style lang="scss">
-    .keyboard {
+    // internal variables
+    $key-highlight-hrz: 4px;
+    $key-highlight-vrt: 6px;
+    $flat-width: 0.8;
+    $flat-height: 55%;
+    $flat-highlight-hrz: 3px;
+
+    .wrapper {
         // internal variables
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
-        --_border-radius: 7px;
+        --_border-radius: 10px;
         --_whiteNotes: 7;
         --_label-width: 3ch;
 
         flex-grow: 1;
+        position: relative;
+        height: 100%;
+
+        overflow: hidden;
+
+        &::after {
+            // border
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            border: solid var(--_border-width) var(--clr-kb-border);
+            border-radius: var(--_border-radius);
+        }
+    }
+
+    .keyboard {
+        // flex-grow: 1;
         display: flex;
         flex-flow: row nowrap;
         position: relative;
+        height: 100%;
 
+        background-color: var(--clr-kb-border);
         border-radius: var(--_border-radius);
         overflow: hidden;
         scroll-behavior: smooth;
@@ -144,6 +178,9 @@
         // prevent text highlighting on drag
         -webkit-user-select:none;
         user-select: none;
+
+        // better scroll performance (slowed down due to .note button::before & ::after)
+        will-change: scroll-position;
     }
 
     .segment {
@@ -152,13 +189,17 @@
         flex-flow: row nowrap;
 
         width: calc(var(--_whiteNotes) / 7 * var(--_octave-width));
-        background-color: var(--clr-250);
+        background-color: var(--clr-kb-border);
 
         &#segment-0 {          
             border-radius: var(--_border-radius) 0 0 var(--_border-radius);
 
             .note:first-child button {
                 border-top-left-radius: var(--_border-radius);
+
+                &::before {
+                    border-top-left-radius: var(--_border-radius);
+                }
             }
         }
 
@@ -167,6 +208,10 @@
 
             .note:last-child button {
                 border-top-right-radius: var(--_border-radius);
+
+                &::before {
+                    border-top-right-radius: var(--_border-radius);
+                }
             }
         }
     }
@@ -174,13 +219,14 @@
     .note {
         flex-shrink: 0;
         position: relative;
-        width: calc(100% / var(--_whiteNotes));
+        width: calc(100% / var(--_whiteNotes));        
 
         button {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
+            position: relative;
             width: calc(100% + var(--_border-width));
             height: 100%;
 
@@ -188,11 +234,52 @@
 
             padding: 10px 10px 8px 10px;
             background-color: var(--clr-100);
-            border: solid var(--_border-width) var(--clr-250);
             border-radius: 0 0 var(--_border-radius) var(--_border-radius);
 
             transition: color 0.1s ease,
                         background-color 0.1s ease;
+
+            &::before {
+                // border highlight
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                border-right: solid $key-highlight-hrz var(--clr-kb-highlight);
+                border-bottom: solid $key-highlight-vrt var(--clr-kb-highlight);
+                border-left: solid $key-highlight-hrz var(--clr-kb-highlight);
+                border-radius: 0 0 var(--_border-radius) var(--_border-radius);
+
+                opacity: 1;
+
+                transition: opacity 0.1s ease
+            }
+
+            &::after {
+                // border
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                border: solid var(--_border-width) var(--clr-kb-border);
+                border-radius: 0 0 var(--_border-radius) var(--_border-radius);
+            }
+
+            .shading {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                background: linear-gradient(0deg, rgba(0, 0, 0, 0) 85%,rgba(0, 0, 0, 0.05) 100%);
+            }
 
             span {
                 width: var(--_label-width);
@@ -210,11 +297,16 @@
 
         &.active button {
             background-color: var(--_clr-note);
+
+            &::before {
+                opacity: 0.4;
+            }
         }
 
         &.flat {
-            margin: 0 calc(-100% / (2 * var(--_whiteNotes)));
-            height: 50%;
+            width: calc(100% / var(--_whiteNotes) * $flat-width);
+            margin: 0 calc(-0.5 * (100% / var(--_whiteNotes) * $flat-width));
+            height: $flat-height;
 
             button {
                 position: absolute;
@@ -225,14 +317,25 @@
                 color: var(--clr-250);
 
                 background-color: var(--clr-800);
-                border-color: var(--clr-900);
+                box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.2);
 
                 // transform to center notes
                 transform: translate(-50%, 0);
+
+                &::before {
+                    // border highlight
+                    border-right-width: $flat-highlight-hrz;
+                    border-left-width: $flat-highlight-hrz;
+                    opacity: 0.2;
+                }
             }
 
             &.active button {
                 background-color: var(--_clr-note);
+
+                &::before {
+                    opacity: 0.4;
+                }
             }
         }
 
@@ -251,9 +354,8 @@
             --_octave-height: calc(0.82353 * var(--_keyboard-height)); // width of one octave as as percentage of the visible keyboard
 
             flex-flow: column-reverse nowrap;
+            width: 100%;
             height: var(--_keyboard-height);
-
-            border-radius: var(--_border-radius);
         }
 
         .segment {
@@ -264,12 +366,15 @@
 
             &#segment-0 {
                 border-radius: 0 0 var(--_border-radius) var(--_border-radius);
-                // compensate for last border
-                margin-bottom: var(--_border-width);
 
                 .note:first-child button {
                     border-top-left-radius: 0;
                     border-bottom-left-radius: var(--_border-radius);
+
+                    &::before {
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: var(--_border-radius);
+                    }
                 }
             }
 
@@ -278,6 +383,10 @@
 
                 .note:last-child button {
                     border-top-left-radius: var(--_border-radius);
+
+                    &::before {
+                        border-top-left-radius: var(--_border-radius);
+                    }
                 }
             }
         }
@@ -294,6 +403,28 @@
                 padding: 10px 8px 10px 10px;
                 border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
 
+                &::before {
+                    // border highlight
+                    border-top: solid $key-highlight-hrz var(--clr-kb-highlight);
+                    border-right: solid $key-highlight-vrt var(--clr-kb-highlight);
+                    border-bottom: solid $key-highlight-hrz var(--clr-kb-highlight);
+                    border-left: none;
+                    border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
+
+                    opacity: 1;
+
+                    transition: opacity 0.1s ease
+                }
+
+                &::after {
+                    // border
+                    border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
+                }
+
+                .shading {
+                    background: linear-gradient(270deg, rgba(0, 0, 0, 0) 85%,rgba(0, 0, 0, 0.05) 100%);
+                }
+
                 span {
                     margin-right: 10px;
                     margin-bottom: 0;
@@ -301,17 +432,28 @@
             }
 
             &.flat {
-                margin: calc(-1 * (var(--_whiteNotes) / 7 * var(--_octave-height)) / (2 * var(--_whiteNotes))) 0;
-                width: 50%;
-                height: calc(var(--_whiteNotes) / 7 * var(--_octave-height) / var(--_whiteNotes));
+                margin: calc(-1 * $flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height)) / (2 * var(--_whiteNotes))) 0;
+                width: $flat-height;
+                height: calc($flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height) / var(--_whiteNotes)));
 
                 button {
                     top: unset;
                     bottom: 50%;
                     left: 0;
 
+                    box-shadow: 4px 0 7px 0 rgba(0, 0, 0, 0.2);
+
                     // transform to center notes
                     transform: translate(0, 50%);
+
+                    &::before {
+                        // border highlight
+                        border-top-width: $flat-highlight-hrz;
+                        border-right-width: $key-highlight-vrt;
+                        border-bottom-width: $flat-highlight-hrz;
+                        border-left-width: 0;
+                        opacity: 0.2;
+                    }
                 }
             }
         }
