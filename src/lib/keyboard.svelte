@@ -160,6 +160,8 @@
 
             border: solid var(--_border-width) var(--clr-kb-border);
             border-radius: var(--_border-radius);
+
+            pointer-events: none;
         }
     }
 
