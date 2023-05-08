@@ -139,7 +139,7 @@
     .wrapper {
         // internal variables
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
-        --_border-radius: 10px;
+        
         --_whiteNotes: 7;
         --_label-width: 3ch;
 
@@ -159,7 +159,7 @@
             left: 0;
 
             border: solid var(--_border-width) var(--clr-kb-border);
-            border-radius: var(--_border-radius);
+            border-radius: $input-border-radius;
 
             pointer-events: none;
         }
@@ -172,7 +172,7 @@
         height: 100%;
 
         background-color: var(--clr-kb-border);
-        border-radius: var(--_border-radius);
+        border-radius: $input-border-radius;
         overflow: hidden;
         scroll-behavior: smooth;
 
@@ -190,25 +190,25 @@
         background-color: var(--clr-kb-border);
 
         &#segment-0 {          
-            border-radius: var(--_border-radius) 0 0 var(--_border-radius);
+            border-radius: $input-border-radius 0 0 $input-border-radius;
 
             .note:first-child button {
-                border-top-left-radius: var(--_border-radius);
+                border-top-left-radius: $input-border-radius;
 
                 &::before {
-                    border-top-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
+                    border-top-left-radius: calc($input-border-radius - $key-highlight-hrz);
                 }
             }
         }
 
         &#segment-2 {
-            border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
+            border-radius: 0 $input-border-radius $input-border-radius 0;
 
             .note:last-child button {
-                border-top-right-radius: var(--_border-radius);
+                border-top-right-radius: $input-border-radius;
 
                 &::before {
-                    border-top-right-radius: calc(var(--_border-radius) - $key-highlight-hrz);
+                    border-top-right-radius: calc($input-border-radius - $key-highlight-hrz);
                 }
             }
         }
@@ -233,7 +233,7 @@
             padding: 10px 10px 8px 10px;
             background-color: var(--clr-kb-white-highlight);
             border: solid var(--_border-width) var(--clr-kb-border);
-            border-radius: 0 0 var(--_border-radius) var(--_border-radius);
+            border-radius: 0 0 $input-border-radius $input-border-radius;
 
             transition: color 0.1s ease,
                         background-color 0.1s ease;
@@ -251,8 +251,8 @@
                 border-radius:
                     0
                     0
-                    calc(var(--_border-radius) - $key-highlight-hrz)
-                    calc(var(--_border-radius) - $key-highlight-hrz);
+                    calc($input-border-radius - $key-highlight-hrz)
+                    calc($input-border-radius - $key-highlight-hrz);
 
                 transition: background-color 0.1s ease;
             }
@@ -348,27 +348,27 @@
             height: calc(var(--_whiteNotes) / 7 * var(--_octave-height));
 
             &#segment-0 {
-                border-radius: 0 0 var(--_border-radius) var(--_border-radius);
+                border-radius: 0 0 $input-border-radius $input-border-radius;
 
                 .note:first-child button {
                     border-top-left-radius: 0;
-                    border-bottom-left-radius: var(--_border-radius);
+                    border-bottom-left-radius: $input-border-radius;
 
                     &::before {
                         border-top-left-radius: 0;
-                        border-bottom-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
+                        border-bottom-left-radius: calc($input-border-radius - $key-highlight-hrz);
                     }
                 }
             }
 
             &#segment-2 {
-                border-radius: var(--_border-radius) var(--_border-radius) 0 0;
+                border-radius: $input-border-radius $input-border-radius 0 0;
 
                 .note:last-child button {
-                    border-top-left-radius: var(--_border-radius);
+                    border-top-left-radius: $input-border-radius;
 
                     &::before {
-                        border-top-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
+                        border-top-left-radius: calc($input-border-radius - $key-highlight-hrz);
                     }
                 }
             }
@@ -384,7 +384,7 @@
                 height: calc(100% + var(--_border-width));
 
                 padding: 10px 8px 10px 10px;
-                border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
+                border-radius: 0 $input-border-radius $input-border-radius 0;
 
                 &::before {
                     // main color
@@ -395,8 +395,8 @@
                     
                     border-radius:
                         0
-                        calc(var(--_border-radius) - $key-highlight-hrz)
-                        calc(var(--_border-radius) - $key-highlight-hrz)
+                        calc($input-border-radius - $key-highlight-hrz)
+                        calc($input-border-radius - $key-highlight-hrz)
                         0;
                 }
 
