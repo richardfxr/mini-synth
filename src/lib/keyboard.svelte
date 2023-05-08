@@ -114,7 +114,6 @@
                             on:pointerdown={() => handleKeyDown(note)}
                             on:pointerup={() => handleKeyUp(note)}
                             on:pointerleave={() => handleKeyUp(note)}>
-                            <div class="shading"></div>
                             <span>{notes.indexOf(note) + 1}</span>
                         </button>
                     </li>
@@ -130,11 +129,12 @@
 
 <style lang="scss">
     // internal variables
-    $key-highlight-hrz: 4px;
-    $key-highlight-vrt: 6px;
+    $key-highlight-hrz: 2px;
+    $key-highlight-vrt: 4px;
     $flat-width: 0.8;
     $flat-height: 55%;
-    $flat-highlight-hrz: 3px;
+    $flat-highlight-hrz: 1px;
+    $flat-highlight-vrt: 6px;
 
     .wrapper {
         // internal variables
@@ -166,7 +166,6 @@
     }
 
     .keyboard {
-        // flex-grow: 1;
         display: flex;
         flex-flow: row nowrap;
         position: relative;
@@ -180,9 +179,6 @@
         // prevent text highlighting on drag
         -webkit-user-select:none;
         user-select: none;
-
-        // better scroll performance (slowed down due to .note button::before & ::after)
-        will-change: scroll-position;
     }
 
     .segment {
@@ -200,7 +196,7 @@
                 border-top-left-radius: var(--_border-radius);
 
                 &::before {
-                    border-top-left-radius: var(--_border-radius);
+                    border-top-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
                 }
             }
         }
@@ -212,7 +208,7 @@
                 border-top-right-radius: var(--_border-radius);
 
                 &::before {
-                    border-top-right-radius: var(--_border-radius);
+                    border-top-right-radius: calc(var(--_border-radius) - $key-highlight-hrz);
                 }
             }
         }
@@ -235,55 +231,35 @@
             color: var(--clr-600);
 
             padding: 10px 10px 8px 10px;
-            background-color: var(--clr-100);
+            background-color: var(--clr-kb-white-highlight);
+            border: solid var(--_border-width) var(--clr-kb-border);
             border-radius: 0 0 var(--_border-radius) var(--_border-radius);
 
             transition: color 0.1s ease,
                         background-color 0.1s ease;
 
             &::before {
-                // border highlight
+                // main color
                 content: "";
                 position: absolute;
                 top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
+                right: $key-highlight-hrz;
+                bottom: $key-highlight-vrt;
+                left: $key-highlight-hrz;
 
-                border-right: solid $key-highlight-hrz var(--clr-kb-highlight);
-                border-bottom: solid $key-highlight-vrt var(--clr-kb-highlight);
-                border-left: solid $key-highlight-hrz var(--clr-kb-highlight);
-                border-radius: 0 0 var(--_border-radius) var(--_border-radius);
+                background-color: var(--clr-kb-white);
+                border-radius:
+                    0
+                    0
+                    calc(var(--_border-radius) - $key-highlight-hrz)
+                    calc(var(--_border-radius) - $key-highlight-hrz);
 
-                opacity: 1;
-
-                transition: opacity 0.1s ease
-            }
-
-            &::after {
-                // border
-                content: "";
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-
-                border: solid var(--_border-width) var(--clr-kb-border);
-                border-radius: 0 0 var(--_border-radius) var(--_border-radius);
-            }
-
-            .shading {
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-
-                background: linear-gradient(0deg, rgba(0, 0, 0, 0) 85%,rgba(0, 0, 0, 0.05) 100%);
+                transition: background-color 0.1s ease;
             }
 
             span {
+                position: relative;
+                z-index: 0;
                 width: var(--_label-width);
 
                 color: var(--clr-1000);
@@ -298,10 +274,10 @@
         }
 
         &.active button {
-            background-color: var(--_clr-note);
+            background-color: var(--_clr-note-highlight);
 
             &::before {
-                opacity: 0.4;
+                background-color: var(--_clr-note);
             }
         }
 
@@ -318,25 +294,27 @@
 
                 color: var(--clr-250);
 
-                background-color: var(--clr-800);
+                background-color: var(--clr-kb-flat-highlight);
                 box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.2);
 
                 // transform to center notes
                 transform: translate(-50%, 0);
 
                 &::before {
-                    // border highlight
-                    border-right-width: $flat-highlight-hrz;
-                    border-left-width: $flat-highlight-hrz;
-                    opacity: 0.2;
+                    // main color
+                    right: $flat-highlight-hrz;
+                    bottom: $flat-highlight-vrt;
+                    left: $flat-highlight-hrz;
+
+                    background-color: var(--clr-kb-flat);
                 }
             }
 
             &.active button {
-                background-color: var(--_clr-note);
+                background-color: var(--_clr-note-highlight);
 
                 &::before {
-                    opacity: 0.4;
+                    background-color: var(--_clr-note);
                 }
             }
         }
@@ -344,17 +322,20 @@
         @for $i from 0 through 11 {
             &.note-#{$i} {
                 --_clr-note: var(--clr-note-#{$i});
+                --_clr-note-highlight: var(--clr-note-#{$i}-highlight);
             }
         }
     }
 
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
-        .keyboard {
+        .wrapper {
             // internal variables
             --_keyboard-height: 650px; // visible height of the keyboard
-            --_octave-height: calc(0.82353 * var(--_keyboard-height)); // width of one octave as as percentage of the visible keyboard
+            --_octave-height: calc(0.82353 * var(--_keyboard-height)); // width of one octave as as percentage of the visible keyboard            
+        }
 
+        .keyboard {
             flex-flow: column-reverse nowrap;
             width: 100%;
             height: var(--_keyboard-height);
@@ -375,7 +356,7 @@
 
                     &::before {
                         border-top-left-radius: 0;
-                        border-bottom-left-radius: var(--_border-radius);
+                        border-bottom-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
                     }
                 }
             }
@@ -387,7 +368,7 @@
                     border-top-left-radius: var(--_border-radius);
 
                     &::before {
-                        border-top-left-radius: var(--_border-radius);
+                        border-top-left-radius: calc(var(--_border-radius) - $key-highlight-hrz);
                     }
                 }
             }
@@ -406,25 +387,17 @@
                 border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
 
                 &::before {
-                    // border highlight
-                    border-top: solid $key-highlight-hrz var(--clr-kb-highlight);
-                    border-right: solid $key-highlight-vrt var(--clr-kb-highlight);
-                    border-bottom: solid $key-highlight-hrz var(--clr-kb-highlight);
-                    border-left: none;
-                    border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
-
-                    opacity: 1;
-
-                    transition: opacity 0.1s ease
-                }
-
-                &::after {
-                    // border
-                    border-radius: 0 var(--_border-radius) var(--_border-radius) 0;
-                }
-
-                .shading {
-                    background: linear-gradient(270deg, rgba(0, 0, 0, 0) 85%,rgba(0, 0, 0, 0.05) 100%);
+                    // main color
+                    top: $key-highlight-hrz;
+                    right: $key-highlight-vrt;
+                    bottom:  $key-highlight-hrz;
+                    left: 0;
+                    
+                    border-radius:
+                        0
+                        calc(var(--_border-radius) - $key-highlight-hrz)
+                        calc(var(--_border-radius) - $key-highlight-hrz)
+                        0;
                 }
 
                 span {
@@ -449,21 +422,13 @@
                     transform: translate(0, 50%);
 
                     &::before {
-                        // border highlight
-                        border-top-width: $flat-highlight-hrz;
-                        border-right-width: $key-highlight-vrt;
-                        border-bottom-width: $flat-highlight-hrz;
-                        border-left-width: 0;
-                        opacity: 0.2;
+                        // main color
+                        top: $flat-highlight-hrz;
+                        right: $flat-highlight-vrt;
+                        bottom:  $flat-highlight-hrz;
                     }
                 }
             }
-        }
-    }
-
-    @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
-        .keyboard {
-            border-radius: 0;
         }
     }
 </style>

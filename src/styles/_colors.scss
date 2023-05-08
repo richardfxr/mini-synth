@@ -22,9 +22,11 @@ $light: (
     50: #f7f7f7,
     0: #ffffff,
 
-    kb-white: #d6d6d6,
-    kb-highlight: #ffffff,
+    kb-white: #e6e6e6,
+    kb-white-highlight: #ffffff,
     kb-border: #525252,
+    kb-flat: #383838,
+    kb-flat-highlight: #555555,
 
     note-0: #fad94d,
     note-1: #ffb566,
@@ -38,6 +40,18 @@ $light: (
     note-9: #85e6d3,
     note-10: #7fe3b1,
     note-11: #a4eb7a,
+    note-0-highlight: #faedb1,
+    note-1-highlight: #ffce99,
+    note-2-highlight: #ffcabf,
+    note-3-highlight: #ffb3c5,
+    note-4-highlight: #f5cbf8,
+    note-5-highlight: #e8cfff,
+    note-6-highlight: #ced2ff,
+    note-7-highlight: #d1e5ff,
+    note-8-highlight: #b7ecff,
+    note-9-highlight: #c6fff4,
+    note-10-highlight: #a6ffd3,
+    note-11-highlight: #dbffc7,
 );
 
 // === DARK THEME =========================
