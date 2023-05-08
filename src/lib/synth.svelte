@@ -443,6 +443,7 @@
                         beats[currentSubdiv] = [];
                     }
                 }}>
+                <span class="visuallyHidden">clear current subdiv</span>
                 <TrashCanIcon />
             </button>
             {#if sean}
