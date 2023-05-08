@@ -303,6 +303,15 @@
 
             transition: color var(--trans-fast) ease,
                         background-color var(--trans-fast) ease;
+
+            span {
+                display: block;
+                font-size: 17px;
+                font-weight: 600;
+
+                // move numbers down slightly
+                margin-bottom: -1px;
+            }
         }
     }
 </style>
