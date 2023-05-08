@@ -196,7 +196,7 @@
                     border-radius: var(--borderRadius-round);
 
                     transition: background-color var(--trans-normal) ease,
-                                border-colorvar(--trans-normal) ease;
+                                border-color var(--trans-normal) ease;
                 }
 
                 &::after {
@@ -215,6 +215,18 @@
                     transition: background-color var(--trans-normal) ease,
                                 transform var(--trans-normal) ease,
                                 opacity var(--trans-normal) ease;
+                }
+
+                &:active, &.active {
+                    &::before {
+                        // override default .button ::before transform
+                        transform: none;
+                    }
+
+                    &::after {
+                        // add default .button ::before transform to ::after
+                        transform: translateY(-$button-highlight-top);
+                    }
                 }
 
                 .spool {
