@@ -1,6 +1,13 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import { onMount, createEventDispatcher } from 'svelte';
+    // icons
+    import HighHatIcon from '$lib/SVGs/highHatIcon.svelte';
+    import KickDrumIcon from '$lib/SVGs/kickDrumIcon.svelte';
+    import SnareDrumIcon from '$lib/SVGs/snareDrumIcon.svelte';
+    import TomDrum1Icon from '$lib/SVGs/tomDrum1Icon.svelte';
+    import TomDrum2Icon from '$lib/SVGs/tomDrum2Icon.svelte';
+    import TomDrum3Icon from '$lib/SVGs/tomDrum3Icon.svelte';
 
     /* === PROPS ============================== */
     export let currentSubdiv: number;
@@ -68,7 +75,27 @@
             on:pointerdown={() => handleButtonDown(beat)}
             on:pointerup={() => handleButtonUp(beat)}
             on:pointerleave={() => handleButtonUp(beat)}>
-            <span>{beat}</span>
+            <div class="beat">
+                {#if beat === "hh"}
+                    <span class="visuallyHidden">high hat</span>
+                    <HighHatIcon />
+                {:else if beat === "kc"}
+                    <span class="visuallyHidden">kick drum</span>
+                    <KickDrumIcon />
+                {:else if beat === "sn"}
+                    <span class="visuallyHidden">snare drum</span>
+                    <SnareDrumIcon />
+                {:else if beat === "t1"}
+                    <span class="visuallyHidden">tom drum 1</span>
+                    <TomDrum1Icon />
+                {:else if beat === "t2"}
+                    <span class="visuallyHidden">tom drum 2</span>
+                    <TomDrum2Icon />
+                {:else if beat === "t3"}
+                    <span class="visuallyHidden">tom drum 3</span>
+                    <TomDrum3Icon />
+                {/if}
+            </div>
         </button>
     {/each}
 </div>
@@ -83,7 +110,6 @@
     .soundboard {
         // internal variables
         --_button-height: 120px;
-        --_label-width: 3ch;
         
         align-self: flex-start;
         display: grid;
@@ -135,17 +161,20 @@
                 }
             }
 
-            span {
+            .beat {
                 display: block;
                 position: relative;
-                width: var(--_label-width);
 
                 color: var(--clr-1000);
-                font-size: 1.3rem;
 
-                padding: 5px;
+                padding: var(--pad-lg) var(--pad-xl);
                 background-color: var(--_clr);
                 border-radius: var(--borderRadius-sm);
+
+                :global(.beat.icon) {
+                    width: 24px;
+                    height: 24px;
+                }
             }
 
             &.active {
