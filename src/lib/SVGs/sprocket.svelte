@@ -11,7 +11,7 @@
     svg {
         fill: none;
         stroke: var(--clr-250);
-        stroke-width: var(--border-width);
+        stroke-width: var(--border-width-thick);
 
         position: absolute;
         top: 0;
@@ -20,7 +20,7 @@
         right: 0;
         width: 100%;
 
-        padding: 2px;
+        padding: 2.5px;
         transition: opacity 0.25s ease;
     }
 </style>

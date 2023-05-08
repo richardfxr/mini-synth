@@ -284,7 +284,7 @@
                 width: var(--_width);
                 height: var(--_height);
 
-                &.add {
+                &.add, &.add::before {
                     border-radius: 
                         calc(0.5 * var(--_width))
                         calc(0.5 * var(--_width))
@@ -292,7 +292,7 @@
                         var(--borderRadius-sm);
                 }
 
-                &.remove {
+                &.remove, &.remove::before {
                     border-radius: 
                         var(--borderRadius-sm)
                         var(--borderRadius-sm)

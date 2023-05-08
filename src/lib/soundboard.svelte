@@ -77,8 +77,8 @@
 
 <style lang="scss">
     // internal variables
-    $button-highlight-hrz: 3px;
-    $button-highlight-vrt: 10px;
+    $beat-highlight-hrz: 3px;
+    $beat-highlight-vrt: 10px;
 
     .soundboard {
         // internal variables
@@ -114,13 +114,13 @@
                 // main color
                 content: "";
                 position: absolute;
-                top: $button-highlight-vrt;
-                right: $button-highlight-hrz;
+                top: $beat-highlight-vrt;
+                right: $beat-highlight-hrz;
                 bottom: 0;
-                left: $button-highlight-hrz;
+                left: $beat-highlight-hrz;
 
                 background-color: var(--clr-100);
-                border-radius: calc($input-border-radius - $button-highlight-hrz);
+                border-radius: calc($input-border-radius - $beat-highlight-hrz);
                 box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
                 transition: background-color var(--trans-fastest) ease,

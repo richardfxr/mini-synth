@@ -45,6 +45,7 @@
             disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
             on:click = {() => dispatch('skipToBeginning')}>
             <span class="visuallyHidden">skip to start of track</span>
+            <div class="spool"></div>
             <SkipToStartIcon />
             <Sprocket />
         </button>
@@ -89,6 +90,7 @@
             disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
             on:click = {() => dispatch('skipToEnd')}>
             <span class="visuallyHidden">skip to end of track</span>
+            <div class="spool"></div>
             <SkipToEndIcon />
             <Sprocket />
         </button>
@@ -180,22 +182,6 @@
                 opacity: 0;
 
                 &::before {
-                    // spool
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    bottom: 0;
-                    right: 0;
-                    z-index: -2;
-
-                    background-color: #ececec;
-                    border-radius: var(--borderRadius-round);
-
-                    transition: scale 0.1s ease;
-                }
-
-                &::after {
                     // fake background and border to go above spool (::before)
                     content: "";
                     position: absolute;
@@ -205,16 +191,49 @@
                     right: 0;
                     z-index: -1;
 
-                    background-color: var(--_clr-background);
-                    border: solid var(--border-width) var(--_clr-border);
+                    background-color: var(--_clr-highlight);
+                    border: solid var(--border-width-thick) var(--_clr-border);
                     border-radius: var(--borderRadius-round);
 
-                    transition: background-color 0.2s ease,
-                                border-color 0.2s ease;
+                    transition: background-color var(--trans-normal) ease,
+                                border-colorvar(--trans-normal) ease;
                 }
 
-                p {
-                    transition: opacity 0.25s ease;
+                &::after {
+                    // main color
+                    content: "";
+                    position: absolute;
+                    top: calc(var(--border-width-thick) + $button-highlight-top);
+                    right: calc(var(--border-width-thick) + $button-highlight-vrt);
+                    bottom: var(--border-width-thick);
+                    left: calc(var(--border-width-thick) + $button-highlight-vrt);
+
+                    background-color: var(--_clr-background);
+                    border-radius: var(--borderRadius-round);
+                    transform: translateY(0);
+
+                    transition: background-color var(--trans-normal) ease,
+                                transform var(--trans-normal) ease,
+                                opacity var(--trans-normal) ease;
+                }
+
+                .spool {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    z-index: -2;
+
+                    background-color: var(--clr-150);
+                    border-radius: var(--borderRadius-round);
+
+                    transition: scale var(--trans-fastest) ease;
+                }
+
+                :global(.icon) {
+                    position: relative;
+                    z-index: 1;
                 }
 
                 :global(svg.sprocket) {
@@ -278,7 +297,11 @@
                     
                     scale: 1.21;
 
-                    &::before {
+                    &::after {
+                        opacity: 0;
+                    }
+
+                    .spool {
                         scale: var(--_spool-scale);
                     }
 

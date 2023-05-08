@@ -58,7 +58,7 @@
         padding: 10px 10px 8px 10px;
         margin: 0 var(--pad-2xl) 0 0;
 
-        &::before {
+        &::after {
             // internal variables
             --_clr: var(--clr-200);
             // keyboard connector
@@ -76,7 +76,7 @@
         }
 
         &.active {
-            &::before {
+            &::after {
                 // keyboard connector
                 --_clr: var(--clr-600);
             }
@@ -103,8 +103,18 @@
         .wrapper {
             flex-grow: 1;
         }
+
         .keyboardControls {
             flex-direction: column-reverse;
+        }
+
+        .button {
+            margin: 0 var(--pad-xl) 0 0;
+
+            &::after {
+                right: calc(-1 * var(--pad-xl) - var(--border-width));
+                width: calc(var(--pad-xl) + var(--border-width));
+            }
         }
     }
 

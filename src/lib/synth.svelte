@@ -667,7 +667,11 @@
                     opacity: 0;
 
                     &.autoSkipping {
-                        background-color: orange;
+                        background-color: #ff6b6b;
+
+                        &::before {
+                            background-color: #ff8383;
+                        }
                     }
                 }
             }
@@ -724,7 +728,7 @@
         #melodyInputs {
             height: unset;
             max-height: unset;
-            padding: var(--pad-2xl) 0 var(--pad-2xl) var(--pad-xl);
+            padding: var(--pad-2xl) var(--pad-xl) var(--pad-2xl) var(--pad-xl);
 
             .secondaryControls {
                 flex-flow: column-reverse nowrap;

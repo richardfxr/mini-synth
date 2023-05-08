@@ -36,7 +36,7 @@
     <button
         class="button"
         style="--_dir: -1"
-        disabled={!isReady}>
+        disabled>
     </button>
 </header>
 

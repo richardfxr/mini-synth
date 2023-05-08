@@ -32,22 +32,42 @@ GLOBAL
     // internal variables 
     --_clr: var(--clr-900);
     --_clr-background: var(--clr-100);
-    --_clr-border: var(--clr-350);
+    --_clr-highlight: var(--clr-0);
+    --_clr-border: var(--clr-300);
     
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    z-index: 1;
     width: var(--button-minSize);
     height: var(--button-minSize);
 
     color: var(--_clr);
-    background-color: var(--_clr-background);
-    border: solid var(--border-width) var(--_clr-border);
-    border-radius: 200px;
+    background-color: var(--_clr-highlight);
+    border: solid var(--border-width-thick) var(--_clr-border);
+    border-radius: var(--borderRadius-round);
 
-    transition: background-color var(--trans-normal) ease,
-                border-color var(--trans-normal) ease;
+    transition: background-color var(--trans-fast) ease,
+                border-color var(--trans-fast) ease;
+
+    &::before {
+        // main color
+        content: "";
+        position: absolute;
+        top: $button-highlight-top;
+        right: $button-highlight-vrt;
+        bottom: 0;
+        left: $button-highlight-vrt;
+        z-index: -1;
+
+        background-color: var(--_clr-background);
+        border-radius: var(--borderRadius-round);
+        transform: translateY(0);
+
+        transition: background-color var(--trans-fast) ease,
+                    transform var(--trans-fast) ease;
+    }
     
     &:hover {
         --_clr: var(--clr-1000);
@@ -57,12 +77,18 @@ GLOBAL
     &:active, &.active {
         --_clr: var(--clr-1000);
         --_clr-background: var(--clr-0);
+        --_clr-highlight: var(--clr-250);
         --_clr-border: var(--clr-600);
+
+        &::before {
+            transform: translateY(-$button-highlight-top);
+        }
     }
 
     &:disabled {
         --_clr: var(--clr-400);
         --_clr-background: var(--clr-100);
+        --_clr-highlight: var(--clr-100);
         --_clr-border: var(--clr-150);
 
         cursor: not-allowed;
