@@ -25,13 +25,15 @@
         <MenuIcon />
     </a>
 
-    <input
-        type="text"
-        autocomplete="off"
-        placeholder="song title"
-        disabled={!isReady}
-        bind:this={titleInput}
-        bind:value={title}>
+    <form on:submit|preventDefault={() => titleInput.blur()}>
+        <input
+            type="text"
+            autocomplete="off"
+            placeholder="song title"
+            disabled={!isReady}
+            bind:this={titleInput}
+            bind:value={title}>
+    </form>
     
     <button
         class="button"
@@ -66,26 +68,31 @@
         opacity: 0;
     }
 
-    input {
+    form {
         flex-grow: 1;
-        width: 100%;
 
-        font-size: 1.1rem;
-        text-align: center;
-        
-        border: none;
-        border-bottom: solid var(--border-width) var(--clr-350);
+        input {
+            width: 100%;
+            height: 100%;
 
-        transition: border-color var(--trans-normal) ease,
-                    opacity var(--trans-slow) var(--trans-cubic-1);
+            font-size: 1.1rem;
+            text-align: center;
+            
+            border: none;
+            border-bottom: solid var(--border-width) var(--clr-350);
 
-        // load state
-        opacity: 0;
-        
-        &:focus {
-            border-color: var(--clr-600);
+            transition: border-color var(--trans-normal) ease,
+                        opacity var(--trans-slow) var(--trans-cubic-1);
+
+            // load state
+            opacity: 0;
+            
+            &:focus {
+                border-color: var(--clr-600);
+            }
         }
     }
+    
 
     .cassetteHeader.isReady {
         .button {
