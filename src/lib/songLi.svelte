@@ -126,7 +126,7 @@
         position: relative;
 
         background-color: var(--clr-100);
-        border-bottom: solid var(--border-width) var(--clr-150);
+        border-bottom: solid var(--border-width) var(--clr-border);
 
         transition: background-color var(--trans-fast) ease;
 
@@ -136,7 +136,7 @@
             }
 
             .tapesAndLength {
-                --_clr-bg: var(--clr-50);
+                --_clr-bg: var(--clr-highlight-dim);
                 --_clr-border: var(--clr-900);
 
                 .length {
@@ -146,22 +146,22 @@
         }
 
         &:active .tapesAndLength, &.active .tapesAndLength {
-            --_clr-bg: var(--clr-0);
+            --_clr-bg: var(--clr-highlight);
         }
 
         &.active {
-            background-color: var(--clr-0);
+            background-color: var(--clr-highlight);
 
             .cassette {
-                --_clr-bg: var(--clr-0);
+                --_clr-bg: var(--clr-highlight);
             }
         }
 
         &.new {
-            background-color: var(--clr-50);
+            background-color: var(--clr-highlight-dim);
 
             .cassette {
-                --_clr-bg: var(--clr-50);
+                --_clr-bg: var(--clr-highlight-dim);
             }
         }
 
@@ -214,11 +214,11 @@
     }
 
     input:checked ~ .checkbox {
-        background-color: red;
-        border-color: red;
+        background-color: var(--clr-red);
+        border-color: var(--clr-red);
 
         &::before {
-            background-color: var(--clr-0);
+            background-color: var(--clr-highlight);
             transform: scale(0.7);
         }
     }
@@ -280,7 +280,7 @@
 
             font-family: 'Roboto Mono', monospace;
             font-weight: 500;
-            color: var(--clr-0);
+            color: var(--clr-highlight);
             background-color: var(--clr-800);
             padding: var(--pad-xs) var(--pad-xl);
 
@@ -359,6 +359,7 @@
     .cassette {
         // internal variables
         --_clr-bg: var(--clr-100);
+        --_clr-border: var(--clr-250);
 
         position: absolute;
         top: 0;
@@ -378,7 +379,8 @@
             bottom: 7px;
             left: 0;
 
-            border: solid var(--border-width) var(--clr-250);
+            background-color: var(--_clr-bg);
+            border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
         }
 
@@ -395,7 +397,7 @@
 
             background-color: var(--_clr-bg);
             padding: var(--pad-sm);
-            border: solid var(--border-width) var(--clr-250);
+            border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
 
             transition: background-color var(--trans-fast) ease;
@@ -404,7 +406,8 @@
                 flex-grow: 1;
                 max-width: 65px;
 
-                border: solid var(--border-width) var(--clr-250);
+                background-color: var(--clr-100);
+                border: solid var(--border-width) var(--_clr-border);
             }
         }
     }
@@ -415,6 +418,15 @@
                 // default state
                 transform: translateX(0);
             }
+        }
+    }
+
+    /* === COLOR SCHEME ======================= */
+    @media (prefers-color-scheme: dark) {
+        .cassette {
+            // internal variables
+            --_clr-bg: var(--clr-150);
+            --_clr-border: var(--clr-0);
         }
     }
 

@@ -228,8 +228,6 @@
             width: calc(100% + var(--_border-width));
             height: 100%;
 
-            color: var(--clr-600);
-
             padding: 10px 10px 8px 10px;
             background-color: var(--clr-kb-white-highlight);
             border: solid var(--_border-width) var(--clr-kb-border);
@@ -262,7 +260,7 @@
                 z-index: 0;
                 width: var(--_label-width);
 
-                color: var(--clr-1000);
+                color: var(--clr-note-text);
                 font-size: 1.3rem;
                 font-weight: 600;
 
@@ -291,8 +289,6 @@
                 top: 0;
                 left: 50%;
                 z-index: 1;
-
-                color: var(--clr-250);
 
                 background-color: var(--clr-kb-flat-highlight);
                 box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.2);

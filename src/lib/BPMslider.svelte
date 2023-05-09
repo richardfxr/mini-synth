@@ -58,8 +58,8 @@
     .sliderWrapper {
         // internal variables
         --_clr-track: var(--clr-150);
-        --_clr-track-progress: red;
-        --_clr-thumb: red;
+        --_clr-track-progress: var(--clr-red);
+        --_clr-thumb: var(--clr-red);
         --_track-width: 100%;
         --_track-height: var(--border-width);
         --_thumb-height: 20px;
@@ -196,6 +196,14 @@
                 //defult state
                 opacity: 1;
             }
+        }
+    }
+
+    /* === COLOR SCHEME ======================= */
+    @media (prefers-color-scheme: dark) {
+        .sliderWrapper {
+            // internal variables
+            --_clr-track: var(--clr-0);
         }
     }
 </style>

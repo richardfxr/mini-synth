@@ -179,7 +179,7 @@
             content: "";
             pointer-events: none;
             position: absolute;
-            background-color: red;
+            background-color: var(--clr-red);
         }
 
         &::before {
@@ -343,6 +343,14 @@
         .spools {
             // default state
             transform: translateX(0);
+        }
+    }
+
+    /* === COLOR SCHEME ======================= */
+    @media (prefers-color-scheme: dark) {
+        .reels {
+            // internal variables
+            --_clr-scrollbar: var(--clr-0);
         }
     }
 </style>
