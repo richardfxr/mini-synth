@@ -44,6 +44,7 @@
 
 <div
     class="reels"
+    class:isReady
     style="--melodyLength: {melody.length}">
     <div
         class="spools"
