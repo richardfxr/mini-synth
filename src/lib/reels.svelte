@@ -221,6 +221,11 @@
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
 
+        transition: transform var(--trans-slow) var(--trans-cubic-1);
+
+        // load state
+        transform: translateX(0);
+
         &.dragging {
             cursor: grabbing;
         }
@@ -334,5 +339,10 @@
         // default state
         transform: translateY(0);
         opacity: 1;
+
+        .spools {
+            // default state
+            // transform: translateX(0);
+        }
     }
 </style>
