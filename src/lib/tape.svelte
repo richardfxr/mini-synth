@@ -171,7 +171,7 @@
             --_clr-border: var(--clr-800);
 
             .subdiv p {
-                color: var(--clr-note-text);
+                color: var(--clr-900);
 
                 // note colors
                 @for $i from 0 through 11 {
@@ -286,7 +286,7 @@
         overflow-y: hidden;
 
         &.active {
-            background-color: var(--clr-highlight);
+            background-color: var(--clr-0);
         }
 
         p {
@@ -297,9 +297,9 @@
             justify-content: center;
             height: var(--_note-height);
 
-            color: var(--clr-note-text-dim);
+            color: var(--clr-700);
             text-align: center;
-            background-color: var(--clr-note-dim);
+            background-color: var(--clr-200);
 
             transition: color var(--trans-fast) ease,
                         background-color var(--trans-fast) ease;
@@ -311,23 +311,6 @@
 
                 // move numbers down slightly
                 margin-bottom: -1px;
-            }
-        }
-    }
-
-    /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .tape {
-            // internal variables
-            --_clr-border: var(--clr-500);
-
-            &#melody {
-                border-bottom: solid var(--border-width) var(--clr-1000);
-            }
-
-            &.active {
-                // internal variables
-                --_clr-border: var(--clr-1000);
             }
         }
     }

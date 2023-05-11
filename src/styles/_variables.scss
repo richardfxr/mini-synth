@@ -87,20 +87,6 @@ $beats: (
    color-scheme: light;
 }
 
-/* === COLOR SCHEME ======================= */
-@media (prefers-color-scheme: dark) {
-   :root {
-      /* === COLORS ============================= */
-
-      /* light theme (default) */
-      // parse $light into CSS variables
-      @each $name, $value in $dark {
-         --clr-#{$name}: #{$value};
-      }
-      color-scheme: dark;
-   }
-}
-
 /* === BREAKPOINTS ======================== */
 @media (orientation: portrait) {
    :root{

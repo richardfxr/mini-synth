@@ -10,7 +10,7 @@
 <style lang="scss">
     svg {
         fill: none;
-        stroke: currentColor;
+        stroke: var(--clr-250);
         stroke-width: var(--border-width-thick);
 
         position: absolute;

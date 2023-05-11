@@ -724,23 +724,6 @@
         padding: var(--pad-2xl) var(--pad-xl) 0 var(--pad-xl);
     }
 
-    /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .cassette {
-            .housing {
-                border-color: var(--clr-0);
-            }
-
-            &.bottom .sideButton .button.autoSkipping {
-                background-color: #f14c4c;
-
-                &::before {
-                    background-color: #ff6363;
-                }
-            }
-        }
-    }
-
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
         #melodyInputs {

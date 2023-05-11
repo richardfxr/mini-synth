@@ -109,8 +109,6 @@
 
     .soundboard {
         // internal variables
-        --_clr-blank: var(--clr-100);
-        --_clr-blank-highlight: var(--clr-0);
         --_button-height: 120px;
         
         align-self: flex-start;
@@ -131,7 +129,7 @@
             position: relative;
             height: var(--_button-height);
 
-            background-color: var(--_clr-blank-highlight);
+            background-color: var(--clr-0);
             border: solid var(--border-width) var(--clr-kb-border);
             border-radius: $input-border-radius;
 
@@ -147,7 +145,7 @@
                 bottom: 0;
                 left: $beat-highlight-hrz;
 
-                background-color: var(--_clr-blank);
+                background-color: var(--clr-100);
                 border-radius: calc($input-border-radius - $beat-highlight-hrz);
                 box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
@@ -167,7 +165,7 @@
                 display: block;
                 position: relative;
 
-                color: var(--clr-note-text);
+                color: var(--clr-1000);
 
                 padding: var(--pad-lg) var(--pad-xl);
                 background-color: var(--_clr);
@@ -181,20 +179,13 @@
 
             &.active {
                 background-color: var(--_clr-highlight);
+                border-color: var(--clr-600);
 
                 &::before {
                     background-color: var(--_clr);
                     transform: translateY(-5px);
                 }
             }
-        }
-    }
-
-    /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .soundboard {
-            // internal variables
-            --_clr-blank-highlight: var(--clr-150);
         }
     }
 </style>

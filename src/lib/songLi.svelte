@@ -126,7 +126,7 @@
         position: relative;
 
         background-color: var(--clr-100);
-        border-bottom: solid var(--border-width) var(--clr-border);
+        border-bottom: solid var(--border-width) var(--clr-150);
 
         transition: background-color var(--trans-fast) ease;
 
@@ -136,7 +136,7 @@
             }
 
             .tapesAndLength {
-                --_clr-bg: var(--clr-highlight-dim);
+                --_clr-bg: var(--clr-50);
                 --_clr-border: var(--clr-900);
 
                 .length {
@@ -146,22 +146,22 @@
         }
 
         &:active .tapesAndLength, &.active .tapesAndLength {
-            --_clr-bg: var(--clr-highlight);
+            --_clr-bg: var(--clr-0);
         }
 
         &.active {
-            background-color: var(--clr-highlight);
+            background-color: var(--clr-0);
 
             .cassette {
-                --_clr-bg: var(--clr-highlight);
+                --_clr-bg: var(--clr-0);
             }
         }
 
         &.new {
-            background-color: var(--clr-highlight-dim);
+            background-color: var(--clr-50);
 
             .cassette {
-                --_clr-bg: var(--clr-highlight-dim);
+                --_clr-bg: var(--clr-50);
             }
         }
 
@@ -214,11 +214,11 @@
     }
 
     input:checked ~ .checkbox {
-        background-color: var(--clr-red);
-        border-color: var(--clr-red);
+        background-color: red;
+        border-color: red;
 
         &::before {
-            background-color: var(--clr-highlight);
+            background-color: var(--clr-0);
             transform: scale(0.7);
         }
     }
@@ -280,7 +280,7 @@
 
             font-family: 'Roboto Mono', monospace;
             font-weight: 500;
-            color: var(--clr-highlight);
+            color: var(--clr-0);
             background-color: var(--clr-800);
             padding: var(--pad-xs) var(--pad-xl);
 
@@ -359,7 +359,6 @@
     .cassette {
         // internal variables
         --_clr-bg: var(--clr-100);
-        --_clr-border: var(--clr-250);
 
         position: absolute;
         top: 0;
@@ -379,8 +378,7 @@
             bottom: 7px;
             left: 0;
 
-            background-color: var(--_clr-bg);
-            border: solid var(--border-width) var(--_clr-border);
+            border: solid var(--border-width) var(--clr-250);
             border-radius: var(--borderRadius-sm);
         }
 
@@ -397,7 +395,7 @@
 
             background-color: var(--_clr-bg);
             padding: var(--pad-sm);
-            border: solid var(--border-width) var(--_clr-border);
+            border: solid var(--border-width) var(--clr-250);
             border-radius: var(--borderRadius-sm);
 
             transition: background-color var(--trans-fast) ease;
@@ -406,8 +404,7 @@
                 flex-grow: 1;
                 max-width: 65px;
 
-                background-color: var(--clr-100);
-                border: solid var(--border-width) var(--_clr-border);
+                border: solid var(--border-width) var(--clr-250);
             }
         }
     }
@@ -418,15 +415,6 @@
                 // default state
                 transform: translateX(0);
             }
-        }
-    }
-
-    /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .cassette {
-            // internal variables
-            --_clr-bg: var(--clr-150);
-            --_clr-border: var(--clr-0);
         }
     }
 

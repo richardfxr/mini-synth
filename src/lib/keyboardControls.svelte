@@ -93,7 +93,7 @@
             transition: background-color 0.1s ease;
 
             &.populated {
-                background-color: var(--clr-red);
+                background-color: red;
             }
         }
     }

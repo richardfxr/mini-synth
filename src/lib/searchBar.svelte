@@ -47,18 +47,18 @@
     .searchBar {
         color: var(--clr-700);
         background-color: var(--clr-100);
-        border-top: solid var(--border-width) var(--clr-border);
-        border-bottom: solid var(--border-width) var(--clr-border);
+        border-top: solid var(--border-width) var(--clr-150);
+        border-bottom: solid var(--border-width) var(--clr-150);
 
         transition: color var(--trans-fast) ease,
                     background-color var(--trans-fast) ease;
 
         &:focus-within {
             color: var(--clr-900);
-            background-color: var(--clr-highlight);
+            background-color: var(--clr-0);
 
             .button {
-                --_clr-background: var(--clr-highlight);
+                --_clr-background: var(--clr-0);
             }
         }
     }
