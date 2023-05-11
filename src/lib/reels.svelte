@@ -112,7 +112,7 @@
                 {/each}
             </div>
 
-            <!-- <Tape
+            <Tape
                 tapeName = "melody"
                 tape = {melody}
                 {notes}
@@ -129,7 +129,7 @@
                 bind:currentTapeName = {currentTapeName}
                 {dragging}
                 bind:radioPointerDown = {radioPointerDown}
-                isReady = {false} /> -->
+                isReady = {false} />
 
         </div>
         
