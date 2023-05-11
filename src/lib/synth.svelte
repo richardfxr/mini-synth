@@ -13,7 +13,6 @@
     import { onMount, onDestroy, tick } from 'svelte';
     import { goto, beforeNavigate } from '$app/navigation';
     import { browser } from '$app/environment';
-    import { fade, fly } from 'svelte/transition';
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     // Tone
@@ -397,9 +396,7 @@
 </svelte:head>
 
 <div
-    class="synth"
-    in:fade={{ duration: 50, delay: 200 }}
-    out:fly={{ y: 20, duration: 200 }}>
+    class="synth">
     <div class="background">
         <div
             class="cassette top"
@@ -530,8 +527,7 @@
     {#if isReady && currentTapeName === "melody"}
         <div
             id="melodyInputs"
-            class="inputs"
-            out:fly={{ y: 20, duration: 200 }}>
+            class="inputs">
             <div class="secondaryControls">
                 <KeyboardControls
                     bind:currentKbSegment = {currentKbSegment}
@@ -560,8 +556,7 @@
     {:else if isReady}
         <div
             id="beatsInputs"
-            class="inputs"
-            out:fly={{ y: 20, duration: 200 }}>
+            class="inputs">
             <Soundboard
                 {currentSubdiv}
                 bind:beats = {beats}
