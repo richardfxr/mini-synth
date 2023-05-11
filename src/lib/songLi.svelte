@@ -2,6 +2,7 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
     // types
     import type { Song } from '../storage/db';
     // data
@@ -41,6 +42,7 @@
     class:active={song.id !== undefined ? selectedSongs.includes(song.id) : false}
     class:new={song.id !== undefined ? newSongs.includes(song.id) : false}
     class:isReady
+    transition:fade|local={{ duration: 150 }}
     bind:this={songListItem}>
     <div>
         <label>

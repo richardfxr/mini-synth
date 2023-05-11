@@ -3,6 +3,7 @@
     // Svelte
     import { onMount } from 'svelte';
     import { goto, beforeNavigate } from '$app/navigation';
+    import { fade } from 'svelte/transition';
     // Dexie
     import { db } from "../storage/db";
     // stores
@@ -134,7 +135,9 @@
 
 
 <div
-    class="index">
+    class="index"
+    in:fade={{ duration: 50, delay: 200 }}
+    out:fade={{ duration: 200 }}>
 
     <ul class="actions" class:isReady={introHasFinished}>
         <li id="new">
