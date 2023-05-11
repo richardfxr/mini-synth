@@ -491,7 +491,7 @@
 
             <BPMslider
                 bind:bpm = {bpm}
-                isReady={false}
+                {isReady}
                 on:input = {() => Tone.Transport.bpm.value = bpm} />
         </div>
         <div id="right" class="sideButton">
