@@ -325,16 +325,16 @@
     onMount(async () => {
         console.log("onMount");
         // time intro 
-        if ($firstLoad) {
+        // if ($firstLoad) {
             $firstLoad = false;
-            introHasFinished = true;
-        } else {
-            setTimeout(() => {
-                introHasFinished = true;
-                console.log("intro has finished");
-                console.log("isReady: " + isReady);
-            }, 225);
-        }
+            // introHasFinished = true;
+        // } else {
+        //     setTimeout(() => {
+        //         introHasFinished = true;
+        //         console.log("intro has finished");
+        //         console.log("isReady: " + isReady);
+        //     }, 225);
+        // }
 
         // get song from database
         if (id === "new") {
@@ -403,11 +403,11 @@
     <div class="background">
         <div
             class="cassette top"
-            >
+            class:isReady>
             <div class="housing">
                 <CassetteHeader 
                     bind:title = {title}
-                    isReady={false}/>
+                    {isReady}/>
             </div>
         </div>
     </div>
@@ -423,14 +423,14 @@
         {notes}
         {beats}
         bind:hasManuallyScrolled = {hasManuallyScrolled}
-        isReady={false}
+        {isReady}
         on:pause = {() => Tone.Transport.pause()}
         on:addQuarter = {async () => await addSubdiv(4)}
         on:removeQuarter = {async () => await removeSubdiv(4)} />
 
     <div
         class="cassette bottom"
-        >
+        class:isReady>
         <div id="left" class="sideButton">
             <button
                 class="button warn"
@@ -466,7 +466,7 @@
                 {tweenedProgress}
                 {playbackProgress}
                 melodyLength = {melody.length}
-                isReady={false}
+                {isReady}
                 on:skipToBeginning = {async () => await skipTo(0)}
                 on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
                 on:play = {async () => {
@@ -491,7 +491,7 @@
 
             <BPMslider
                 bind:bpm = {bpm}
-                isReady={false}
+                {isReady}
                 on:input = {() => Tone.Transport.bpm.value = bpm} />
         </div>
         <div id="right" class="sideButton">
@@ -527,7 +527,7 @@
         </div>
     </div>
 
-    <!-- {#if isReady && currentTapeName === "melody"}
+    {#if isReady && currentTapeName === "melody"}
         <div
             id="melodyInputs"
             class="inputs"
@@ -578,7 +578,7 @@
                     autoSkipping= false;
                 }} />
         </div>
-    {/if} -->
+    {/if}
 </div>
 
 
