@@ -52,22 +52,22 @@
         style="--subdivWidth: {subdivWidth}px"
         bind:this={tapes}
         on:scroll={() => {
-            // if (!isReady) return;
-            // // update progress if it is not updating scroll
-            // if (!tweening) {
-            //     tweenedProgress.set(tapes.scrollLeft);
-            //     hasManuallyScrolled = true;
-            //     let calculatedubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
+            if (!isReady) return;
+            // update progress if it is not updating scroll
+            if (!tweening) {
+                tweenedProgress.set(tapes.scrollLeft);
+                hasManuallyScrolled = true;
+                let calculatedubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
 
-            //     // prevent currentSubdiv from producing invalid index
-            //     if (calculatedubdiv >= melody.length) {
-            //         currentSubdiv = melody.length - 1;
-            //     } else if (calculatedubdiv < 0) {
-            //         currentSubdiv = 0;
-            //     } else {
-            //         currentSubdiv = calculatedubdiv;
-            //     }
-            // }
+                // prevent currentSubdiv from producing invalid index
+                if (calculatedubdiv >= melody.length) {
+                    currentSubdiv = melody.length - 1;
+                } else if (calculatedubdiv < 0) {
+                    currentSubdiv = 0;
+                } else {
+                    currentSubdiv = calculatedubdiv;
+                }
+            }
         }}
         on:pointerdown={() => {
             if (!isReady) return;
