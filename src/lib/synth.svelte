@@ -423,7 +423,7 @@
         {notes}
         {beats}
         bind:hasManuallyScrolled = {hasManuallyScrolled}
-        {isReady}
+        isReady={false}
         on:pause = {() => Tone.Transport.pause()}
         on:addQuarter = {async () => await addSubdiv(4)}
         on:removeQuarter = {async () => await removeSubdiv(4)} />
