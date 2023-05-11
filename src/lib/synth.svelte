@@ -325,16 +325,16 @@
     onMount(async () => {
         console.log("onMount");
         // time intro 
-        if ($firstLoad) {
+        // if ($firstLoad) {
             $firstLoad = false;
-            introHasFinished = true;
-        } else {
-            setTimeout(() => {
-                introHasFinished = true;
-                console.log("intro has finished");
-                console.log("isReady: " + isReady);
-            }, 225);
-        }
+            // introHasFinished = true;
+        // } else {
+        //     setTimeout(() => {
+        //         introHasFinished = true;
+        //         console.log("intro has finished");
+        //         console.log("isReady: " + isReady);
+        //     }, 225);
+        // }
 
         // get song from database
         if (id === "new") {
@@ -430,7 +430,7 @@
 
     <div
         class="cassette bottom"
-        >
+        class:isReady>
         <div id="left" class="sideButton">
             <button
                 class="button warn"
