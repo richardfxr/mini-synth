@@ -326,8 +326,8 @@
         console.log("onMount");
         // time intro 
         // if ($firstLoad) {
-            // $firstLoad = false;
-            // introHasFinished = true;
+            $firstLoad = false;
+            introHasFinished = true;
         // } else {
         //     setTimeout(() => {
         //         introHasFinished = true;
