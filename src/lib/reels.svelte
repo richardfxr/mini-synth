@@ -120,7 +120,7 @@
                 bind:currentTapeName = {currentTapeName}
                 {dragging}
                 bind:radioPointerDown = {radioPointerDown}
-                {isReady} />
+                isReady = {false} />
 
             <Tape
                 tapeName = "beats"
@@ -129,7 +129,7 @@
                 bind:currentTapeName = {currentTapeName}
                 {dragging}
                 bind:radioPointerDown = {radioPointerDown}
-                {isReady} />
+                isReady = {false} />
 
         </div>
         
