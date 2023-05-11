@@ -466,7 +466,7 @@
                 {tweenedProgress}
                 {playbackProgress}
                 melodyLength = {melody.length}
-                isReady={false}
+                {isReady}
                 on:skipToBeginning = {async () => await skipTo(0)}
                 on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
                 on:play = {async () => {
