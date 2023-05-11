@@ -527,7 +527,7 @@
         </div>
     </div>
 
-    <!-- {#if isReady && currentTapeName === "melody"}
+    {#if isReady && currentTapeName === "melody"}
         <div
             id="melodyInputs"
             class="inputs"
@@ -578,7 +578,7 @@
                     autoSkipping= false;
                 }} />
         </div>
-    {/if} -->
+    {/if}
 </div>
 
 
