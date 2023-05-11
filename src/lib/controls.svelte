@@ -60,7 +60,7 @@
         </button>
 
         <button
-            class="button main"
+            class="button main warn"
             disabled = {!isReady}
             on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
             {#if playbackState === "started"}
@@ -160,7 +160,6 @@
         .button {
             &.main {
                 width: 90px;
-                color: red;
                 z-index: 3;
             }
 
@@ -173,7 +172,8 @@
             &.skip {
                 z-index: 1;
                 border: none;
-                transition: scale var(--trans-normal) ease,
+                transition: color var(--trans-normal) ease,
+                            scale var(--trans-normal) ease,
                             transform var(--trans-normal) var(--trans-cubic-1),
                             opacity var(--trans-normal) var(--trans-cubic-1);
 
@@ -307,6 +307,7 @@
                 &.skip {
                     --_clr-border: var(--clr-250);
                     
+                    color: var(--_clr-border);
                     scale: 1.21;
 
                     &::after {
@@ -330,6 +331,19 @@
                 &.subdiv {
                     transform: translateX(calc(var(--_dir) * 10px));
                     opacity: 0;
+                }
+            }
+        }
+    }
+
+    /* === COLOR SCHEME ======================= */
+    @media (prefers-color-scheme: dark) {
+        .controls.isReady.playing .playback button {
+            &.skip {
+                --_clr-border: var(--clr-200);
+
+                .spool {
+                    background-color: var(--clr-50);
                 }
             }
         }
