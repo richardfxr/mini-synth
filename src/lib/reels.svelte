@@ -170,8 +170,11 @@
                     opacity $cassette-ani-duration $cassette-ani-easing;
         
         // load state
-        transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-        opacity: 0;
+        // transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        // opacity: 0;
+
+        transform: translateY(0);
+        opacity: 1;
 
         &::before, &::after {
             // playhead
@@ -223,7 +226,7 @@
         transition: transform var(--trans-slow) var(--trans-cubic-1);
 
         // load state
-        transform: translateX(100px);
+        transform: translateX(0);
 
         &.dragging {
             cursor: grabbing;
@@ -334,16 +337,16 @@
         }
     }
 
-    .reels.isReady {
-        // default state
-        transform: translateY(0);
-        opacity: 1;
+    // .reels.isReady {
+    //     // default state
+    //     transform: translateY(0);
+    //     opacity: 1;
 
-        .spools {
-            // default state
-            transform: translateX(0);
-        }
-    }
+    //     .spools {
+    //         // default state
+    //         transform: translateX(0);
+    //     }
+    // }
 
     /* === COLOR SCHEME ======================= */
     @media (prefers-color-scheme: dark) {
