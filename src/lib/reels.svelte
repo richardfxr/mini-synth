@@ -44,6 +44,7 @@
 
 <div
     class="reels"
+    class:isReady
     style="--melodyLength: {melody.length}">
     <div
         class="spools"
@@ -170,11 +171,8 @@
                     opacity $cassette-ani-duration $cassette-ani-easing;
         
         // load state
-        // transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-        // opacity: 0;
-
-        transform: translateY(0);
-        opacity: 1;
+        transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        opacity: 0;
 
         &::before, &::after {
             // playhead
@@ -337,16 +335,16 @@
         }
     }
 
-    // .reels.isReady {
-    //     // default state
-    //     transform: translateY(0);
-    //     opacity: 1;
+    .reels.isReady {
+        // default state
+        transform: translateY(0);
+        opacity: 1;
 
-    //     .spools {
-    //         // default state
-    //         transform: translateX(0);
-    //     }
-    // }
+        .spools {
+            // default state
+            // transform: translateX(0);
+        }
+    }
 
     /* === COLOR SCHEME ======================= */
     @media (prefers-color-scheme: dark) {
