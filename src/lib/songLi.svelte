@@ -66,6 +66,7 @@
         </label>
         <a href={"/song/" + song.id} class="title">{song.title}</a>
         <div class="details">
+            <div class="tapeShadow"></div>
             <div class="tapesAndLength">
                 <p class="length">
                     <span>{Math.floor((song.melody.length) / 16)}:{Math.floor((song.melody.length) / 4) % 4}:{(song.melody.length) % 4}</span>
@@ -121,6 +122,8 @@
     $_cassette-height: 50px;
     $_cassette-extrusion-inset: 30px;
     $_note-height: 3px;
+    $_melody-height: calc(3 * $border-width + 3 * $_note-height + 2 * $border-width-thin);
+    $_beats-height: calc(2 * $border-width + 2 * $_note-height + $border-width-thin);
 
     .song {
         position: relative;
@@ -153,7 +156,8 @@
             background-color: var(--clr-highlight);
 
             .cassette {
-                --_clr-bg: var(--clr-highlight);
+                --_clr-bg: var(--clr-100);
+                --_clr-bg-higlight: var(--clr-highlight);
             }
         }
 
@@ -179,7 +183,7 @@
         align-items: center;
         justify-content: center;
         position: relative;
-        z-index: 3;
+        z-index: 5;
         width: 100%;
         height: 100%;
 
@@ -239,7 +243,7 @@
             right: 0;
             bottom: 0;
             left: 0;
-            z-index: 2;
+            z-index: 4;
         }
     }
 
@@ -256,6 +260,23 @@
         margin-bottom: var(--pad-xl);
     }
 
+    .tapeShadow {
+        position: absolute;
+        right: calc($_cassette-extrusion-inset + var(--border-width) + var(--pad-sm));
+        left: 0;
+        z-index: 2;
+
+        height: calc(2 * $border-width + $_melody-height + $_beats-height);
+
+        background-color: transparent;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+
+        // load state
+        opacity: 0;
+
+        transition: opacity var(--trans-normal) var(--trans-cubic-1);
+    }
+
     .tapesAndLength {
         // internal variables
         --_clr-bg: var(--clr-100);
@@ -265,7 +286,7 @@
         display: flex;
         flex-flow: row nowrap;
         position: relative;
-        z-index: 1;
+        z-index: 3;
 
         border-right: solid var(--border-width) var(--_clr-border);
         margin-right: calc($_cassette-extrusion-inset + var(--border-width) + var(--pad-sm));
@@ -305,7 +326,8 @@
             // load state
             transform: translateX(70px);
 
-            transition: border-color var(--trans-fast) ease,
+            transition: background-color var(--trans-fast) ease,
+                        border-color var(--trans-fast) ease,
                         transform var(--trans-normal) var(--trans-cubic-1);
 
             .tape {
@@ -316,12 +338,12 @@
                 overflow: hidden;
 
                 &.melody {
-                    height: calc(3 * var(--border-width) + 3 * $_note-height + 2 * var(--border-width-thin));
+                    height: $_melody-height;
                     border-bottom: solid var(--border-width) var(--_clr-border);
                 }
 
                 &.beats {
-                    height: calc(2 * var(--border-width) + 2 * $_note-height + var(--border-width-thin));
+                    height: $_beats-height;
                 }
 
                 .subdiv {
@@ -358,8 +380,10 @@
 
     .cassette {
         // internal variables
-        --_clr-bg: var(--clr-100);
-        --_clr-border: var(--clr-250);
+        --_clr-bg: var(--clr-150);
+        --_clr-bg-higlight: var(--clr-highlight-dim);
+        --_clr-bg-cutout: var(--clr-250);
+        --_clr-border: var(--clr-350);
 
         position: absolute;
         top: 0;
@@ -372,6 +396,7 @@
         margin: auto;
 
         &::before {
+            // cassette housing
             content: "";
             position: absolute;
             top: 7px;
@@ -379,9 +404,26 @@
             bottom: 7px;
             left: 0;
 
-            background-color: var(--_clr-bg);
+            background-color: var(--_clr-bg-higlight);
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
+
+            transition: background-color var(--trans-fast) ease;
+        }
+
+        &::after {
+            // cassette housing background
+            content: "";
+            position: absolute;
+            top: calc(7px + var(--border-width) + $highlight-height);
+            right: var(--border-width);
+            bottom: calc(7px + var(--border-width));
+            left: var(--border-width);
+
+            background-color: var(--_clr-bg);
+            border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+
+            transition: background-color var(--trans-fast) ease;
         }
 
         .extrusion {
@@ -394,25 +436,61 @@
             right: $_cassette-extrusion-inset;
             bottom: 0;
             left: $_cassette-extrusion-inset;
+            z-index: 1;
 
-            background-color: var(--_clr-bg);
+            background-color: var(--_clr-bg-higlight);
             padding: var(--pad-sm);
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
 
             transition: background-color var(--trans-fast) ease;
 
+            &::before {
+                // ectrusion background
+                content: "";
+                position: absolute;
+                top: $highlight-height;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                background-color: var(--_clr-bg);
+                border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+
+                transition: background-color var(--trans-fast) ease;
+            }
+
             .cutout {
                 flex-grow: 1;
+                position: relative;
                 max-width: 65px;
 
-                background-color: var(--clr-100);
+                background-color: var(--_clr-bg-cutout);
                 border: solid var(--border-width) var(--_clr-border);
+
+                &::before {
+                    // cutout highlight
+                    content: "";
+                    position: absolute;
+                    right: calc(-1 * var(--border-width));
+                    bottom: calc(-1 * var(--border-width) - $highlight-height);
+                    left: calc(-1 * var(--border-width));
+                    height: $highlight-height;
+
+                    background-color: var(--_clr-bg-higlight);
+                    border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+
+                    transition: background-color var(--trans-fast) ease;
+                }
             }
         }
     }
 
     .song.isReady {
+        .tapeShadow {
+            opacity: 1;
+        }
+
         .tapesAndLength {
             .length, .tapes {
                 // default state
@@ -423,10 +501,23 @@
 
     /* === COLOR SCHEME ======================= */
     @media (prefers-color-scheme: dark) {
+        .song.active {
+            .cassette {
+                --_clr-bg: var(--clr-250);
+                --_clr-bg-higlight: var(--clr-350);
+                --_clr-bg-cutout: var(--clr-150);
+            }
+        }
+
+        .tapeShadow {
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
+        }
+
         .cassette {
             // internal variables
-            --_clr-bg: var(--clr-150);
             --_clr-border: var(--clr-0);
+            --_clr-bg-higlight: var(--clr-250);
+            --_clr-bg-cutout: var(--clr-100);
         }
     }
 
