@@ -11,14 +11,9 @@
     // types
     import type { Song } from "../storage/db";
     // components
+    import IndexHeader from '$lib/indexHeader.svelte';
     import SearchBar from '$lib/searchBar.svelte';
     import SongLi from '$lib/songLi.svelte';
-    // icons
-    import PlusIcon from '$lib/SVGs/plusIcon.svelte';
-    import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
-    import DuplicateIcon from '$lib/SVGs/duplicateIcon.svelte';
-    import SearchIcon from '$lib/SVGs/searchIcon.svelte';
-    
 
     /* === VARIABLES ========================== */
     let songs: Song[] = [];
@@ -139,36 +134,12 @@
     in:fade={{ duration: 50, delay: 200 }}
     out:fade={{ duration: 200 }}>
 
-    <ul class="actions" class:isReady={introHasFinished}>
-        <li id="new">
-            <a
-                href="/song/new"
-                class="button">
-                <span class="visuallyHidden">new song</span>
-                <PlusIcon />
-            </a>
-        </li>
-        <li id="duplicate">
-            <button
-                class="button"
-                class:disabled={selectedSongs.length === 0}
-                disabled={selectedSongs.length === 0 || working}
-                on:click={duplicateSelectedSongs}>
-                <span class="visuallyHidden">duplicate selected songs</span>
-                <DuplicateIcon />
-            </button>
-        </li>
-        <li id="delete">
-            <button
-                class="button warn"
-                class:disabled={selectedSongs.length === 0}
-                disabled={selectedSongs.length === 0 || working}
-                on:click={deleteSelectedSongs}>
-                <span class="visuallyHidden">delete selected songs</span>
-                <TrashCanIcon />
-            </button>
-        </li>
-    </ul>
+    <IndexHeader
+        isReady = {introHasFinished}
+        {working}
+        noSelectedSongs = {selectedSongs.length === 0}
+        on:duplicate = {duplicateSelectedSongs}
+        on:delete = {deleteSelectedSongs} />
     
     <SearchBar
         bind:searchQuery = {searchQuery}
@@ -203,66 +174,6 @@
         --_actions-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
 
         padding-bottom: var(--_actions-height);
-    }
-
-    .actions {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-        gap: var(--pad-sm);
-        position: sticky;
-        top: 0;
-        right: 0;
-        z-index: 1000;
-        max-width: $page-maxWidth;
-
-        padding: var(--pad-2xl);
-        margin: 0 auto;
-
-        // allow click through
-        pointer-events: none;
-
-        // load state
-        transform: translateY(calc(-0.5 * var(--_actions-height)));
-        opacity: 0;
-
-        transition: transform var(--trans-normal) ease-in-out,
-                    opacity var(--trans-normal) ease-in-out;
-
-        &.isReady {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        #new {
-            order: 1;
-
-            .button {
-                width: 90px;
-                pointer-events: auto; 
-            }
-        }
-
-        #duplicate, #delete {
-            .button {
-                opacity: 1;
-                transform: translateY(0);
-
-                transition: opacity var(--trans-normal) var(--trans-cubic-1),
-                            transform var(--trans-normal) var(--trans-cubic-1);
-
-                pointer-events: auto;
-
-                &.disabled {
-                    opacity: 0;
-                    transform: translateY(calc(-1 * var(--_actions-height)));
-
-                    transition: opacity var(--trans-normal) cubic-bezier(.7,0,.93,.67),
-                                transform var(--trans-normal) cubic-bezier(.7,0,.93,.67);
-                }
-            }
-            
-        }
     }
 
     .songs {
