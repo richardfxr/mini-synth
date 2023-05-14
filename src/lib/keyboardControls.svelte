@@ -60,7 +60,8 @@
 
         &::after {
             // internal variables
-            --_clr: var(--clr-200);
+            --_clr: var(--clr-300);
+            
             // keyboard connector
             content: "";
             position: absolute;
@@ -70,9 +71,9 @@
             z-index: -1;
             
             border-top: solid var(--border-width-thick) var(--_clr);
-            border-bottom: solid var(--border-width) var(--clr-0);
+            border-bottom: solid $highlight-height var(--_clr-highlight);
 
-            transition: border-color var(--trans-normal) ease;
+            transition: border-color var(--trans-fast) ease;
         }
 
         &.active {
@@ -94,6 +95,21 @@
 
             &.populated {
                 background-color: var(--clr-red);
+            }
+        }
+    }
+
+    /* === COLOR SCHEME ======================= */
+    @media (prefers-color-scheme: dark) {
+        .button {
+            &::after {
+                // internal variables
+                --_clr: var(--clr-0);
+            }
+
+            &.active::after {
+                // internal variables
+                --_clr: var(--clr-300);
             }
         }
     }

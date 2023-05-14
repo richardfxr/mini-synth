@@ -203,10 +203,10 @@
                     // main color
                     content: "";
                     position: absolute;
-                    top: calc(var(--border-width-thick) + $button-highlight-top);
-                    right: calc(var(--border-width-thick) + $button-highlight-vrt);
+                    top: calc(var(--border-width-thick) + $highlight-height);
+                    right: calc(var(--border-width-thick) + 0.5 * $highlight-height);
                     bottom: var(--border-width-thick);
-                    left: calc(var(--border-width-thick) + $button-highlight-vrt);
+                    left: calc(var(--border-width-thick) + 0.5 * $highlight-height);
 
                     background-color: var(--_clr-background);
                     border-radius: var(--borderRadius-round);
@@ -225,7 +225,7 @@
 
                     &::after {
                         // add default .button ::before transform to ::after
-                        transform: translateY(-$button-highlight-top);
+                        transform: translateY(-$highlight-height);
                     }
                 }
 

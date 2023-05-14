@@ -57,10 +57,10 @@ GLOBAL
         // main color
         content: "";
         position: absolute;
-        top: $button-highlight-top;
-        right: $button-highlight-vrt;
+        top: $highlight-height;
+        right: calc(0.5 * $highlight-height);
         bottom: 0;
-        left: $button-highlight-vrt;
+        left: calc(0.5 * $highlight-height);
         z-index: -1;
 
         background-color: var(--_clr-background);
@@ -83,7 +83,7 @@ GLOBAL
         --_clr-border: var(--clr-600);
 
         &::before {
-            transform: translateY(-$button-highlight-top);
+            transform: translateY(-$highlight-height);
         }
     }
 
