@@ -1,7 +1,12 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
+    // Svelte
+    import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     // icons
     import MenuIcon from "$lib/SVGs/menuIcon.svelte";
+    import ExitFullscreen from '$lib/SVGs/exitFullscreen.svelte';
+    import EnterFullscreenIcon from '$lib/SVGs/enterFullscreenIcon.svelte';
 
     /* === PROPS ============================== */
     export let title: string; // bind
@@ -9,9 +14,45 @@
 
     /* === VARIABLES ========================== */
     let titleInput: HTMLInputElement;
+    let allowFullscreen = false;
+    let isFullscreen = false;
+
+    /* === FUNCTIONS ========================== */
+    function checkFullscreen(): void {
+        // @ts-ignore
+        isFullscreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    }
+
+    function toggleFullscreen(): void {
+        if (!allowFullscreen) return;
+
+        // check if document is currently full screen
+        if (isFullscreen) {
+            // get supported exitFullScreen
+            // @ts-ignore
+            let cancelFullScreen = document.exitFullscreen || document.mozCancelFullScreen || document.webkitExitFullscreen || document.msExitFullscreen;
+            cancelFullScreen.call(document);
+            isFullscreen = false;
+        } else {
+            // get supported requestFullScreen
+            // @ts-ignore
+            let requestFullScreen = document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullScreen || document.documentElement.msRequestFullscreen;
+            requestFullScreen.call(document.documentElement);
+            isFullscreen = true;
+        }
+    }
+
+    /* === LIFECYCLES ========================= */
+    onMount(() => {
+        // check if full screen is allowed
+        allowFullscreen = document.fullscreenEnabled;
+        checkFullscreen();
+    });
 </script>
 
 
+
+<svelte:window on:resize={checkFullscreen} />
 
 <header
     class="cassetteHeader"
@@ -38,7 +79,16 @@
     <button
         class="button"
         style="--_dir: -1"
-        disabled>
+        type="button"
+        on:click={toggleFullscreen}
+        disabled={!allowFullscreen}>
+        {#if isFullscreen}
+            <span class="visuallyHidden">exit fullscreen</span>
+            <ExitFullscreen />
+        {:else}
+            <span class="visuallyHidden">enter fullscreen</span>
+            <EnterFullscreenIcon />
+        {/if}
     </button>
 </header>
 
