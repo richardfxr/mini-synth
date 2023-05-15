@@ -53,7 +53,7 @@ $beats: (
    --beats-height: 55px;
    --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));
    --inputs-maxWidth: 1000px;
-   --inputs-height: calc(100vh - var(--reels-height) - 62px);
+   --inputs-height: calc(100vh - var(--reels-height) - 62px - env(safe-area-inset-bottom));
    --inputs-maxHeight: 400px;
 
    --pad-3xl: 20px;

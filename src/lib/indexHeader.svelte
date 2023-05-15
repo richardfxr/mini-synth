@@ -50,55 +50,57 @@
     </button>
 
     <div class="logo"></div>
-
-    <ul class="actions">
-        <li id="new">
-            <a
-                href="/song/new"
-                class="button">
-                <span class="visuallyHidden">new song</span>
-                <PlusIcon />
-            </a>
-        </li>
-        <li id="duplicate">
-            <button
-                class="button"
-                class:disabled={noSelectedSongs}
-                disabled={noSelectedSongs || working}
-                on:click={() => dispatch("duplicate")}>
-                <span class="visuallyHidden">duplicate selected songs</span>
-                <DuplicateIcon />
-            </button>
-        </li>
-        <li id="delete">
-            <button
-                class="button warn"
-                class:disabled={noSelectedSongs}
-                disabled={noSelectedSongs || working}
-                on:click={() => dispatch("delete")}>
-                <span class="visuallyHidden">delete selected songs</span>
-                <TrashCanIcon />
-            </button>
-        </li>
-    </ul>
 </header>
+
+<ul class="actions" class:isReady>
+    <li id="new">
+        <a
+            href="/song/new"
+            class="button">
+            <span class="visuallyHidden">new song</span>
+            <PlusIcon />
+        </a>
+    </li>
+    <li id="duplicate">
+        <button
+            class="button"
+            class:disabled={noSelectedSongs}
+            disabled={noSelectedSongs || working}
+            on:click={() => dispatch("duplicate")}>
+            <span class="visuallyHidden">duplicate selected songs</span>
+            <DuplicateIcon />
+        </button>
+    </li>
+    <li id="delete">
+        <button
+            class="button warn"
+            class:disabled={noSelectedSongs}
+            disabled={noSelectedSongs || working}
+            on:click={() => dispatch("delete")}>
+            <span class="visuallyHidden">delete selected songs</span>
+            <TrashCanIcon />
+        </button>
+    </li>
+</ul>
 
 
 
 <style lang="scss">
-    .indexHeader {
+    :root {
         // internal variables
-        --_actions-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
-        
+        --_header-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
+    }
+    
+    .indexHeader {        
         display: grid;
         grid-template-columns: 1fr 50px 1fr;
         max-width: $page-maxWidth;
 
         padding: var(--pad-2xl);
-        margin: 0 auto;
+        margin: 0 auto calc(-1 * var(--_header-height)) auto;
 
         // load state
-        transform: translateY(calc(-0.5 * var(--_actions-height)));
+        transform: translateY(calc(-0.5 * var(--_header-height)));
         opacity: 0;
 
         transition: transform var(--trans-normal) ease-in-out,
@@ -119,10 +121,21 @@
         position: sticky;
         top: 0;
         right: 0;
-        z-index: 1000;        
+        max-width: $page-maxWidth;
+        z-index: 1000;
+
+        padding: var(--pad-2xl);
+        margin: 0 auto;
 
         // allow click through
         pointer-events: none;
+
+        // load state
+        transform: translateY(calc(-0.5 * var(--_header-height)));
+        opacity: 0;
+
+        transition: transform var(--trans-normal) ease-in-out,
+                    opacity var(--trans-normal) ease-in-out;
 
         #new {
             order: 1;
@@ -148,13 +161,19 @@
 
                 &.disabled {
                     opacity: 0;
-                    transform: translateY(calc(-1 * var(--_actions-height)));
+                    transform: translateY(calc(-1 * var(--_header-height)));
 
                     transition: opacity var(--trans-normal) cubic-bezier(.7,0,.93,.67),
                                 transform var(--trans-normal) cubic-bezier(.7,0,.93,.67);
                 }
             }
             
+        }
+
+        &.isReady {
+            // default state
+            transform: translateY(0);
+            opacity: 1;
         }
     }
 </style>
