@@ -2,11 +2,16 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
-    import { browser } from '$app/environment';
+    import { browser, dev } from '$app/environment';
+    // Vercel
+    import { inject } from '@vercel/analytics';
     // Dexie
     import { db } from "../storage/db";
     // stores
     import { colorScheme, displayedColorScheme } from '../storage/store';
+
+    /* === ANALYTICS ========================== */
+    inject({ mode: dev ? 'development' : 'production' });
 
     /* === UPDATES ============================ */
     colorScheme.subscribe(async (value) => {
