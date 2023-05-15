@@ -37,6 +37,38 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .button {
+            &::after {
+                // internal variables
+                --_clr: var(--clr-300);
+            }
+
+            &.active ::after {
+                // internal variables
+                --_clr: var(--clr-600);
+            }
+        }
+    }
+
+    @mixin dark{
+        .button {
+            &::after {
+                // internal variables
+                --_clr: var(--clr-0);
+            }
+
+            &.active::after {
+                // internal variables
+                --_clr: var(--clr-300);
+            }
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .keyboardControls {
         display: flex;
         flex-direction: column;
@@ -59,9 +91,6 @@
         margin: 0 var(--pad-2xl) 0 0;
 
         &::after {
-            // internal variables
-            --_clr: var(--clr-300);
-            
             // keyboard connector
             content: "";
             position: absolute;
@@ -76,15 +105,8 @@
             transition: border-color var(--trans-fast) ease;
         }
 
-        &.active {
-            &::after {
-                // keyboard connector
-                --_clr: var(--clr-600);
-            }
-
-            .indicator {
-                background-color: var(--clr-100);
-            }
+        &.active .indicator {
+            background-color: var(--clr-100);
         }
 
         .indicator {
@@ -100,17 +122,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .button {
-            &::after {
-                // internal variables
-                --_clr: var(--clr-0);
-            }
+    :global([data-colorScheme="dark"]) { @include dark; }
 
-            &.active::after {
-                // internal variables
-                --_clr: var(--clr-300);
-            }
+    @media (prefers-color-scheme: dark) {
+        @include dark;
+
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 

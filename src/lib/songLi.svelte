@@ -125,13 +125,58 @@
     $_melody-height: calc(3 * $border-width + 3 * $_note-height + 2 * $border-width-thin);
     $_beats-height: calc(2 * $border-width + 2 * $_note-height + $border-width-thin);
 
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .song.active .cassette {
+            // internal variables
+            --_clr-bg: var(--clr-100);
+            --_clr-bg-higlight: var(--clr-highlight);
+            --_clr-bg-cutout: var(--clr-150);
+        }
+
+        .tapeShadow {
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .cassette {
+            // internal variables
+            --_clr-border: var(--clr-350);
+            --_clr-bg-higlight: var(--clr-highlight-dim);
+            --_clr-bg-cutout: var(--clr-250);
+        }
+    }
+
+    @mixin dark {
+        .song.active .cassette {
+            // internal variables
+            --_clr-bg: var(--clr-250);
+            --_clr-bg-higlight: var(--clr-350);
+            --_clr-bg-cutout: var(--clr-150);
+        }
+
+        .tapeShadow {
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .cassette {
+            // internal variables
+            --_clr-border: var(--clr-0);
+            --_clr-bg-higlight: var(--clr-250);
+            --_clr-bg-cutout: var(--clr-100);
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .song {
         position: relative;
 
         background-color: var(--clr-100);
         border-bottom: solid var(--border-width) var(--clr-border);
 
-        transition: background-color var(--trans-fast) ease;
+        transition: background-color var(--trans-fast) ease,
+                    border-color var(--trans-fast) ease;
 
         &:hover, &:active {
             .title {
@@ -154,11 +199,6 @@
 
         &.active {
             background-color: var(--clr-highlight);
-
-            .cassette {
-                --_clr-bg: var(--clr-100);
-                --_clr-bg-higlight: var(--clr-highlight);
-            }
         }
 
         &.new {
@@ -269,7 +309,6 @@
         height: calc(2 * $border-width + $_melody-height + $_beats-height);
 
         background-color: transparent;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
 
         // load state
         opacity: 0;
@@ -381,9 +420,6 @@
     .cassette {
         // internal variables
         --_clr-bg: var(--clr-150);
-        --_clr-bg-higlight: var(--clr-highlight-dim);
-        --_clr-bg-cutout: var(--clr-250);
-        --_clr-border: var(--clr-350);
 
         position: absolute;
         top: 0;
@@ -408,7 +444,8 @@
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
 
-            transition: background-color var(--trans-fast) ease;
+            transition: background-color var(--trans-fast) ease,
+                        border-color var(--trans-fast) ease;
         }
 
         &::after {
@@ -443,7 +480,8 @@
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
 
-            transition: background-color var(--trans-fast) ease;
+            transition: background-color var(--trans-fast) ease,
+                        border-color var(--trans-fast) ease;
 
             &::before {
                 // ectrusion background
@@ -467,6 +505,9 @@
 
                 background-color: var(--_clr-bg-cutout);
                 border: solid var(--border-width) var(--_clr-border);
+
+                transition: background-color var(--trans-fast) ease,
+                            border-color var(--trans-fast) ease;
 
                 &::before {
                     // cutout highlight
@@ -500,24 +541,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .song.active {
-            .cassette {
-                --_clr-bg: var(--clr-250);
-                --_clr-bg-higlight: var(--clr-350);
-                --_clr-bg-cutout: var(--clr-150);
-            }
-        }
+        @include dark;
 
-        .tapeShadow {
-            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
-        }
-
-        .cassette {
-            // internal variables
-            --_clr-border: var(--clr-0);
-            --_clr-bg-higlight: var(--clr-250);
-            --_clr-bg-cutout: var(--clr-100);
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 

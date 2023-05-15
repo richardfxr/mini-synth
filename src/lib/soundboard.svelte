@@ -107,10 +107,27 @@
     $beat-highlight-hrz: 3px;
     $beat-highlight-vrt: 10px;
 
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .soundboard {
+            // internal variables
+            --_clr-blank-highlight: var(--clr-0);
+        }
+    }
+
+    @mixin dark {
+        .soundboard {
+            // internal variables
+            --_clr-blank-highlight: var(--clr-150);
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .soundboard {
         // internal variables
         --_clr-blank: var(--clr-100);
-        --_clr-blank-highlight: var(--clr-0);
         --_button-height: 120px;
         
         align-self: flex-start;
@@ -191,10 +208,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .soundboard {
-            // internal variables
-            --_clr-blank-highlight: var(--clr-150);
+        @include dark;
+
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 </style>

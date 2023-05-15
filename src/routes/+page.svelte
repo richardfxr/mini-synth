@@ -170,9 +170,6 @@
     }
 
     .index {
-        // internal variables
-        --_actions-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
-
         padding-bottom: var(--_actions-height);
     }
 

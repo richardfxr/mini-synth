@@ -2,7 +2,11 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { createEventDispatcher } from 'svelte';
+    // stores
+    import { colorScheme, displayedColorScheme } from '../storage/store';
     // icons
+    import SunIcon from '$lib/SVGs/sunIcon.svelte';
+    import MoonIcon from '$lib/SVGs/moonIcon.svelte';
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
     import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
     import DuplicateIcon from '$lib/SVGs/duplicateIcon.svelte';
@@ -14,12 +18,40 @@
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
+
+    /* === FUNCTIONS ========================== */
+    function toggleColorScheme(): void {
+        if ($colorScheme === "light") {
+            $colorScheme = "dark";
+        } else if ($colorScheme === "dark") {
+            $colorScheme = "light";
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            $colorScheme = "light";
+        } else {
+            $colorScheme = "dark";
+        }
+    }
 </script>
 
 
 
-<div class="header">
-    <ul class="actions" class:isReady>
+<header class="indexHeader" class:isReady>
+    <button
+        class="button"
+        type="button"
+        on:click={toggleColorScheme}>
+        {#if $displayedColorScheme === "dark"}
+            <span class="visuallyHidden">use light mode</span>
+            <SunIcon />
+        {:else}
+            <span class="visuallyHidden">use dark mode</span>
+            <MoonIcon />
+        {/if}
+    </button>
+
+    <div class="logo"></div>
+
+    <ul class="actions">
         <li id="new">
             <a
                 href="/song/new"
@@ -49,27 +81,21 @@
             </button>
         </li>
     </ul>
-</div>
+</header>
 
 
 
 <style lang="scss">
-    .actions {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-        gap: var(--pad-sm);
-        position: sticky;
-        top: 0;
-        right: 0;
-        z-index: 1000;
+    .indexHeader {
+        // internal variables
+        --_actions-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
+        
+        display: grid;
+        grid-template-columns: 1fr 50px 1fr;
         max-width: $page-maxWidth;
 
         padding: var(--pad-2xl);
         margin: 0 auto;
-
-        // allow click through
-        pointer-events: none;
 
         // load state
         transform: translateY(calc(-0.5 * var(--_actions-height)));
@@ -79,9 +105,24 @@
                     opacity var(--trans-normal) ease-in-out;
 
         &.isReady {
+            // default state
             transform: translateY(0);
             opacity: 1;
         }
+    }
+
+    .actions {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+        gap: var(--pad-sm);
+        position: sticky;
+        top: 0;
+        right: 0;
+        z-index: 1000;        
+
+        // allow click through
+        pointer-events: none;
 
         #new {
             order: 1;
@@ -97,7 +138,10 @@
                 opacity: 1;
                 transform: translateY(0);
 
-                transition: opacity var(--trans-normal) var(--trans-cubic-1),
+                transition: color var(--trans-fast) ease,
+                            background-color var(--trans-fast) ease,
+                            border-color var(--trans-fast) ease,
+                            opacity var(--trans-normal) var(--trans-cubic-1),
                             transform var(--trans-normal) var(--trans-cubic-1);
 
                 pointer-events: auto;

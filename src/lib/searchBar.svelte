@@ -51,7 +51,8 @@
         border-bottom: solid var(--border-width) var(--clr-border);
 
         transition: color var(--trans-fast) ease,
-                    background-color var(--trans-fast) ease;
+                    background-color var(--trans-fast) ease,
+                    border-color var(--trans-fast) ease;
 
         &:focus-within {
             color: var(--clr-900);

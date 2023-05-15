@@ -155,9 +155,26 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .reels {
+            // internal variables
+            --_clr-scrollbar: var(--clr-200);
+        }
+    }
+
+    @mixin dark {
+        .reels {
+            // internal variables
+            --_clr-scrollbar: var(--clr-0);
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .reels {
         // internal variables
-        --_clr-scrollbar: var(--clr-200);
         --_clr-thumb: var(--clr-500);
 
         position: sticky;
@@ -337,10 +354,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .reels {
-            // internal variables
-            --_clr-scrollbar: var(--clr-0);
+        @include dark;
+
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 </style>

@@ -89,17 +89,33 @@ $beats: (
    color-scheme: light;
 }
 
+:global([data-colorScheme="dark"]) {
+   /* dark theme (default) */
+   // parse $dark into CSS variables
+   @each $name, $value in $dark {
+      --clr-#{$name}: #{$value};
+   }
+   color-scheme: dark;
+}
+
 /* === COLOR SCHEME ======================= */
 @media (prefers-color-scheme: dark) {
    :root {
-      /* === COLORS ============================= */
-
-      /* light theme (default) */
-      // parse $light into CSS variables
+      /* dark theme (default) */
+      // parse $dark into CSS variables
       @each $name, $value in $dark {
          --clr-#{$name}: #{$value};
       }
       color-scheme: dark;
+   }
+
+   :global([data-colorScheme="light"]) {
+      /* light theme */
+      // parse $light into CSS variables
+      @each $name, $value in $light {
+         --clr-#{$name}: #{$value};
+      }
+      color-scheme: light;
    }
 }
 

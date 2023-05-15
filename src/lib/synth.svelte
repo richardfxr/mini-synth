@@ -584,6 +584,42 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .cassette {
+            .housing {
+                border-color: var(--clr-250);
+            }
+
+            &.bottom .sideButton .button.autoSkipping {
+                background-color: #ff6b6b;
+
+                &::before {
+                    background-color: #ff8383;
+                }
+            }
+        }
+    }
+
+    @mixin dark {
+        .cassette {
+            .housing {
+                border-color: var(--clr-0);
+            }
+
+            &.bottom .sideButton .button.autoSkipping {
+                background-color: #f14c4c;
+
+                &::before {
+                    background-color: #ff6363;
+                }
+            }
+        }
+    }
+    
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .background {
         position: relative;
         z-index: 1001;
@@ -599,7 +635,8 @@
             max-width: $cassetts-maxWidth;
 
             background-color: var(--clr-100);
-            border: solid var(--border-width) var(--clr-250);
+            border-style: solid;
+            border-width: var(--border-width);
             margin: 0 auto;
         }
 
@@ -666,14 +703,6 @@
                     // load state
                     transform: translateX(calc(var(--_dir) * 50px));
                     opacity: 0;
-
-                    &.autoSkipping {
-                        background-color: #ff6b6b;
-
-                        &::before {
-                            background-color: #ff8383;
-                        }
-                    }
                 }
             }
         }
@@ -725,19 +754,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .cassette {
-            .housing {
-                border-color: var(--clr-0);
-            }
+        @include dark;
 
-            &.bottom .sideButton .button.autoSkipping {
-                background-color: #f14c4c;
-
-                &::before {
-                    background-color: #ff6363;
-                }
-            }
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 

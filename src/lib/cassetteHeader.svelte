@@ -110,7 +110,10 @@
     .button {
         flex-shrink: 0;
 
-        transition: transform var(--trans-slow) var(--trans-cubic-1),
+        transition: color var(--trans-fast) ease,
+                    background-color var(--trans-fast) ease,
+                    border-color var(--trans-fast) ease,
+                    transform var(--trans-slow) var(--trans-cubic-1),
                     opacity var(--trans-slow) var(--trans-cubic-1);
 
         // load state

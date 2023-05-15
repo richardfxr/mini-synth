@@ -129,9 +129,44 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .tape {
+            // internal variables
+            --_clr-border: var(--clr-350);
+
+            &#melody {
+                border-bottom: solid var(--border-width) var(--clr-800);
+            }
+
+            &.active {
+                // internal variables
+                --_clr-border: var(--clr-800);
+            }
+        }
+    }
+
+    @mixin dark {
+        .tape {
+            // internal variables
+            --_clr-border: var(--clr-500);
+
+            &#melody {
+                border-bottom: solid var(--border-width) var(--clr-1000);
+            }
+
+            &.active {
+                // internal variables
+                --_clr-border: var(--clr-1000);
+            }
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .tape {
         // internal variables
-        --_clr-border: var(--clr-350);
         --_note-height: 22px;
         --_repeatDots-size: 5px;
 
@@ -160,31 +195,26 @@
         &#melody {
             height: var(--melody-height);
             border-top: solid var(--border-width) var(--_clr-border);
-            border-bottom: solid var(--border-width) var(--clr-800);
         }
 
         &#beats {
             height: var(--beats-height);
         }
 
-        &.active {
-            --_clr-border: var(--clr-800);
+        &.active .subdiv p {
+            color: var(--clr-note-text);
 
-            .subdiv p {
-                color: var(--clr-note-text);
-
-                // note colors
-                @for $i from 0 through 11 {
-                    &.note-#{$i} {
-                        background-color: var(--clr-note-#{$i});
-                    }
+            // note colors
+            @for $i from 0 through 11 {
+                &.note-#{$i} {
+                    background-color: var(--clr-note-#{$i});
                 }
+            }
 
-                // beat colors
-                @each $beat, $index in $beats {
-                    &.beat-#{$beat} {
-                        background-color: var(--clr-note-#{$index});
-                    }
+            // beat colors
+            @each $beat, $index in $beats {
+                &.beat-#{$beat} {
+                    background-color: var(--clr-note-#{$index});
                 }
             }
         }
@@ -316,19 +346,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .tape {
-            // internal variables
-            --_clr-border: var(--clr-500);
+        @include dark;
 
-            &#melody {
-                border-bottom: solid var(--border-width) var(--clr-1000);
-            }
-
-            &.active {
-                // internal variables
-                --_clr-border: var(--clr-1000);
-            }
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 </style>

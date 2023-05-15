@@ -107,6 +107,32 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .playback .button.skip .spool {
+            background-color: var(--clr-150);
+        }
+        
+        .controls.isReady.playing .playback button.skip {
+            // internal variables
+            --_clr-border: var(--clr-250);
+        }
+    }
+
+    @mixin dark {
+        .playback .button.skip .spool {
+            background-color: var(--clr-50);
+        }
+
+        .controls.isReady.playing .playback button.skip {
+            // internal variables
+            --_clr-border: var(--clr-250);
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .controls {
         // internal variables
         --_button-size: 44px;
@@ -237,7 +263,6 @@
                     right: 0;
                     z-index: -2;
 
-                    background-color: var(--clr-150);
                     border-radius: var(--borderRadius-round);
 
                     transition: scale var(--trans-fastest) ease;
@@ -304,9 +329,7 @@
             border-color: var(--clr-800);
 
             button {
-                &.skip {
-                    --_clr-border: var(--clr-250);
-                    
+                &.skip {                    
                     color: var(--_clr-border);
                     scale: 1.21;
 
@@ -337,15 +360,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
-    @media (prefers-color-scheme: dark) {
-        .controls.isReady.playing .playback button {
-            &.skip {
-                --_clr-border: var(--clr-200);
+    :global([data-colorScheme="dark"]) { @include dark; }
 
-                .spool {
-                    background-color: var(--clr-50);
-                }
-            }
+    @media (prefers-color-scheme: dark) {
+        @include dark;
+
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 </style>

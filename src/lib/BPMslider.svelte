@@ -55,9 +55,26 @@
 
 
 <style lang="scss">
+    /* === COLOR SCHEME MIXINS ================ */
+    @mixin light {
+        .sliderWrapper {
+            // internal variables
+            --_clr-track: var(--clr-150);
+        }
+    }
+
+    @mixin dark {
+        .sliderWrapper {
+            // internal variables
+            --_clr-track: var(--clr-0);
+        }
+    }
+
+    /* === MAIN STYLES ======================== */
+    @include light;
+
     .sliderWrapper {
         // internal variables
-        --_clr-track: var(--clr-150);
         --_clr-track-progress: var(--clr-red);
         --_clr-thumb: var(--clr-red);
         --_track-width: 100%;
@@ -200,10 +217,13 @@
     }
 
     /* === COLOR SCHEME ======================= */
+    :global([data-colorScheme="dark"]) { @include dark; }
+
     @media (prefers-color-scheme: dark) {
-        .sliderWrapper {
-            // internal variables
-            --_clr-track: var(--clr-0);
+        @include dark;
+
+        :global([data-colorScheme="light"]) {
+            @include light;
         }
     }
 </style>
