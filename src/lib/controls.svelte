@@ -32,7 +32,7 @@
     class:isReady
     style="--_sprocket-rotation: {-1 * $tweenedProgress}deg">
     <div class="timecode">
-        <p>{Math.floor(currentSubdiv / 16)}:{Math.floor(currentSubdiv / 4) % 4}:{currentSubdiv % 4}</p>
+        <p>{Math.floor((currentSubdiv + 1) / 16)}:{Math.floor((currentSubdiv + 1) / 4) % 4}:{(currentSubdiv + 1) % 4}</p>
     </div>
 
     <div class="playback">
