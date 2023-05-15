@@ -16,17 +16,26 @@ export interface Song {
     beats: Beats;
     bpm: Tone.Unit.BPM;
 };
+export interface Setting {
+    id: string;
+    value: string;
+}
 
 /* === CLASSES ============================ */
 export class MiniSynthDexie extends Dexie {
     // typing
     songs!: Table<Song>;
+    settings!: Table<Setting>
 
     constructor() {
         super('MiniSynthEdu');
         this.version(1).stores({
             songs: '++id, title, melody, beats, bpm'
         });
+        this.version(2).stores({
+            songs: '++id, title, melody, beats, bpm',
+            settings: "id, value"
+        })
     }
 }
 
