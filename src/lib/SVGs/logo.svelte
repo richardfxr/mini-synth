@@ -17,10 +17,10 @@
     <rect class="note-7-highlight" x="11.29" y="1" width="2.57" height=".5"/>
     <rect class="note-9-highlight" x="13.86" y="1" width="2.57" height=".5"/>
     <path class="note-11-highlight" d="m18.5,1h-2.07v.5h2.07c.28,0,.5.22.5.5v-.5c0-.28-.22-.5-.5-.5Z"/>
-    <circle class="cls-16" cx="2.5" cy="2.5" r=".5"/>
-    <circle class="cls-16" cx="2.5" cy="13.5" r=".5"/>
-    <circle class="cls-11" cx="17.5" cy="2.5" r=".5"/>
-    <circle class="cls-11" cx="17.5" cy="13.5" r=".5"/>
+    <circle class="note-0-screw" cx="2.5" cy="2.5" r=".5"/>
+    <circle class="note-0-screw" cx="2.5" cy="13.5" r=".5"/>
+    <circle class="note-11-screw" cx="17.5" cy="2.5" r=".5"/>
+    <circle class="note-11-screw" cx="17.5" cy="13.5" r=".5"/>
     <path class="note-text" d="m5,6c1.1,0,2,.9,2,2s-.9,2-2,2-2-.9-2-2,.9-2,2-2m0-1c-1.66,0-3,1.34-3,3s1.34,3,3,3,3-1.34,3-3-1.34-3-3-3h0Z"/>
     <path class="note-text" d="m15,6c1.1,0,2,.9,2,2s-.9,2-2,2-2-.9-2-2,.9-2,2-2m0-1c-1.66,0-3,1.34-3,3s1.34,3,3,3,3-1.34,3-3-1.34-3-3-3h0Z"/>
     <polygon class="note-text" points="15 5 5 5 5 6 15 6 15 5 15 5"/>
