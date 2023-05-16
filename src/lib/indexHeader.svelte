@@ -7,6 +7,7 @@
     // icons
     import SunIcon from '$lib/SVGs/sunIcon.svelte';
     import MoonIcon from '$lib/SVGs/moonIcon.svelte';
+    import Logo from '$lib/SVGs/logo.svelte';
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
     import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
     import DuplicateIcon from '$lib/SVGs/duplicateIcon.svelte';
@@ -35,7 +36,10 @@
 
 
 
-<header class="indexHeader" class:isReady>
+<header
+    class="indexHeader"
+    class:isReady
+    class:hidden={!noSelectedSongs}>
     <button
         class="button"
         type="button"
@@ -49,7 +53,9 @@
         {/if}
     </button>
 
-    <div class="logo"></div>
+    <div class="logo">
+        <Logo />
+    </div>
 </header>
 
 <ul class="actions" class:isReady>
@@ -93,7 +99,7 @@
     
     .indexHeader {        
         display: grid;
-        grid-template-columns: 1fr 50px 1fr;
+        grid-template-columns: 1fr 40px 1fr;
         max-width: $page-maxWidth;
 
         padding: var(--pad-2xl);
@@ -111,6 +117,11 @@
             transform: translateY(0);
             opacity: 1;
         }
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
     }
 
     .actions {
@@ -174,6 +185,13 @@
             // default state
             transform: translateY(0);
             opacity: 1;
+        }
+    }
+
+    /* === BREAKPOINTS ======================== */
+    @media (max-width: 500px) {
+        .indexHeader.hidden {
+            opacity: 0;
         }
     }
 </style>
