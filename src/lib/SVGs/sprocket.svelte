@@ -9,7 +9,6 @@
 
 <style lang="scss">
     svg {
-        fill: none;
         stroke: currentColor;
         stroke-width: var(--border-width-thick);
 

@@ -35,73 +35,69 @@
         <p>{Math.floor((currentSubdiv + 1) / 16)}:{Math.floor((currentSubdiv + 1) / 4) % 4}:{(currentSubdiv + 1) % 4}</p>
     </div>
 
-    <div class="playback">
-        <button
-            class="button small skip"
-            style="
-                --_dir: 1;
-                --_spool-scale: {1.1 + playbackProgress * 1.4};
-            "
-            disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
-            on:click = {() => dispatch('skipToBeginning')}>
-            <span class="visuallyHidden">skip to start of track</span>
-            <div class="spool"></div>
-            <SkipToStartIcon />
-            <Sprocket />
-        </button>
+    <div class="playbackWrapper">
+        <div class="playback">
+            <button
+                class="button small skip"
+                style="
+                    --_dir: 1;
+                    --_spool-scale: {1.1 + playbackProgress * 1.4};
+                "
+                disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+                on:click = {() => dispatch('skipToBeginning')}>
+                <span class="visuallyHidden">skip to start of track</span>
+                <div class="spool"></div>
+                <SkipToStartIcon />
+                <Sprocket />
+            </button>
 
-        <button
-            class="button small subdiv"
-            style="--_dir: 1"
-            disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
-            on:click = {() => dispatch('prevSubdiv')}>
-            <span class="visuallyHidden">previous subdivision</span>
-            <PrevSubdiv />
-        </button>
+            <button
+                class="button small subdiv"
+                style="--_dir: 1"
+                disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+                on:click = {() => dispatch('prevSubdiv')}>
+                <span class="visuallyHidden">previous subdivision</span>
+                <PrevSubdiv />
+            </button>
 
-        <button
-            class="button main warn"
-            disabled = {!isReady}
-            on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
-            {#if playbackState === "started"}
-                <span class="visuallyHidden">pause</span>
-                <PuaseIcon />
-            {:else}
-                <span class="visuallyHidden">play</span>
-                <PlayIcon />
-            {/if}
-        </button>
+            <button
+                class="button main warn"
+                disabled = {!isReady}
+                on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
+                {#if playbackState === "started"}
+                    <span class="visuallyHidden">pause</span>
+                    <PuaseIcon />
+                {:else}
+                    <span class="visuallyHidden">play</span>
+                    <PlayIcon />
+                {/if}
+            </button>
 
-        <button
-            class="button small subdiv"
-            style="--_dir: -1"
-            disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
-            on:click = {() => dispatch('nextSubdiv')}>
-            <span class="visuallyHidden">next subdivision</span>
-            <NextSubdivIcon />
-        </button>
+            <button
+                class="button small subdiv"
+                style="--_dir: -1"
+                disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+                on:click = {() => dispatch('nextSubdiv')}>
+                <span class="visuallyHidden">next subdivision</span>
+                <NextSubdivIcon />
+            </button>
 
-        <button
-            class="button small skip"
-            style="
-                --_dir: -1;
-                --_spool-scale: {2.5 - playbackProgress * 1.4};
-            "
-            disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
-            on:click = {() => dispatch('skipToEnd')}>
-            <span class="visuallyHidden">skip to end of track</span>
-            <div class="spool"></div>
-            <SkipToEndIcon />
-            <Sprocket />
-        </button>
+            <button
+                class="button small skip"
+                style="
+                    --_dir: -1;
+                    --_spool-scale: {2.5 - playbackProgress * 1.4};
+                "
+                disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+                on:click = {() => dispatch('skipToEnd')}>
+                <span class="visuallyHidden">skip to end of track</span>
+                <div class="spool"></div>
+                <SkipToEndIcon />
+                <Sprocket />
+            </button>
+        </div>
     </div>
-
-    <div class="subdivIndicators">
-        <div class:active={playbackState === "started"}></div>
-        <div class:active={playbackState === "started" && currentSubdiv % 4 >= 1}></div>
-        <div class:active={playbackState === "started" && currentSubdiv % 4 >= 2}></div>
-        <div class:active={playbackState === "started" && currentSubdiv % 4 >= 3}></div>
-    </div>
+    
 </div>
 
 
@@ -109,24 +105,88 @@
 <style lang="scss">
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
-        .playback .button.skip .spool {
-            background-color: var(--clr-150);
-        }
+        .playback {
+            background-color: var(--clr-200);
+            border-color: var(--clr-300);
+
+            .button {
+                --_clr-border: var(--clr-400);
+
+                &:hover {
+                    --_clr-border: var(--clr-600);
+                }
+
+                &:active, &.active {
+                    --_clr-border: var(--clr-700);
+                }
+            
+                &:disabled {
+                    --_clr-border: var(--clr-250);
+                }
+
+                &.skip {
+                    .spool {
+                        background-color: var(--clr-500);
+                        box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.15);
+                    }
+
+                    :global(svg.sprocket) {
+                        fill: var(--clr-50);
+                        stroke: var(--clr-300);
+                    }
+                } 
+            }
+        } 
         
-        .controls.isReady.playing .playback button.skip {
-            // internal variables
-            --_clr-border: var(--clr-250);
+        .controls.isReady.playing .playback {
+            border-color: var(--clr-700);
+
+            button.skip {
+                --_clr-border: var(--clr-700);
+            }
         }
     }
 
     @mixin dark {
-        .playback .button.skip .spool {
+        .playback {
             background-color: var(--clr-50);
-        }
+            border-color: var(--clr-0);
 
-        .controls.isReady.playing .playback button.skip {
-            // internal variables
-            --_clr-border: var(--clr-250);
+            .button {
+                --_clr-border: var(--clr-0);
+
+                &:hover {
+                    --_clr-border: var(--clr-0);
+                }
+
+                &:active, &.active {
+                    --_clr-border: var(--clr-0);
+                }
+            
+                &:disabled {
+                    --_clr-border: var(--clr-50);
+                }
+
+                &.skip {
+                    .spool {
+                        background-color: var(--clr-0);
+                        box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.5);
+                    }
+
+                    :global(svg.sprocket) {
+                        fill: var(--clr-50);
+                        stroke: var(--clr-350);
+                    }
+                } 
+            }
+        } 
+        
+        .controls.isReady.playing .playback {
+            border-color: var(--clr-0);
+
+            button.skip {
+                --_clr-border: var(--clr-600);
+            }
         }
     }
 
@@ -157,9 +217,7 @@
         position: relative;
         z-index: 2;
 
-        background-color: var(--clr-100);
-        padding: 10px var(--pad-md) 0 var(--pad-md);
-        margin-bottom: -5px;
+        padding: 10px var(--pad-md) var(--pad-sm) var(--pad-md);
 
         p {
             font-family: 'Roboto Mono', monospace;
@@ -167,14 +225,22 @@
         }
     }
 
+    .playbackWrapper {
+        padding-bottom: $cassette-shading-size;
+        background-color: var(--clr-cassette-bg-highlight);
+        border-radius: var(--borderRadius-round);
+    }
+
     .playback {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        gap: 4px;
+        gap: 2px;
+        position: relative;
 
         padding: 6px;
-        border: solid var(--border-width) var(--clr-150);
+        border-style: solid;
+        border-width: var(--border-width-thick);
         border-radius: var(--borderRadius-round);
 
         overflow: hidden;
@@ -266,7 +332,10 @@
 
                     border-radius: var(--borderRadius-round);
 
-                    transition: scale var(--trans-fastest) ease;
+                    opacity: 0;
+
+                    transition: opacity var(--trans-fastest) ease,
+                                scale var(--trans-fastest) ease;
                 }
 
                 :global(.icon) {
@@ -294,29 +363,6 @@
         }
     }
 
-    .subdivIndicators {
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
-        position: relative;
-        z-index: 1;
-
-        background-color: var(--clr-100);
-        padding: 0 4px;
-        margin-top: calc(-1 * var(--border-width));
-
-        & > div {
-            width: 13px;
-            height: var(--border-width);
-            background-color: var(--clr-150);
-            transition: background-color 0.15s ease;
-
-            &.active {
-                background-color: var(--clr-800);
-            }
-        }
-    }
-
     .controls.isReady {
         .playback .button {
             &.skip, &.subdiv {
@@ -327,8 +373,6 @@
         }
 
         &.playing .playback {
-            border-color: var(--clr-800);
-
             button {
                 &.skip {                    
                     color: var(--_clr-border);
@@ -339,6 +383,7 @@
                     }
 
                     .spool {
+                        opacity: 1;
                         scale: var(--_spool-scale);
                     }
 
