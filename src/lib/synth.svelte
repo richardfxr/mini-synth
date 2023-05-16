@@ -405,6 +405,8 @@
             class="cassette top"
             class:isReady>
             <div class="housing">
+                <div class="left screw"></div>
+                <div class="right screw"></div>
                 <CassetteHeader 
                     bind:title = {title}
                     {isReady}/>
@@ -460,6 +462,8 @@
             {/if}
         </div>
         <div class="housing">
+            <div class="left screw"></div>
+            <div class="right screw"></div>
             <Controls
                 {playbackState}
                 {currentSubdiv}
@@ -593,17 +597,11 @@
 
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
-        .cassette {
-            .housing {
-                border-color: var(--clr-250);
-            }
+        .cassette.bottom .sideButton .button.autoSkipping {
+            background-color: #ff6b6b;
 
-            &.bottom .sideButton .button.autoSkipping {
-                background-color: #ff6b6b;
-
-                &::before {
-                    background-color: #ff8383;
-                }
+            &::before {
+                background-color: #ff8383;
             }
         }
 
@@ -613,17 +611,11 @@
     }
 
     @mixin dark {
-        .cassette {
-            .housing {
-                border-color: var(--clr-0);
-            }
+        .cassette.bottom .sideButton .button.autoSkipping {
+            background-color: #f14c4c;
 
-            &.bottom .sideButton .button.autoSkipping {
-                background-color: #f14c4c;
-
-                &::before {
-                    background-color: #ff6363;
-                }
+            &::before {
+                background-color: #ff6363;
             }
         }
 
@@ -638,7 +630,7 @@
     .background {
         position: relative;
         z-index: 1001;
-        background-color: var(--clr-100);
+        background-color: var(--clr-50);
     }
 
     .cassette {
@@ -647,18 +639,48 @@
         padding: 0 $page-pad-hrz;
 
         .housing {
+            position: relative;
             max-width: $cassetts-maxWidth;
 
-            background-color: var(--clr-100);
+            border-color: var(--clr-cassette-border);
             border-style: solid;
-            border-width: var(--border-width);
+            border-width: var(--border-width-thick);
             margin: 0 auto;
+
+            &::before {
+                // main color
+                content: "";
+                position: absolute;
+                right: 0;
+                left: 0;
+
+                background-color: var(--clr-cassette-bg);
+                border-right: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
+                border-left: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
+            }
+
+            .screw {
+                position: absolute;
+                width: $cassette-screw-size;
+                height: $cassette-screw-size;
+                z-index: 10;
+
+                background-color: var(--clr-cassette-cutout-bg);
+                border-radius: var(--borderRadius-round);
+
+                &.left {
+                    left: var(--pad-sm);
+                }
+
+                &.right {
+                    right: var(--pad-sm);
+                }
+            }
         }
 
         &.top {
             z-index: 1002;
             padding-top: 10px;
-            background-color: var(--clr-100);
 
             transition: transform $cassette-ani-duration $cassette-ani-easing;
 
@@ -666,12 +688,27 @@
             transform: translateY(var(--cassettTop-translateY));
 
             .housing {
+                background-color: var(--clr-cassette-bg-highlight);
                 border-bottom: none;
                 border-radius:
                     $cassette-border-radius
                     $cassette-border-radius
                     0
                     0;
+
+                &::before {
+                    top: $cassette-shading-size;
+                    bottom: 0;
+                    border-radius:
+                        calc($cassette-border-radius - var(--border-width))
+                        calc($cassette-border-radius - var(--border-width))
+                        0
+                        0;
+                }
+
+                .screw {
+                    top: var(--pad-sm);
+                }
             }
         }
 
@@ -690,6 +727,7 @@
                 flex-grow: 1;
                 z-index: 2;
 
+                background-color: var(--clr-cassette-bg-shadow);
                 padding-bottom: var(--pad-xs);
                 border-top: none;
                 border-radius:
@@ -703,6 +741,20 @@
 
                 // load state
                 transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+                
+                &::before {
+                    top: 0;
+                    bottom: $cassette-shading-size;
+                    border-radius:
+                        0
+                        0
+                        calc($cassette-border-radius - var(--border-width))
+                        calc($cassette-border-radius - var(--border-width));
+                }
+
+                .screw {
+                    bottom: var(--pad-sm);
+                }
             }
 
             .sideButton {

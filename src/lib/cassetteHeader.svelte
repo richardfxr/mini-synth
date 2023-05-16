@@ -99,6 +99,7 @@
         display: flex;
         flex-flow: row nowrap;
         gap: var(--pad-xl);
+        position: relative;
 
         padding: 
             var(--pad-xl)

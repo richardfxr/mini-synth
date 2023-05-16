@@ -127,42 +127,36 @@
 
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
-        .song.active .cassette {
-            // internal variables
-            --_clr-bg: var(--clr-100);
-            --_clr-bg-higlight: var(--clr-highlight);
-            --_clr-bg-cutout: var(--clr-150);
-        }
+        .song.active {
+            background-color: var(--clr-0);
+
+            .cassette {
+                // internal variables
+                --_clr-bg: var(--clr-100);
+                --_clr-bg-highlight: var(--clr-highlight);
+                --_clr-bg-cutout: var(--clr-200);
+            }
+        } 
 
         .tapeShadow {
             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
         }
-
-        .cassette {
-            // internal variables
-            --_clr-border: var(--clr-350);
-            --_clr-bg-higlight: var(--clr-highlight-dim);
-            --_clr-bg-cutout: var(--clr-250);
-        }
     }
 
     @mixin dark {
-        .song.active .cassette {
-            // internal variables
-            --_clr-bg: var(--clr-250);
-            --_clr-bg-higlight: var(--clr-350);
-            --_clr-bg-cutout: var(--clr-150);
-        }
+        .song.active {
+            background-color: var(--clr-100);
+
+            .cassette {
+                // internal variables
+                --_clr-bg: var(--clr-200);
+                --_clr-bg-highlight: var(--clr-300);
+                --_clr-bg-cutout: var(--clr-100);
+            }
+        } 
 
         .tapeShadow {
             box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5);
-        }
-
-        .cassette {
-            // internal variables
-            --_clr-border: var(--clr-0);
-            --_clr-bg-higlight: var(--clr-250);
-            --_clr-bg-cutout: var(--clr-100);
         }
     }
 
@@ -172,7 +166,7 @@
     .song {
         position: relative;
 
-        background-color: var(--clr-100);
+        background-color: var(--clr-50);
         border-bottom: solid var(--border-width) var(--clr-border);
 
         transition: background-color var(--trans-fast) ease,
@@ -195,10 +189,6 @@
 
         &:active .tapesAndLength, &.active .tapesAndLength {
             --_clr-bg: var(--clr-highlight);
-        }
-
-        &.active {
-            background-color: var(--clr-highlight);
         }
 
         &.new {
@@ -419,8 +409,11 @@
 
     .cassette {
         // internal variables
-        --_clr-bg: var(--clr-150);
-
+        --_clr-border: var(--clr-cassette-border);
+        --_clr-bg: var(--clr-cassette-bg);
+        --_clr-bg-highlight: var(--clr-cassette-bg-highlight);
+        --_clr-bg-cutout: var(--clr-cassette-cutout-bg);
+        
         position: absolute;
         top: 0;
         right: 0;
@@ -440,7 +433,7 @@
             bottom: 7px;
             left: 0;
 
-            background-color: var(--_clr-bg-higlight);
+            background-color: var(--_clr-bg-highlight);
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
 
@@ -475,7 +468,7 @@
             left: $_cassette-extrusion-inset;
             z-index: 1;
 
-            background-color: var(--_clr-bg-higlight);
+            background-color: var(--_clr-bg-highlight);
             padding: var(--pad-sm);
             border: solid var(--border-width) var(--_clr-border);
             border-radius: var(--borderRadius-sm);
@@ -518,7 +511,7 @@
                     left: calc(-1 * var(--border-width));
                     height: $highlight-height;
 
-                    background-color: var(--_clr-bg-higlight);
+                    background-color: var(--_clr-bg-highlight);
                     border-radius: calc(var(--borderRadius-sm) - var(--border-width));
 
                     transition: background-color var(--trans-fast) ease;

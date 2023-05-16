@@ -150,6 +150,7 @@
             0
             $cassette-border-radius
             $cassette-border-radius;
+        margin: 0 3px;
     }
 
     .timecode {

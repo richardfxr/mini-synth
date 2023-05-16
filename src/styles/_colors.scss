@@ -18,7 +18,7 @@ $light: (
     250: #cecece,
     200: #d6d6d6,
     150: #e4e4e4,
-    100: #eeeeee, // main background
+    100: #eeeeee,
     50: #f7f7f7,
     0: #ffffff,
  
@@ -28,6 +28,12 @@ $light: (
     "red": #ff0000,
     red-hover: #df0000,
     red-disabled: #ff9d9d,
+
+    cassette-bg: #eeeeee,
+    cassette-bg-highlight: #ffffff,
+    cassette-bg-shadow: #d6d6d6,
+    cassette-cutout-bg: #cecece,
+    cassette-border: #9c9c9c,
 
     kb-white: #e6e6e6,
     kb-white-highlight: #ffffff,
@@ -78,7 +84,7 @@ $dark: (
     250: #515151,
     200: #414141,
     150: #383838,
-    100: #282828, // main background
+    100: #282828,
     50: #1d1d1d,
     0: #000000,
 
@@ -88,6 +94,12 @@ $dark: (
     "red": #ff7171,
     red-hover: #ff8e8e,
     red-disabled: #ac4c4c,
+
+    cassette-bg: #282828,
+    cassette-bg-highlight: #383838,
+    cassette-bg-shadow: #1d1d1d,
+    cassette-cutout-bg: #1d1d1d,
+    cassette-border: #000000,
 
     kb-white: #e6e6e6,
     kb-white-highlight: #ffffff,

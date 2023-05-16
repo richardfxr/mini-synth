@@ -46,6 +46,11 @@
     class="reels"
     class:isReady
     style="--melodyLength: {melody.length}">
+
+    <div class="cassette">
+        <div class="housing"></div>
+    </div>
+
     <div
         class="spools"
         class:dragging={dragging}
@@ -181,15 +186,12 @@
         top: calc(-1 * (var(--reels-pad-top) + var(--tapeMarker-height)) + var(--border-width-thick));
         z-index: 1000;
 
-        background-color: var(--clr-100);
-        border-bottom: solid var(--border-width-thick) var(--clr-100);
+        background-color: var(--clr-50);
 
-        transition: transform $cassette-ani-duration $cassette-ani-easing,
-                    opacity $cassette-ani-duration $cassette-ani-easing;
+        transition: transform $cassette-ani-duration $cassette-ani-easing;
         
         // load state
         transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-        opacity: 0;
 
         &::before, &::after {
             // playhead
@@ -222,6 +224,49 @@
             
             border: solid var(--border-width-thin) var(--clr-0);
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
+
+            // load state
+            opacity: 0;
+
+            transition: opacity $cassette-ani-duration $cassette-ani-easing;
+        }
+    }
+
+    .cassette {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        padding: 0 $page-pad-hrz;
+
+        .housing {
+            position: relative;
+            max-width: $cassetts-maxWidth;
+            height: 100%;
+
+            background-color: var(--clr-100);
+            border-color: var(--clr-cassette-border);
+            border-right-style: solid;
+            border-right-width: var(--border-width-thick);
+            border-left-style: solid;
+            border-left-width: var(--border-width-thick);
+            margin: 0 auto;
+
+            &::before {
+                // highlight
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+
+                background-color: var(--clr-cassette-bg);
+                border-right: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
+                border-left: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
+            }
         }
     }
 
@@ -237,6 +282,11 @@
 
         scrollbar-width: thin;
         scrollbar-color: var(--_clr-thumb) var(--_clr-scrollbar);
+
+        // load state
+        opacity: 0;
+
+        transition: opacity $cassette-ani-duration $cassette-ani-easing;
 
         &.dragging {
             cursor: grabbing;
@@ -350,7 +400,16 @@
     .reels.isReady {
         // default state
         transform: translateY(0);
-        opacity: 1;
+
+        &::after {
+            // default state
+            opacity: 1;
+        }
+
+        .spools {
+            // default state
+            opacity: 1;
+        }
     }
 
     /* === COLOR SCHEME ======================= */

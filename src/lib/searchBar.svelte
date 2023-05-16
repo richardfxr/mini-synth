@@ -46,7 +46,7 @@
 <style lang="scss">
     .searchBar {
         color: var(--clr-700);
-        background-color: var(--clr-100);
+        background-color: var(--clr-50);
         border-top: solid var(--border-width) var(--clr-border);
         border-bottom: solid var(--border-width) var(--clr-border);
 

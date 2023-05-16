@@ -86,6 +86,7 @@
         flex-direction: column;
         align-items: center;
         gap: var(--pad-sm);
+        position: relative;
         width: 100%;
 
         padding: var(--pad-3xl) var(--pad-3xl) var(--pad-xl) var(--pad-3xl);
