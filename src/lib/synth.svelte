@@ -44,6 +44,8 @@
     import Soundboard from '$lib/soundboard.svelte';
     // icons
     import TrashCanIcon from '$lib/SVGs/trashCanIcon.svelte';
+    import InsertSubdivIcon from '$lib/SVGs/insertSubdivIcon.svelte';
+    import ClearSubdivIcon from '$lib/SVGs/clearSubdivIcon.svelte';
     import AutoSkipIcon from '$lib/SVGs/autoSkipIcon.svelte';
 
     /* === PROPS ============================== */
@@ -432,98 +434,107 @@
     <div
         class="cassette bottom"
         class:isReady>
-        <div id="left" class="sideButton">
-            <button
-                class="button warn"
-                style="--_dir: 1"
-                disabled={!isReady || currentTape[currentSubdiv].length === 0}
-                on:click={() => {
-                    if (currentTapeName === "melody") {
-                        melody[currentSubdiv] = [];
-                    } else {
-                        beats[currentSubdiv] = [];
-                    }
-                }}>
-                <span class="visuallyHidden">clear current subdiv</span>
-                <TrashCanIcon />
-            </button>
-            <button
-                class="button"
-                style="--_dir: 1"
-                disabled={!isReady}
-                on:click={() => {
-                    melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
-                    beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
-                }}>
-                +
-            </button>
-        </div>
-        <div class="housing">
-            <div class="left screw"></div>
-            <div class="right screw"></div>
-            <Controls
-                {playbackState}
-                {currentSubdiv}
-                {tweenedProgress}
-                {playbackProgress}
-                melodyLength = {melody.length}
-                {isReady}
-                on:skipToBeginning = {async () => await skipTo(0)}
-                on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
-                on:play = {async () => {
-                    await Tone.loaded();
-                    await Tone.start();
-                    readyReels();
+        <div class="bottomHousing">
+            <div id="left" class="sideButton">
+                <div class="wrapper">
+                    <button
+                        class="button warn"
+                        style="--_dir: 1"
+                        disabled={!isReady || melody.length <= 1}
+                        on:click={async () => {
+                            if (currentSubdiv >= melody.length - 1) {
+                                await removeSubdiv(1);
+                            } else {
+                                melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
+                            beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
+                            }
+                        }}>
+                        <span class="visuallyHidden">delete current subdiv</span>
+                        <TrashCanIcon />
+                    </button>
+                    <button
+                        class="button"
+                        style="--_dir: 1"
+                        disabled={!isReady}
+                        on:click={() => {
+                            melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
+                            beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
+                        }}>
+                        <span class="visuallyHidden">insert new subdiv after current subdiv</span>
+                        <InsertSubdivIcon />
+                    </button>
+                </div>
+            </div>
+            <div class="housing">
+                <div class="left screw"></div>
+                <div class="right screw"></div>
+                <Controls
+                    {playbackState}
+                    {currentSubdiv}
+                    {tweenedProgress}
+                    {playbackProgress}
+                    melodyLength = {melody.length}
+                    {isReady}
+                    on:skipToBeginning = {async () => await skipTo(0)}
+                    on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
+                    on:play = {async () => {
+                        await Tone.loaded();
+                        await Tone.start();
+                        readyReels();
 
-                    if (hasManuallyScrolled) {
-                        // reset manual scroll
-                        hasManuallyScrolled = false;
-                        // start transport at current readhead location
-                        Tone.Transport.start("+0", "0:0:" + currentSubdiv);
-                    } else {
-                        Tone.Transport.start();
-                    }
+                        if (hasManuallyScrolled) {
+                            // reset manual scroll
+                            hasManuallyScrolled = false;
+                            // start transport at current readhead location
+                            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+                        } else {
+                            Tone.Transport.start();
+                        }
 
-                    startTapes();
-                }}
-                on:pause = {() => Tone.Transport.pause()}
-                on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
-                on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
+                        startTapes();
+                    }}
+                    on:pause = {() => Tone.Transport.pause()}
+                    on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
+                    on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
-            <BPMslider
-                bind:bpm = {bpm}
-                {isReady}
-                on:input = {() => Tone.Transport.bpm.value = bpm} />
+                <BPMslider
+                    bind:bpm = {bpm}
+                    {isReady}
+                    on:input = {() => Tone.Transport.bpm.value = bpm} />
+            </div>
+            <div id="right" class="sideButton">
+                <div class="wrapper">
+                    <button
+                        class="button warn"
+                        style="--_dir: -1"
+                        disabled={!isReady || currentTape[currentSubdiv].length === 0}
+                        on:click={() => {
+                            if (currentTapeName === "melody") {
+                                melody[currentSubdiv] = [];
+                            } else {
+                                beats[currentSubdiv] = [];
+                            }
+                        }}>
+                        <span class="visuallyHidden">clear current subdiv</span>
+                        <ClearSubdivIcon />
+                    </button>
+                    <label
+                        class="button"
+                        style="--_dir: -1"
+                        class:active={autoSkip}
+                        class:autoSkipping>
+                        <input
+                            class="visuallyHidden"
+                            type="checkbox"
+                            bind:checked={autoSkip}
+                            disabled={!isReady}>
+                        <span class="visuallyHidden">Melody tape</span>
+                        <AutoSkipIcon />
+                    </label>
+                </div>
+            </div>
         </div>
-        <div id="right" class="sideButton">
-            <label
-                class="button"
-                style="--_dir: -1"
-                class:active={autoSkip}
-                class:autoSkipping>
-                <input
-                    class="visuallyHidden"
-                    type="checkbox"
-                    bind:checked={autoSkip}
-                    disabled={!isReady}>
-                <span class="visuallyHidden">Melody tape</span>
-                <AutoSkipIcon />
-            </label>
-            <button
-                class="button"
-                style="--_dir: -1"
-                disabled={!isReady || melody.length <= 1}
-                on:click={async () => {
-                    if (currentSubdiv >= melody.length - 1) {
-                        await removeSubdiv(1);
-                    } else {
-                        melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
-                    beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
-                    }
-                }}>
-                -
-            </button>
-        </div>
+        
     </div>
 
     {#if isReady && currentTapeName === "melody"}
@@ -592,13 +603,35 @@
 
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
-        .cassette.bottom .sideButton .button.autoSkipping {
-            background-color: #ff6b6b;
-
-            &::before {
-                background-color: #ff8383;
+        .cassette.bottom {
+            .bottomHousing {
+                --_clr-shadow: var(--clr-300);
             }
-        }
+            
+            .sideButton .button {
+                --_clr-border: var(--clr-400);
+
+                &:hover {
+                    --_clr-border: var(--clr-600);
+                }
+
+                &:active, &.active {
+                    --_clr-border: var(--clr-700);
+                }
+            
+                &:disabled {
+                    --_clr-border: var(--clr-250);
+                }
+
+                &.autoSkipping {
+                    background-color: #ff6b6b;
+
+                    &::before {
+                        background-color: #ff8383;
+                    }
+                }
+            }
+        } 
 
         .inputs {
             background-color: var(--clr-800);
@@ -606,13 +639,35 @@
     }
 
     @mixin dark {
-        .cassette.bottom .sideButton .button.autoSkipping {
-            background-color: #f14c4c;
-
-            &::before {
-                background-color: #ff6363;
+        .cassette.bottom {
+            .bottomHousing {
+                --_clr-shadow: var(--clr-0);
             }
-        }
+
+            .sideButton .button {
+                --_clr-border: var(--clr-0);
+
+                &:hover {
+                    --_clr-border: var(--clr-0);
+                }
+
+                &:active, &.active {
+                    --_clr-border: var(--clr-0);
+                }
+            
+                &:disabled {
+                    --_clr-border: var(--clr-50);
+                }
+                
+                &.autoSkipping {
+                    background-color: #f14c4c;
+
+                    &::before {
+                        background-color: #ff6363;
+                    }
+                }
+            }
+        } 
 
         .inputs {
             background-color: var(--clr-50);
@@ -637,9 +692,7 @@
             position: relative;
             max-width: $cassetts-maxWidth;
 
-            border-color: var(--clr-cassette-border);
-            border-style: solid;
-            border-width: var(--border-width-thick);
+            border: solid var(--border-width-thick) var(--clr-cassette-border);
             margin: 0 auto;
 
             &::before {
@@ -708,15 +761,24 @@
         }
 
         &.bottom {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: center;
-            gap: var(--pad-xl);
             position: sticky;
             top: calc(var(--reels-height) - $cassetteBottom-height + $cassetteBottom-visible);
             z-index: 999;
 
             padding: 0 0 var(--pad-xl) 0;
+
+            // load state
+            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+            
+            transition: transform $cassette-ani-duration $cassette-ani-easing;
+            
+            .bottomHousing {
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: center;
+                gap: var(--pad-xl);
+                width: 100%;
+            }
 
             .housing {
                 flex-grow: 1;
@@ -732,11 +794,6 @@
                     $cassette-border-radius;
                 margin: 0;
 
-                transition: transform $cassette-ani-duration $cassette-ani-easing;
-
-                // load state
-                transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
-                
                 &::before {
                     top: 0;
                     bottom: $cassette-shading-size;
@@ -755,10 +812,15 @@
             .sideButton {
                 padding-top: var(--pad-md);
 
-                .button {
+                .wrapper {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: var(--pad-sm);
                     position: sticky;
                     top: calc(var(--reels-height) + var(--pad-md));
+                }
 
+                .button {
                     transition: transform var(--trans-normal) var(--trans-cubic-1),
                                 opacity var(--trans-normal) var(--trans-cubic-1);
 
@@ -770,7 +832,7 @@
         }
 
         &.isReady {
-            &.top, &.bottom .housing {
+            &.top, &.bottom {
                 // default state
                 transform: translateY(0);
             }
@@ -833,10 +895,6 @@
 
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
-        .inputsWrapper {
-            
-        }
-
         .inputs {
             max-width: $cassetts-maxWidth;
         }
@@ -863,26 +921,57 @@
         }
     }
 
-    @media (max-width: calc($cassetts-maxWidth + 20px + 88px)) {
+    @media (max-width: calc($cassetts-maxWidth + 28px + 176px)) {
         .cassette.bottom {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto;
-            grid-template-areas: 
-                "housing housing"
-                "leftButton rightButton";
-            gap: var(--pad-md);
-            max-width: calc($cassetts-maxWidth + 2 * var(--pad-xl));
-            
             padding: 0 var(--pad-xl) var(--pad-xl) var(--pad-xl);
-            margin: 0 auto;
+
+            .bottomHousing {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto;
+                grid-template-areas: 
+                    "housing housing"
+                    "leftButton rightButton";
+                gap: var(--pad-md);
+                position: relative;
+                max-width: $cassetts-maxWidth;
+
+                background-color: var(--_clr-shadow);
+                border: solid var(--border-width-thick) var(--clr-cassette-border);
+                border-top: none;
+                border-radius:
+                    0
+                    0
+                    $cassette-border-radius
+                    $cassette-border-radius;
+                margin: 0 auto;
+
+                &::before {
+                    // main color
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: $highlight-height;
+                    left: 0;
+
+                    background-color: var(--clr-cassette-bg-shadow);
+                    border-radius:
+                        0
+                        0
+                        $cassette-border-radius
+                        $cassette-border-radius;
+                }
+            }
             
             .housing {
                 grid-area: housing;
+                max-width: unset;
+                border: none;
             }
 
             .sideButton {
-                padding: 0;
+                padding: 0 var(--pad-xl) var(--pad-lg) var(--pad-xl);
 
                 &#right {
                     margin-left: auto;
