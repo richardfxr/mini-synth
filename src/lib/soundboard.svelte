@@ -103,14 +103,19 @@
 
 
 <style lang="scss">
+    // === USE ====================================
+    @use "sass:map";
+    @use '../styles/colors' as *;
+
     // internal variables
-    $beat-highlight-hrz: 3px;
-    $beat-highlight-vrt: 10px;
+    $beat-highlight-hrz: 2px;
+    $beat-highlight-vrt: 4px;
 
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
         .soundboard {
             // internal variables
+            --_clr-blank: var(--clr-150);
             --_clr-blank-highlight: var(--clr-0);
         }
     }
@@ -118,6 +123,7 @@
     @mixin dark {
         .soundboard {
             // internal variables
+            --_clr-blank: var(--clr-100);
             --_clr-blank-highlight: var(--clr-150);
         }
     }
@@ -127,7 +133,6 @@
 
     .soundboard {
         // internal variables
-        --_clr-blank: var(--clr-100);
         --_button-height: 120px;
         
         align-self: flex-start;
@@ -137,8 +142,7 @@
         position: relative;
         width: 100%;
 
-        background-color: var(--clr-kb-border);
-        border: solid var(--border-width) var(--clr-kb-border);
+        border: solid var(--border-width-thick) transparent;
         border-radius: calc($input-border-radius + var(--border-width));
 
         button {
@@ -166,7 +170,6 @@
 
                 background-color: var(--_clr-blank);
                 border-radius: calc($input-border-radius - $beat-highlight-hrz);
-                box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
                 transition: background-color var(--trans-fastest) ease,
                             transform var(--trans-fastest) ease;
@@ -201,7 +204,7 @@
 
                 &::before {
                     background-color: var(--_clr);
-                    transform: translateY(-5px);
+                    transform: translateY(-0.5 * $beat-highlight-vrt);
                 }
             }
         }

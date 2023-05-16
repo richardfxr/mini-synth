@@ -37,31 +37,51 @@
 
 
 <style lang="scss">
+    // === USE ====================================
+    @use "sass:map";
+    @use '../styles/colors' as *;
+
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
         .button {
-            &::after {
-                // internal variables
-                --_clr: var(--clr-300);
+            // internal variables 
+            --_clr: var(--clr-100);
+            --_clr-background: var(--clr-800);
+            --_clr-highlight: var(--clr-700);
+            --_clr-border: var(--clr-1000);
+
+            &:hover {
+                --_clr: var(--clr-0);
+                --_clr-border: var(--clr-1000);
             }
 
-            &.active ::after {
-                // internal variables
-                --_clr: var(--clr-600);
+            &:active, &.active {
+                --_clr: var(--clr-0);
+                --_clr-background: var(--clr-700);
+                --_clr-highlight: var(--clr-800);
+                --_clr-border: var(--clr-1000);
             }
         }
     }
 
-    @mixin dark{
+    @mixin dark {
         .button {
-            &::after {
-                // internal variables
-                --_clr: var(--clr-0);
+            // internal variables 
+            --_clr: var(--clr-900);
+            --_clr-background: var(--clr-100);
+            --_clr-highlight: var(--clr-150);
+            --_clr-border: var(--clr-0);
+
+            &:hover {
+                --_clr: var(--clr-1000);
+                --_clr-border: var(--clr-0);
             }
 
-            &.active::after {
-                // internal variables
-                --_clr: var(--clr-300);
+            &:active, &.active {
+                --_clr: var(--clr-1000);
+                --_clr-background: var(--clr-150);
+                --_clr-highlight: var(--clr-50);
+                --_clr-border: var(--clr-0);
             }
         }
     }
@@ -72,51 +92,81 @@
     .keyboardControls {
         display: flex;
         flex-direction: column;
-        gap: var(--pad-sm);
+        gap: var(--pad-xs);
         position: sticky;
         top: calc(var(--reels-height) + $cassetteBottom-visible + var(--border-width-thick));
+        height: 100%;
+
+        padding: var(--pad-xs);
     }
 
     .button {
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 3px;
         position: relative;
         width: unset;
+        height: unset;
 
         white-space: nowrap;
 
-        padding: 10px 10px 8px 10px;
-        margin: 0 var(--pad-2xl) 0 0;
+        padding: 8px 10px;
+        border-radius: var(--borderRadius-sm);
+        margin: 0 var(--pad-xl) 0 0;
+
+        &:active, &.active{
+            &::after {
+                border-color: #{map.get($light, 200)};
+            }
+
+            .indicator {
+                background-color: var(--clr-500);
+            }
+        }
+
+        &::before {
+            border-radius: calc(var(--borderRadius-sm) - var(--border-width-thick));
+        }
 
         &::after {
-            // keyboard connector
+            // active light to the right
             content: "";
             position: absolute;
-            top: calc(50% - var(--border-width-thick));
-            right: calc(-1 * var(--pad-2xl) - var(--border-width));
-            width: calc(var(--pad-2xl) + var(--border-width));
-            z-index: -1;
+            top: 0;
+            right: calc(-1 * var(--pad-md) - var(--border-width));
+            bottom: 0;
             
-            border-top: solid var(--border-width-thick) var(--_clr);
-            border-bottom: solid $highlight-height var(--_clr-highlight);
+            border-right: solid var(--border-width-thick) map.get($light, 700);
 
             transition: border-color var(--trans-fast) ease;
         }
 
-        &.active .indicator {
-            background-color: var(--clr-100);
+        &:first-child {
+            border-top-left-radius: calc($input-border-radius - var(--pad-xs));
+
+            &::before {
+                border-top-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+            }
+        }
+
+        &:last-child {
+            border-bottom-left-radius: calc($input-border-radius - var(--pad-xs));
+
+            &::before {
+                border-bottom-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+            }
         }
 
         .indicator {
             width: 13px;
             height: 2px;
-            background-color: var(--clr-0);
+            background-color: map.get($light, 600);
             transition: background-color 0.1s ease;
 
             &.populated {
-                background-color: var(--clr-red);
+                background-color: map.get($dark, "red");
             }
         }
     }
@@ -143,34 +193,56 @@
         }
 
         .button {
-            margin: 0 var(--pad-xl) 0 0;
+            padding: 10px 8px;
 
-            &::after {
-                right: calc(-1 * var(--pad-xl) - var(--border-width));
-                width: calc(var(--pad-xl) + var(--border-width));
+            &:first-child {
+                border-top-left-radius: var(--borderRadius-sm);
+                border-bottom-left-radius: calc($input-border-radius - var(--pad-xs));
+
+                &::before {
+                    border-top-left-radius: var(--borderRadius-sm);
+                    border-bottom-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+                }
+            }
+
+            &:last-child {
+                border-top-left-radius: calc($input-border-radius - var(--pad-xs));
+                border-bottom-left-radius: var(--borderRadius-sm);
+
+                &::before {
+                    border-top-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+                    border-bottom-left-radius: var(--borderRadius-sm);
+                }
             }
         }
     }
 
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
+        .wrapper {
+            width: 100%;
+        }
+        
         .keyboardControls {
             flex-direction: row;
 
             .button {
-                margin: 0 0 var(--pad-2xl) 0;
+                margin: 0 0 var(--pad-xl) 0;
 
-                &::before {
-                    // keyboard connector
+                &::after {
+                    // active line now at the bottom
                     top: unset;
-                    right: calc(50% - var(--border-width-thick));
-                    bottom: calc(-1 * var(--pad-2xl) - var(--border-width));
-                    height: calc(var(--pad-2xl) + var(--border-width));
-                    z-index: -1;
+                    right: 0;
+                    bottom: calc(-1 * var(--pad-md) - var(--border-width));
+                    left: 0;
                     
-                    border-top: none;
-                    border-right: solid var(--border-width-thick) var(--_clr);
-                    border-bottom: none;
-                    border-left: solid var(--border-width) var(--clr-0);
+                    border-right: none;
+                    border-bottom: solid var(--border-width-thick) map.get($light, 700);
+                }
+
+                &:active, &.active {
+                    &::after {
+                        border-color: #{map.get($light, 200)};
+                    }
                 }
             }
         }

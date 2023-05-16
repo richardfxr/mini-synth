@@ -528,55 +528,58 @@
     </div>
 
     {#if isReady && currentTapeName === "melody"}
-        <div
-            id="melodyInputs"
-            class="inputs"
-            out:fly={{ y: 20, duration: 200 }}>
-            <div class="secondaryControls">
-                <KeyboardControls
-                    bind:currentKbSegment = {currentKbSegment}
-                    {segmentIsPopulated} />
-            </div>
+        <div class="inputsWrapper" out:fly={{ y: 20, duration: 200 }}>
+            <div
+                id="melodyInputs"
+                class="inputs">
+                <div class="secondaryControls">
+                    <KeyboardControls
+                        bind:currentKbSegment = {currentKbSegment}
+                        {segmentIsPopulated} />
+                </div>
 
-            <Keyboard
-                {currentSubdiv}
-                {currentKbSegment}
-                bind:melody = {melody}
-                {notes}
-                {notesOfSegment}
-                {autoSkip}
-                on:keyDown = {e => $synth?.triggerAttack(e.detail.note)}
-                on:keyUp = {e => $synth?.triggerRelease(e.detail.note)}
-                on:nextSubDiv = {async () => {
-                    autoSkipping = true;
-                    if (currentSubdiv + 1 >= melody.length) {
-                        await addSubdiv(4);
-                    } else {
-                        await skipTo(currentSubdiv + 1);
-                    }
-                    autoSkipping = false;
-                }}/>
+                <Keyboard
+                    {currentSubdiv}
+                    {currentKbSegment}
+                    bind:melody = {melody}
+                    {notes}
+                    {notesOfSegment}
+                    {autoSkip}
+                    on:keyDown = {e => $synth?.triggerAttack(e.detail.note)}
+                    on:keyUp = {e => $synth?.triggerRelease(e.detail.note)}
+                    on:nextSubDiv = {async () => {
+                        autoSkipping = true;
+                        if (currentSubdiv + 1 >= melody.length) {
+                            await addSubdiv(4);
+                        } else {
+                            await skipTo(currentSubdiv + 1);
+                        }
+                        autoSkipping = false;
+                    }}/>
+            </div>
         </div>
     {:else if isReady}
-        <div
-            id="beatsInputs"
-            class="inputs"
-            out:fly={{ y: 20, duration: 200 }}>
-            <Soundboard
-                {currentSubdiv}
-                bind:beats = {beats}
-                {samples}
-                {autoSkip}
-                on:play = {e => $players?.player(e.detail.beat).start()}
-                on:nextSubDiv = {async () => {
-                    autoSkipping = true;
-                    if (currentSubdiv + 1 >= melody.length) {
-                        await addSubdiv(4);
-                    } else {
-                        await skipTo(currentSubdiv + 1);
-                    }
-                    autoSkipping= false;
-                }} />
+        <div class="inputsWrapper" out:fly={{ y: 20, duration: 200 }}>
+            <div
+                id="beatsInputs"
+                class="inputs"
+                out:fly={{ y: 20, duration: 200 }}>
+                <Soundboard
+                    {currentSubdiv}
+                    bind:beats = {beats}
+                    {samples}
+                    {autoSkip}
+                    on:play = {e => $players?.player(e.detail.beat).start()}
+                    on:nextSubDiv = {async () => {
+                        autoSkipping = true;
+                        if (currentSubdiv + 1 >= melody.length) {
+                            await addSubdiv(4);
+                        } else {
+                            await skipTo(currentSubdiv + 1);
+                        }
+                        autoSkipping= false;
+                    }} />
+            </div>
         </div>
     {/if}
 </div>
@@ -584,6 +587,10 @@
 
 
 <style lang="scss">
+    // === USE ====================================
+    @use "sass:map";
+    @use '../styles/colors' as *;
+
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
         .cassette {
@@ -598,6 +605,10 @@
                     background-color: #ff8383;
                 }
             }
+        }
+
+        .inputs {
+            background-color: var(--clr-800);
         }
     }
 
@@ -615,6 +626,10 @@
                 }
             }
         }
+
+        .inputs {
+            background-color: var(--clr-50);
+        }
     }
     
     /* === MAIN STYLES ======================== */
@@ -629,7 +644,7 @@
     .cassette {
         position: relative;
 
-        padding: 0 10px;
+        padding: 0 $page-pad-hrz;
 
         .housing {
             max-width: $cassetts-maxWidth;
@@ -721,15 +736,23 @@
         }
     }
 
-    .inputs {
-        display: flex;
-        max-width: var(--inputs-maxWidth);
+    .inputsWrapper {
+        width: 100%;
 
-        margin: 0 auto;
+        padding: 0 $page-pad-hrz;
 
         animation: inputsLoad $cassette-ani-duration $cassette-ani-easing 1;
         animation-delay: 0.2s;
         animation-fill-mode: backwards;
+    }
+
+    .inputs {
+        display: flex;
+        max-width: var(--inputs-maxWidth);
+
+        border: solid var(--border-width-thick) map.get($light, 1000);
+        border-radius: calc($input-border-radius + var(--border-width-thick));
+        margin: 0 auto;
     }
 
     #melodyInputs {
@@ -737,8 +760,6 @@
         min-height: 129px;
         height: var(--inputs-height);
         max-height: var(--inputs-maxHeight);
-
-        padding: 0 0 0 var(--pad-2xl);
         
         .secondaryControls {
             display: flex;
@@ -750,7 +771,6 @@
     #beatsInputs {
         flex-direction: column;
         align-items: center;
-        padding: var(--pad-2xl) var(--pad-xl) 0 var(--pad-xl);
     }
 
     /* === COLOR SCHEME ======================= */
@@ -766,10 +786,17 @@
 
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
+        .inputsWrapper {
+            
+        }
+
+        .inputs {
+            max-width: $cassetts-maxWidth;
+        }
+
         #melodyInputs {
             height: unset;
             max-height: unset;
-            padding: var(--pad-2xl) var(--pad-xl) var(--pad-2xl) var(--pad-xl);
 
             .secondaryControls {
                 flex-flow: column-reverse nowrap;
@@ -779,15 +806,13 @@
     }
     
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
+        .inputs {
+            margin: 0 var(--pad-xl);
+        }
+
         #melodyInputs {
             flex-flow: column nowrap;
             min-height: calc(170px + var(--pad-2xl));
-            padding-left: 0;
-
-            .secondaryControls {
-                gap: 30px;
-                padding: 0 20px;
-            }
         }
     }
 
@@ -802,7 +827,7 @@
             gap: var(--pad-md);
             max-width: calc($cassetts-maxWidth + 2 * var(--pad-xl));
             
-            padding: 0 var(--pad-xl);
+            padding: 0 var(--pad-xl) var(--pad-xl) var(--pad-xl);
             margin: 0 auto;
             
             .housing {

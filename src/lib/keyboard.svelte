@@ -128,6 +128,10 @@
 
 
 <style lang="scss">
+    // === USE ====================================
+    @use "sass:map";
+    @use '../styles/colors' as *;
+
     // internal variables
     $key-highlight-hrz: 2px;
     $key-highlight-vrt: 4px;
@@ -158,7 +162,7 @@
             bottom: 0;
             left: 0;
 
-            border: solid var(--_border-width) var(--clr-kb-border);
+            border: solid var(--_border-width) map.get($light, 1000);
             border-radius: $input-border-radius;
 
             pointer-events: none;
@@ -171,7 +175,7 @@
         position: relative;
         height: 100%;
 
-        background-color: var(--clr-kb-border);
+        background-color: map.get($light, 800);
         border-radius: $input-border-radius;
         overflow: hidden;
         scroll-behavior: smooth;
@@ -291,6 +295,7 @@
                 z-index: 1;
 
                 background-color: var(--clr-kb-flat-highlight);
+                border-color: map.get($light, 1000);
                 box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.2);
 
                 // transform to center notes
