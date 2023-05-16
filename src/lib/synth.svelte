@@ -388,6 +388,7 @@
 
 
 <svelte:head>
+    <title>{title} | Mini Synth</title>
     <!--
         disable zoom, this is an accessibility concern but multi-touch is
         unusable without it

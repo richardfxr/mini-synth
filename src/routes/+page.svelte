@@ -129,6 +129,14 @@
 
 
 
+<svelte:head>
+    <title>Mini Synth</title>
+    <meta
+        name="description"
+        content="A simple web-based synthesizer for anyone to create songs."
+    />
+</svelte:head>
+
 <div
     class="index"
     in:fade={{ duration: 50, delay: 200 }}
