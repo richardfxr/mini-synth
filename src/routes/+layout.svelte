@@ -40,7 +40,7 @@
 
 
 <svelte:head>
-    <meta name="theme-color" content={$displayedColorScheme === "light" ? "#eeeeee" : "#282828"} />
+    <meta name="theme-color" content={$displayedColorScheme === "light" ? "#f7f7f7" : "#1d1d1d"} />
 </svelte:head>
 
 <slot></slot>
