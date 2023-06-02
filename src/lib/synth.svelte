@@ -128,10 +128,13 @@
 
             songIsSaved = true;
 
-            // update URL
-            id = realId;
-            goto('/song/' + id, { replaceState: true });
+            if (id !== realId) {
+                // update URL
+                id = realId;
+                goto('/song/' + id, { replaceState: true });
 
+            }
+            
             // update title
             songIsLoaded = true;
             title = "song #" + id;
