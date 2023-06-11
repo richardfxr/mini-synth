@@ -22,9 +22,31 @@
 
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
+
+    /* === FUNCTIONS ========================== */
+    function togglePlayback(): void {
+        playbackState === 'started' ? dispatch('pause') : dispatch('play');
+    }
+
+    function handleKeyDown(e: KeyboardEvent): void {
+        console.log("key: " + e.code);
+        switch(e.code) {
+            case 'Space':
+                togglePlayback();
+                break;
+            case 'ArrowLeft':
+                e.shiftKey? dispatch('skipToBeginning') : dispatch('prevSubdiv');
+                break;
+            case 'ArrowRight':
+                e.shiftKey ? dispatch('skipToEnd') : dispatch('nextSubdiv');
+                break;
+        }
+    }
 </script>
 
 
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <div
     class="controls"
@@ -63,7 +85,7 @@
             <button
                 class="button main warn"
                 disabled = {!isReady}
-                on:click={() => {playbackState === "started" ? dispatch('pause') : dispatch('play')}}>
+                on:click={togglePlayback}>
                 {#if playbackState === "started"}
                     <span class="visuallyHidden">pause</span>
                     <PuaseIcon />
