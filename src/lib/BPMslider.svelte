@@ -11,9 +11,28 @@
     /* === CONSTANTS ========================== */
     const min = 60;
     const max = 185;
+
+    /* === FUNCTIONS ========================== */
+    function adjustBPM(amount: number): void {
+        // clamp bpm to a value between min and max (inclusive)
+        bpm = Math.min(Math.max(bpm + amount, min), max);
+    }
+
+    function handleKeyDown(e: KeyboardEvent): void {
+        switch(e.code) {
+            case 'ArrowUp':
+                e.shiftKey? adjustBPM(10) : adjustBPM(1);
+                break;
+            case 'ArrowDown':
+                e.shiftKey ? adjustBPM(-10) : adjustBPM(-1);
+                break;
+        }
+    }
 </script>
 
 
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <div
     class="sliderWrapper"
@@ -32,7 +51,7 @@
             class="button"
             style="--_dir: 1"
             disabled={bpm <= min}
-            on:click={() => {if (bpm > min) bpm--;}}>
+            on:click={() => adjustBPM(-1)}>
             <span class="visuallyHidden">decrease 1 BPM</span>
             <MinusIcon />
         </button>
@@ -44,7 +63,7 @@
             class="button"
             style="--_dir: -1"
             disabled={bpm >= max}
-            on:click={() => {if (bpm < max) bpm++;}}>
+            on:click={() => adjustBPM(1)}>
             <span class="visuallyHidden">increase 1 BPM</span>
             <PlusIcon />
         </button>
