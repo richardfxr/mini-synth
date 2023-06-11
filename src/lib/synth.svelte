@@ -270,6 +270,25 @@
         tapesFrame = requestAnimationFrame(scrollTapes);
     }
 
+    async function play(): Promise<void> {
+        await Tone.loaded();
+        await Tone.start();
+        readyReels();
+
+        if (hasManuallyScrolled) {
+            // reset manual scroll
+            hasManuallyScrolled = false;
+            // start transport at current readhead location
+            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+        } else {
+            Tone.Transport.start();
+        }
+
+        startTapes();
+    }
+
+    function pause(): void {Tone.Transport.pause();}
+
     /**
      * Skip to specified subdiv index. Only functions when not playing
      * @param relativeIndex index between 0 and (melody.length - 1)
@@ -431,7 +450,7 @@
         {beats}
         bind:hasManuallyScrolled = {hasManuallyScrolled}
         {isReady}
-        on:pause = {() => Tone.Transport.pause()}
+        on:pause = {pause}
         on:addQuarter = {async () => await addSubdiv(4)}
         on:removeQuarter = {async () => await removeSubdiv(4)} />
 
@@ -481,23 +500,8 @@
                     {isReady}
                     on:skipToBeginning = {async () => await skipTo(0)}
                     on:prevSubdiv = {async () => await skipTo(currentSubdiv - 1)}
-                    on:play = {async () => {
-                        await Tone.loaded();
-                        await Tone.start();
-                        readyReels();
-
-                        if (hasManuallyScrolled) {
-                            // reset manual scroll
-                            hasManuallyScrolled = false;
-                            // start transport at current readhead location
-                            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
-                        } else {
-                            Tone.Transport.start();
-                        }
-
-                        startTapes();
-                    }}
-                    on:pause = {() => Tone.Transport.pause()}
+                    on:play = {play}
+                    on:pause = {pause}
                     on:nextSubdiv = {async () => await skipTo(currentSubdiv + 1)}
                     on:skipToEnd = {async () => await skipTo(melody.length - 1)} />
 
