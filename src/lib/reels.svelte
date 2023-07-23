@@ -23,11 +23,10 @@
     export let hasManuallyScrolled: boolean; // bind
     export let isReady: boolean;
 
-    tweenedProgress.subscribe(() => {
+    tweenedProgress.subscribe(value => {
         // set scrollLeft using progress (tweened)
         if (tweening && tapes) {
-            // console.log("progress: " + $progress);
-            tapes.scrollLeft = $tweenedProgress;
+            tapes.scrollLeft = value;
         }
     });
 
@@ -62,15 +61,15 @@
             if (!tweening) {
                 tweenedProgress.set(tapes.scrollLeft);
                 hasManuallyScrolled = true;
-                let calculatedubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
+                let calculatedSubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
 
                 // prevent currentSubdiv from producing invalid index
-                if (calculatedubdiv >= melody.length) {
+                if (calculatedSubdiv >= melody.length) {
                     currentSubdiv = melody.length - 1;
-                } else if (calculatedubdiv < 0) {
+                } else if (calculatedSubdiv < 0) {
                     currentSubdiv = 0;
                 } else {
-                    currentSubdiv = calculatedubdiv;
+                    currentSubdiv = calculatedSubdiv;
                 }
             }
         }}
@@ -89,18 +88,15 @@
                 dragging  = true;
                 // remove radio pointerDown to prevent radios from triggering on drag
                 radioPointerDown = false;
-                let newScrollLeft = tapes.scrollLeft - e.movementX;
-
-                // limit newScrollLeft to be between 0 and melody.length
-                if (newScrollLeft > 0)
-                    newScrollLeft = 0;
-                if (newScrollLeft > melody.length * subdivWidth)
-                    newScrollLeft = melody.length * subdivWidth;
-
+                
                 tapes.scrollLeft = tapes.scrollLeft - e.movementX;
             } else {
                 dragging = false;
             }
+        }}
+        on:mouseup={() => {
+            if (!isReady) return;
+            dragging = false;
         }}>
 
         <div class="tapePadding">
