@@ -35,9 +35,11 @@
                 togglePlayback();
                 break;
             case 'ArrowLeft':
+                e.preventDefault();
                 e.shiftKey? dispatch('skipToBeginning') : dispatch('prevSubdiv');
                 break;
             case 'ArrowRight':
+                e.preventDefault();
                 e.shiftKey ? dispatch('skipToEnd') : dispatch('nextSubdiv');
                 break;
         }
