@@ -536,7 +536,7 @@
                             type="checkbox"
                             bind:checked={autoSkip}
                             disabled={!isReady}>
-                        <span class="visuallyHidden">Melody tape</span>
+                        <span class="visuallyHidden">auto skip to next subdiv</span>
                         <AutoSkipIcon />
                     </label>
                 </div>
@@ -630,14 +630,6 @@
                 &:disabled {
                     --_clr-border: var(--clr-250);
                 }
-
-                &.autoSkipping {
-                    background-color: #ff6b6b;
-
-                    &::before {
-                        background-color: #ff8383;
-                    }
-                }
             }
         } 
 
@@ -665,14 +657,6 @@
             
                 &:disabled {
                     --_clr-border: var(--clr-50);
-                }
-                
-                &.autoSkipping {
-                    background-color: #f14c4c;
-
-                    &::before {
-                        background-color: #ff6363;
-                    }
                 }
             }
         } 
@@ -835,6 +819,14 @@
                     // load state
                     transform: translateX(calc(var(--_dir) * 50px));
                     opacity: 0;
+
+                    &.autoSkipping {
+                        background-color: var(--clr-active);
+
+                        &::before {
+                            background-color: var(--clr-active-highlight);
+                        }
+                    }
                 }
             }
         }

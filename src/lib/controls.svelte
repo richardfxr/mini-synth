@@ -23,6 +23,13 @@
     /* === CONSTANTS ========================== */
     const dispatch = createEventDispatcher();
 
+    /* === VARIABLES ========================== */
+    let skipToBeginningKbActive = false;
+    let prevSubdivKbActive = false;
+    let playbackKbActive = false;
+    let nextSubdivKbActive = false;
+    let skipToEndKbActive = false;
+
     /* === FUNCTIONS ========================== */
     function togglePlayback(): void {
         playbackState === 'started' ? dispatch('pause') : dispatch('play');
@@ -32,15 +39,50 @@
         console.log("key: " + e.code);
         switch(e.code) {
             case 'Space':
+                playbackKbActive = true;
                 togglePlayback();
                 break;
             case 'ArrowLeft':
                 e.preventDefault();
-                e.shiftKey? dispatch('skipToBeginning') : dispatch('prevSubdiv');
+                if (e.shiftKey) {
+                    skipToBeginningKbActive = true;
+                    dispatch('skipToBeginning');
+                } else {
+                    prevSubdivKbActive = true;
+                    dispatch('prevSubdiv');
+                }
                 break;
             case 'ArrowRight':
                 e.preventDefault();
-                e.shiftKey ? dispatch('skipToEnd') : dispatch('nextSubdiv');
+                if (e.shiftKey) {
+                    skipToEndKbActive = true;
+                    dispatch('skipToEnd');
+                } else {
+                    nextSubdivKbActive = true;
+                    dispatch('nextSubdiv');
+                }
+                break;
+        }
+    }
+
+    function handleKeyUp(e: KeyboardEvent): void {
+        switch(e.code) {
+            case 'Space':
+                playbackKbActive = false;
+                break;
+            case 'ArrowLeft':
+                if (e.shiftKey) {
+                    skipToBeginningKbActive = false;
+                } else {
+                    prevSubdivKbActive = false;
+                }
+                break;
+            case 'ArrowRight':
+                if (e.shiftKey) {
+                    skipToEndKbActive = false;
+                } else {
+                    nextSubdivKbActive = false;
+                }
                 break;
         }
     }
@@ -48,7 +90,7 @@
 
 
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <div
     class="controls"
@@ -63,6 +105,7 @@
         <div class="playback">
             <button
                 class="button small skip"
+                class:kbActive={skipToBeginningKbActive}
                 style="
                     --_dir: 1;
                     --_spool-scale: {1.1 + playbackProgress * 1.4};
@@ -77,6 +120,7 @@
 
             <button
                 class="button small subdiv"
+                class:kbActive={prevSubdivKbActive}
                 style="--_dir: 1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
                 on:click = {() => dispatch('prevSubdiv')}>
@@ -86,6 +130,7 @@
 
             <button
                 class="button main warn"
+                class:kbActive={playbackKbActive}
                 disabled = {!isReady}
                 on:click={togglePlayback}>
                 {#if playbackState === "started"}
@@ -99,6 +144,7 @@
 
             <button
                 class="button small subdiv"
+                class:kbActive={nextSubdivKbActive}
                 style="--_dir: -1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
                 on:click = {() => dispatch('nextSubdiv')}>
@@ -108,6 +154,7 @@
 
             <button
                 class="button small skip"
+                class:kbActive={skipToEndKbActive}
                 style="
                     --_dir: -1;
                     --_spool-scale: {2.5 - playbackProgress * 1.4};
@@ -144,7 +191,7 @@
                     --_clr-border: var(--clr-700);
                 }
             
-                &:disabled {
+                &:disabled, &.kbActive:disabled {
                     --_clr-border: var(--clr-250);
                 }
 
@@ -158,7 +205,11 @@
                         fill: var(--clr-50);
                         stroke: var(--clr-300);
                     }
-                } 
+                }
+
+                &.kbActive {
+                    --_clr-border: var(--clr-700);
+                }
             }
         } 
         
@@ -187,7 +238,7 @@
                     --_clr-border: var(--clr-0);
                 }
             
-                &:disabled {
+                &:disabled, &.kbActive:disabled {
                     --_clr-border: var(--clr-50);
                 }
 
@@ -201,7 +252,11 @@
                         fill: var(--clr-50);
                         stroke: var(--clr-350);
                     }
-                } 
+                }
+                
+                &.kbActive {
+                    --_clr-border: var(--clr-0);
+                }
             }
         } 
         

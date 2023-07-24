@@ -12,6 +12,10 @@
     const min = 60;
     const max = 185;
 
+    /* === VARIABLES ========================== */
+    let bpmUpKbActive = false;
+    let bpmDownKbActive = false;
+
     /* === FUNCTIONS ========================== */
     function adjustBPM(amount: number): void {
         // clamp bpm to a value between min and max (inclusive)
@@ -21,10 +25,25 @@
     function handleKeyDown(e: KeyboardEvent): void {
         switch(e.code) {
             case 'ArrowUp':
+                e.preventDefault();
+                bpmUpKbActive = true;
                 e.shiftKey? adjustBPM(10) : adjustBPM(1);
                 break;
             case 'ArrowDown':
+                e.preventDefault();
+                bpmDownKbActive = true;
                 e.shiftKey ? adjustBPM(-10) : adjustBPM(-1);
+                break;
+        }
+    }
+
+    function handleKeyUp(e: KeyboardEvent): void {
+        switch(e.code) {
+            case 'ArrowUp':
+                bpmUpKbActive = false;
+                break;
+            case 'ArrowDown':
+                bpmDownKbActive = false;
                 break;
         }
     }
@@ -32,7 +51,7 @@
 
 
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <div
     class="sliderWrapper"
@@ -49,6 +68,7 @@
     <div class="controls">
         <button
             class="button"
+            class:kbActive={bpmDownKbActive}
             style="--_dir: 1"
             disabled={bpm <= min}
             on:click={() => adjustBPM(-1)}>
@@ -61,6 +81,7 @@
         </label>
         <button
             class="button"
+            class:kbActive={bpmUpKbActive}
             style="--_dir: -1"
             disabled={bpm >= max}
             on:click={() => adjustBPM(1)}>
