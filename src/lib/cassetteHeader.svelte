@@ -2,7 +2,8 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
-    import { browser } from '$app/environment';
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
     // icons
     import MenuIcon from "$lib/SVGs/menuIcon.svelte";
     import ExitFullscreen from '$lib/SVGs/exitFullscreen.svelte';
@@ -61,7 +62,8 @@
         href="/"
         id="menu"
         class="button"
-        style="--_dir: 1">
+        style="--_dir: 1"
+        on:keydown={e => stopPropagation(e, ['Space'])}>
         <span class="visuallyHidden">menu</span>
         <MenuIcon />
     </a>
@@ -81,7 +83,8 @@
         style="--_dir: -1"
         type="button"
         on:click={toggleFullscreen}
-        disabled={!allowFullscreen}>
+        disabled={!allowFullscreen}
+        on:keydown={e => stopPropagation(e, ['Space'])}>
         {#if isFullscreen}
             <span class="visuallyHidden">exit fullscreen</span>
             <ExitFullscreen />

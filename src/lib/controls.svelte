@@ -3,6 +3,8 @@
     import { createEventDispatcher } from 'svelte';
     import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
     // icons
     import SkipToStartIcon from '$lib/SVGs/skipToStartIcon.svelte';
     import PrevSubdiv from '$lib/SVGs/prevSubdiv.svelte';
@@ -111,7 +113,8 @@
                     --_spool-scale: {1.1 + playbackProgress * 1.4};
                 "
                 disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
-                on:click = {() => dispatch('skipToBeginning')}>
+                on:click = {() => dispatch('skipToBeginning')}
+                on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">skip to start of track</span>
                 <div class="spool"></div>
                 <SkipToStartIcon />
@@ -123,7 +126,8 @@
                 class:kbActive={prevSubdivKbActive}
                 style="--_dir: 1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
-                on:click = {() => dispatch('prevSubdiv')}>
+                on:click = {() => dispatch('prevSubdiv')}
+                on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">previous subdivision</span>
                 <PrevSubdiv />
             </button>
@@ -132,7 +136,8 @@
                 class="button main warn"
                 class:kbActive={playbackKbActive}
                 disabled = {!isReady}
-                on:click={togglePlayback}>
+                on:click={togglePlayback}
+                on:keydown={e => stopPropagation(e, ['Space'])}>
                 {#if playbackState === "started"}
                     <span class="visuallyHidden">pause</span>
                     <PuaseIcon />
@@ -147,7 +152,8 @@
                 class:kbActive={nextSubdivKbActive}
                 style="--_dir: -1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
-                on:click = {() => dispatch('nextSubdiv')}>
+                on:click = {() => dispatch('nextSubdiv')}
+                on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">next subdivision</span>
                 <NextSubdivIcon />
             </button>
@@ -160,7 +166,8 @@
                     --_spool-scale: {2.5 - playbackProgress * 1.4};
                 "
                 disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
-                on:click = {() => dispatch('skipToEnd')}>
+                on:click = {() => dispatch('skipToEnd')}
+                on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">skip to end of track</span>
                 <div class="spool"></div>
                 <SkipToEndIcon />
@@ -183,8 +190,13 @@
             .button {
                 --_clr-border: var(--clr-400);
 
-                &:hover {
+                &:hover, &:focus {
                     --_clr-border: var(--clr-600);
+                }
+
+                &:focus-visible {
+                    --_clr: var(--clr-1000);
+                    --_clr-border: var(--clr-red);
                 }
 
                 &:active, &.active {
@@ -210,6 +222,10 @@
                 &.kbActive {
                     --_clr-border: var(--clr-700);
                 }
+
+                &.warn:focus-visible {
+                    --_clr: var(--clr-red-hover);
+                }
             }
         } 
         
@@ -230,8 +246,13 @@
             .button {
                 --_clr-border: var(--clr-0);
 
-                &:hover {
+                &:hover, &:focus {
                     --_clr-border: var(--clr-0);
+                }
+
+                &:focus-visible {
+                    --_clr: var(--clr-1000);
+                    --_clr-border: var(--clr-active-highlight);
                 }
 
                 &:active, &.active {
@@ -256,6 +277,10 @@
                 
                 &.kbActive {
                     --_clr-border: var(--clr-0);
+                }
+
+                &.warn:focus-visible {
+                    --_clr: var(--clr-red-hover);
                 }
             }
         } 

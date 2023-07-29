@@ -34,6 +34,8 @@
         players,
         playersVol
     } from "../storage/store";
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
     // components
     import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
@@ -471,7 +473,8 @@
                                 melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
                             beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
                             }
-                        }}>
+                        }}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
                         <span class="visuallyHidden">delete current subdiv</span>
                         <TrashCanIcon />
                     </button>
@@ -482,7 +485,8 @@
                         on:click={() => {
                             melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
                             beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
-                        }}>
+                        }}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
                         <span class="visuallyHidden">insert new subdiv after current subdiv</span>
                         <InsertSubdivIcon />
                     </button>
@@ -522,23 +526,28 @@
                             } else {
                                 beats[currentSubdiv] = [];
                             }
-                        }}>
+                        }}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
                         <span class="visuallyHidden">clear current subdiv</span>
                         <ClearSubdivIcon />
                     </button>
+                    <input
+                        id="autoSkip"
+                        class="buttonInput visuallyHidden"
+                        type="checkbox"
+                        bind:checked={autoSkip}
+                        disabled={!isReady}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
                     <label
                         class="button"
                         style="--_dir: -1"
                         class:active={autoSkip}
-                        class:autoSkipping>
-                        <input
-                            class="visuallyHidden"
-                            type="checkbox"
-                            bind:checked={autoSkip}
-                            disabled={!isReady}>
+                        class:autoSkipping
+                        for="autoSkip">
                         <span class="visuallyHidden">auto skip to next subdiv</span>
                         <AutoSkipIcon />
                     </label>
+                    
                 </div>
             </div>
         </div>
@@ -616,21 +625,32 @@
                 --_clr-shadow: var(--clr-300);
             }
             
-            .sideButton .button {
-                --_clr-border: var(--clr-400);
+            .sideButton {
+                .button {
+                    --_clr-border: var(--clr-400);
 
-                &:hover {
-                    --_clr-border: var(--clr-600);
+                    &:hover, &:focus {
+                        --_clr-border: var(--clr-600);
+                    }
+
+                    &:focus-visible {
+                        --_clr-border: var(--clr-red);
+                    }
+
+                    &:active, &.active {
+                        --_clr-border: var(--clr-700);
+                    }
+                
+                    &:disabled {
+                        --_clr-border: var(--clr-250);
+                    }
                 }
 
-                &:active, &.active {
-                    --_clr-border: var(--clr-700);
+                .buttonInput:focus-visible + .button {
+                    --_clr: var(--clr-1000);
+                    --_clr-border: var(--clr-red);
                 }
-            
-                &:disabled {
-                    --_clr-border: var(--clr-250);
-                }
-            }
+            } 
         } 
 
         .inputs {
@@ -644,21 +664,32 @@
                 --_clr-shadow: var(--clr-0);
             }
 
-            .sideButton .button {
-                --_clr-border: var(--clr-0);
-
-                &:hover {
+            .sideButton {
+                .button {
                     --_clr-border: var(--clr-0);
+
+                    &:hover, &:focus {
+                        --_clr-border: var(--clr-0);
+                    }
+
+                    &:focus-visible {
+                        --_clr-border: var(--clr-active-highlight);
+                    }
+
+                    &:active, &.active {
+                        --_clr-border: var(--clr-0);
+                    }
+                
+                    &:disabled {
+                        --_clr-border: var(--clr-50);
+                    }
                 }
 
-                &:active, &.active {
-                    --_clr-border: var(--clr-0);
+                .buttonInput:focus-visible + .button {
+                    --_clr: var(--clr-1000);
+                    --_clr-border: var(--clr-active-highlight);
                 }
-            
-                &:disabled {
-                    --_clr-border: var(--clr-50);
-                }
-            }
+            } 
         } 
 
         .inputs {

@@ -1,5 +1,7 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
     // icons
     import MinusIcon from '$lib/SVGs/minusIcon.svelte';
     import PlusIcon from '$lib/SVGs/plusIcon.svelte';
@@ -21,37 +23,9 @@
         // clamp bpm to a value between min and max (inclusive)
         bpm = Math.min(Math.max(bpm + amount, min), max);
     }
-
-    function handleKeyDown(e: KeyboardEvent): void {
-        switch(e.code) {
-            case 'ArrowUp':
-                e.preventDefault();
-                bpmUpKbActive = true;
-                e.shiftKey? adjustBPM(10) : adjustBPM(1);
-                break;
-            case 'ArrowDown':
-                e.preventDefault();
-                bpmDownKbActive = true;
-                e.shiftKey ? adjustBPM(-10) : adjustBPM(-1);
-                break;
-        }
-    }
-
-    function handleKeyUp(e: KeyboardEvent): void {
-        switch(e.code) {
-            case 'ArrowUp':
-                bpmUpKbActive = false;
-                break;
-            case 'ArrowDown':
-                bpmDownKbActive = false;
-                break;
-        }
-    }
 </script>
 
 
-
-<svelte:window on:keydown={handleKeyDown} on:keyup={handleKeyUp} />
 
 <div
     class="sliderWrapper"
@@ -64,14 +38,16 @@
         on:input
         {min}
         {max}
-        step="1">
+        step="1"
+        on:keydown={e => stopPropagation(e, ['ArrowLeft', 'ArrowRight'])}>
     <div class="controls">
         <button
             class="button"
             class:kbActive={bpmDownKbActive}
             style="--_dir: 1"
             disabled={bpm <= min}
-            on:click={() => adjustBPM(-1)}>
+            on:click={() => adjustBPM(-1)}
+            on:keydown={e => stopPropagation(e, ['Space'])}>
             <span class="visuallyHidden">decrease 1 BPM</span>
             <MinusIcon />
         </button>
@@ -84,7 +60,8 @@
             class:kbActive={bpmUpKbActive}
             style="--_dir: -1"
             disabled={bpm >= max}
-            on:click={() => adjustBPM(1)}>
+            on:click={() => adjustBPM(1)}
+            on:keydown={e => stopPropagation(e, ['Space'])}>
             <span class="visuallyHidden">increase 1 BPM</span>
             <PlusIcon />
         </button>
@@ -143,10 +120,17 @@
         width: var(--_track-width);
         overflow: hidden;
 
-        transition: opacity var(--trans-slow) var(--trans-cubic-1);
+        outline: solid var(--border-width-thick) transparent;
+
+        transition: opacity var(--trans-slow) var(--trans-cubic-1),
+                    outline-color var(--trans-fast) ease;
 
         // load state
         opacity: 0;
+
+        &:focus-visible {
+            outline-color: var(--clr-1000);
+        }
         
         &::-webkit-slider-runnable-track {
             position: relative;
