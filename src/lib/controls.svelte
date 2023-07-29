@@ -196,7 +196,7 @@
 
                 &:focus-visible {
                     --_clr: var(--clr-1000);
-                    --_clr-border: var(--clr-red);
+                    --_clr-border: var(--clr-focus-red);
                 }
 
                 &:active, &.active {
@@ -252,7 +252,7 @@
 
                 &:focus-visible {
                     --_clr: var(--clr-1000);
-                    --_clr-border: var(--clr-active-highlight);
+                    --_clr-border: var(--clr-focus-red);
                 }
 
                 &:active, &.active {

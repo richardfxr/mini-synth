@@ -634,7 +634,7 @@
                     }
 
                     &:focus-visible {
-                        --_clr-border: var(--clr-red);
+                        --_clr-border: var(--clr-focus-red);
                     }
 
                     &:active, &.active {
@@ -673,7 +673,7 @@
                     }
 
                     &:focus-visible {
-                        --_clr-border: var(--clr-active-highlight);
+                        --_clr-border: var(--clr-focus-red);
                     }
 
                     &:active, &.active {
