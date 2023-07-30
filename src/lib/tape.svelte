@@ -25,6 +25,20 @@
 
 
 
+<!-- visually hidden radio input for track switching -->
+<label for={tapeName + "-radio"} class="visuallyHidden">
+    {tapeName} tape
+</label>
+
+<input
+    type="radio"
+    id={tapeName + "-radio"}
+    class="visuallyHidden tapeRadio"
+    name="tape"
+    value={tapeName}
+    bind:group={currentTapeName}
+    disabled={!isReady}>
+
 <article
     id={tapeName}
     class="tape"
@@ -45,17 +59,6 @@
         radioPointerDown = false;   
     }}>
 
-    <!-- visually hidden radio input for track switching -->
-    <label class="visuallyHidden">
-        <input
-            type="radio"
-            name="tape"
-            value={tapeName}
-            bind:group={currentTapeName}
-            disabled={!isReady}>
-        {tapeName} tape
-    </label>
-
     <!-- start tape terminal -->
     <div class="tapeTerminal start">
         {#if tapeName === "melody"}
@@ -66,58 +69,62 @@
     </div>
 
     <!-- vertical note markers -->
-    <div class="noteMarkers">
+    <div class="noteMarkers" aria-hidden="true">
         <div class="noteMarker"></div>
         <div class="noteMarker"></div>
         <div class="noteMarker"></div>
         <div class="noteMarker"></div>
     </div>
 
-    {#if tapeName === "melody"}
-        <!-- melody subdivs -->
-        {#each tape as subdiv, i}
-            <div
-                class="subdiv"
-                class:active={i === currentSubdiv}>
-                {#each subdiv as note}
-                    <p class="note-{notes.indexOf(note) % 12}">
-                        <span>{notes.indexOf(note) + 1}</span>
-                    </p>
-                {/each}
-            </div>
-        {/each}
-    {:else}
-        <!-- beats subdivs -->
-        {#each tape as subdiv, i}
-            <div
-                class="subdiv"
-                class:active={i === currentSubdiv}>
-                {#each subdiv as beat}
-                    <p class="beat-{beat}">
-                        {#if beat === "hh"}
-                            <span class="visuallyHidden">high hat</span>
-                            <HighHatIcon />
-                        {:else if beat === "kc"}
-                            <span class="visuallyHidden">kick drum</span>
-                            <KickDrumIcon />
-                        {:else if beat === "sn"}
-                            <span class="visuallyHidden">snare drum</span>
-                            <SnareDrumIcon />
-                        {:else if beat === "t1"}
-                            <span class="visuallyHidden">tom drum 1</span>
-                            <TomDrum1Icon />
-                        {:else if beat === "t2"}
-                            <span class="visuallyHidden">tom drum 2</span>
-                            <TomDrum2Icon />
-                        {:else if beat === "t3"}
-                            <span class="visuallyHidden">tom drum 3</span>
-                            <TomDrum3Icon />
-                        {/if}
-                    </p>
-                {/each}
-            </div>
-        {/each}
-    {/if}
+    <h2 class="visuallyHidden">{tapeName} track</h2>
+    
+    <ol class="notes">
+        {#if tapeName === "melody"}
+            <!-- melody subdivs -->
+            {#each tape as subdiv, i}
+                <li
+                    class="subdiv"
+                    class:active={i === currentSubdiv}>
+                    {#each subdiv as note}
+                        <p class="note-{notes.indexOf(note) % 12}">
+                            <span>{notes.indexOf(note) + 1}</span>
+                        </p>
+                    {/each}
+                </li>
+            {/each}
+        {:else}
+            <!-- beats subdivs -->
+            {#each tape as subdiv, i}
+                <li
+                    class="subdiv"
+                    class:active={i === currentSubdiv}>
+                    {#each subdiv as beat}
+                        <p class="beat-{beat}">
+                            {#if beat === "hh"}
+                                <span class="visuallyHidden">high hat</span>
+                                <HighHatIcon />
+                            {:else if beat === "kc"}
+                                <span class="visuallyHidden">kick drum</span>
+                                <KickDrumIcon />
+                            {:else if beat === "sn"}
+                                <span class="visuallyHidden">snare drum</span>
+                                <SnareDrumIcon />
+                            {:else if beat === "t1"}
+                                <span class="visuallyHidden">tom drum 1</span>
+                                <TomDrum1Icon />
+                            {:else if beat === "t2"}
+                                <span class="visuallyHidden">tom drum 2</span>
+                                <TomDrum2Icon />
+                            {:else if beat === "t3"}
+                                <span class="visuallyHidden">tom drum 3</span>
+                                <TomDrum3Icon />
+                            {/if}
+                        </p>
+                    {/each}
+                </li>
+            {/each}
+        {/if}
+    </ol>
 
     <!-- end tape terminal -->
     <div class="tapeTerminal end">
@@ -131,13 +138,18 @@
 <style lang="scss">
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
+        .tapeRadio:focus-visible + .tape {
+            // internal variable
+            --_clr-border: var(--clr-focus-red);
+
+            &#melody {
+                border-bottom-color: var(--clr-focus-red);
+            }
+        }
+        
         .tape {
             // internal variables
             --_clr-border: var(--clr-350);
-
-            &#melody {
-                border-bottom: solid var(--border-width) var(--clr-800);
-            }
 
             &.active {
                 // internal variables
@@ -147,13 +159,14 @@
     }
 
     @mixin dark {
+        .tapeRadio:focus-visible + .tape {
+            // internal variable
+            --_clr-border: var(--clr-focus-red);
+        }   
+
         .tape {
             // internal variables
             --_clr-border: var(--clr-500);
-
-            &#melody {
-                border-bottom: solid var(--border-width) var(--clr-1000);
-            }
 
             &.active {
                 // internal variables
@@ -165,6 +178,10 @@
     /* === MAIN STYLES ======================== */
     @include light;
 
+    .tapeRadio:focus-visible + .tape {
+        z-index: 3;
+    }
+
     .tape {
         // internal variables
         --_note-height: 22px;
@@ -174,12 +191,13 @@
         grid-template-columns:
             var(--tapeTerminal-start-width)
             var(--noteMarker-width)
-            repeat(var(--melodyLength), var(--subdivWidth))
+            1fr
             var(--tapeTerminal-end-width);
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
+        border-top: solid var(--border-width) var(--_clr-border);
         border-bottom: solid var(--border-width) var(--_clr-border);
         // offset tapeTerminal at each end
         margin-right: calc(-1 * var(--tapeTerminal-end-width));
@@ -194,27 +212,31 @@
 
         &#melody {
             height: var(--melody-height);
-            border-top: solid var(--border-width) var(--_clr-border);
+            margin-bottom: calc(-1 * var(--border-width));
         }
 
         &#beats {
             height: var(--beats-height);
         }
 
-        &.active .subdiv p {
-            color: var(--clr-note-text);
+        &.active {
+            z-index: 3;
 
-            // note colors
-            @for $i from 0 through 11 {
-                &.note-#{$i} {
-                    background-color: var(--clr-note-#{$i});
+            .subdiv p {
+                color: var(--clr-note-text);
+
+                // note colors
+                @for $i from 0 through 11 {
+                    &.note-#{$i} {
+                        background-color: var(--clr-note-#{$i});
+                    }
                 }
-            }
 
-            // beat colors
-            @each $beat, $index in $beats {
-                &.beat-#{$beat} {
-                    background-color: var(--clr-note-#{$index});
+                // beat colors
+                @each $beat, $index in $beats {
+                    &.beat-#{$beat} {
+                        background-color: var(--clr-note-#{$index});
+                    }
                 }
             }
         }
@@ -302,48 +324,55 @@
         }
     }
 
-    .subdiv {
-        display: flex;
-        flex-direction: column;
-        gap: var(--border-width);
-        position: relative;
+    .notes {
+        display: grid;
+        grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
+        overflow: hidden;
 
-        padding: var(--border-width-thick) 0;
-        border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
-        border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
-
-        overflow-x: visible;
-        overflow-y: hidden;
-
-        &.active {
-            background-color: var(--clr-highlight);
-        }
-
-        p {
-            flex-shrink: 0;
+        .subdiv {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: var(--_note-height);
+            gap: var(--border-width);
+            position: relative;
 
-            color: var(--clr-note-text-dim);
-            text-align: center;
-            background-color: var(--clr-note-dim);
+            padding: var(--border-width-thick) 0;
+            border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+            border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
 
-            transition: color var(--trans-fast) ease,
-                        background-color var(--trans-fast) ease;
+            overflow-x: visible;
+            overflow-y: hidden;
 
-            span {
-                display: block;
-                font-size: 17px;
-                font-weight: 600;
+            &.active {
+                background-color: var(--clr-highlight);
+            }
 
-                // move numbers down slightly
-                margin-bottom: -1px;
+            p {
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: var(--_note-height);
+
+                color: var(--clr-note-text-dim);
+                text-align: center;
+                background-color: var(--clr-note-dim);
+
+                transition: color var(--trans-fast) ease,
+                            background-color var(--trans-fast) ease;
+
+                span {
+                    display: block;
+                    font-size: 17px;
+                    font-weight: 600;
+
+                    // move numbers down slightly
+                    margin-bottom: -1px;
+                }
             }
         }
     }
+    
 
     /* === COLOR SCHEME ======================= */
     :global([data-colorScheme="dark"]) { @include dark; }
