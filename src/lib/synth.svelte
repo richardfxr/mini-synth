@@ -460,38 +460,6 @@
         class="cassette bottom"
         class:isReady>
         <div class="bottomHousing">
-            <div id="left" class="sideButton">
-                <div class="wrapper">
-                    <button
-                        class="button warn"
-                        style="--_dir: 1"
-                        disabled={!isReady || melody.length <= 1}
-                        on:click={async () => {
-                            if (currentSubdiv >= melody.length - 1) {
-                                await removeSubdiv(1);
-                            } else {
-                                melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
-                            beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
-                            }
-                        }}
-                        on:keydown={e => stopPropagation(e, ['Space'])}>
-                        <span class="visuallyHidden">delete current subdiv</span>
-                        <TrashCanIcon />
-                    </button>
-                    <button
-                        class="button"
-                        style="--_dir: 1"
-                        disabled={!isReady}
-                        on:click={() => {
-                            melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
-                            beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
-                        }}
-                        on:keydown={e => stopPropagation(e, ['Space'])}>
-                        <span class="visuallyHidden">insert new subdiv after current subdiv</span>
-                        <InsertSubdivIcon />
-                    </button>
-                </div>
-            </div>
             <div class="housing">
                 <div class="left screw"></div>
                 <div class="right screw"></div>
@@ -514,6 +482,38 @@
                     {isReady}
                     on:input = {() => Tone.Transport.bpm.value = bpm} />
             </div>
+            <div id="left" class="sideButton">
+                <div class="wrapper">
+                    <button
+                        class="button warn"
+                        style="--_dir: 1"
+                        disabled={!isReady || melody.length <= 1}
+                        on:click={async () => {
+                            if (currentSubdiv >= melody.length - 1) {
+                                await removeSubdiv(1);
+                            } else {
+                                melody = [...melody.slice(0, currentSubdiv), ...melody.slice(currentSubdiv + 1)];
+                            beats = [...beats.slice(0, currentSubdiv), ...beats.slice(currentSubdiv + 1)];
+                            }
+                        }}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
+                        <span class="visuallyHidden">delete current sixteenth</span>
+                        <TrashCanIcon />
+                    </button>
+                    <button
+                        class="button"
+                        style="--_dir: 1"
+                        disabled={!isReady}
+                        on:click={() => {
+                            melody = [...melody.slice(0, currentSubdiv + 1), [], ...melody.slice(currentSubdiv + 1)];
+                            beats = [...beats.slice(0, currentSubdiv + 1), [], ...beats.slice(currentSubdiv + 1)];
+                        }}
+                        on:keydown={e => stopPropagation(e, ['Space'])}>
+                        <span class="visuallyHidden">insert new sixteenth after current sixteenth</span>
+                        <InsertSubdivIcon />
+                    </button>
+                </div>
+            </div>
             <div id="right" class="sideButton">
                 <div class="wrapper">
                     <button
@@ -528,7 +528,7 @@
                             }
                         }}
                         on:keydown={e => stopPropagation(e, ['Space'])}>
-                        <span class="visuallyHidden">clear current subdiv</span>
+                        <span class="visuallyHidden">clear current sixteenth</span>
                         <ClearSubdivIcon />
                     </button>
                     <input
@@ -544,7 +544,7 @@
                         class:active={autoSkip}
                         class:autoSkipping
                         for="autoSkip">
-                        <span class="visuallyHidden">auto skip to next subdiv</span>
+                        <span class="visuallyHidden">auto skip to next sixteenth</span>
                         <AutoSkipIcon />
                     </label>
                     
@@ -830,6 +830,10 @@
                 .screw {
                     bottom: var(--pad-sm);
                 }
+            }
+
+            #left {
+                order: -1;
             }
 
             .sideButton {

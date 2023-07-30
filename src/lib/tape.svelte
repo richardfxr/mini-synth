@@ -84,10 +84,11 @@
             {#each tape as subdiv, i}
                 <li
                     class="subdiv"
-                    class:active={i === currentSubdiv}>
+                    class:active={i === currentSubdiv}
+                    aria-current={i === currentSubdiv}>
                     {#each subdiv as note}
                         <p class="note-{notes.indexOf(note) % 12}">
-                            <span>{notes.indexOf(note) + 1}</span>
+                            <span><span class="visuallyHidden">key </span>{notes.indexOf(note) + 1}</span>
                         </p>
                     {/each}
                 </li>
@@ -97,7 +98,8 @@
             {#each tape as subdiv, i}
                 <li
                     class="subdiv"
-                    class:active={i === currentSubdiv}>
+                    class:active={i === currentSubdiv}
+                    aria-current={i === currentSubdiv}>
                     {#each subdiv as beat}
                         <p class="beat-{beat}">
                             {#if beat === "hh"}

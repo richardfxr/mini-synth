@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <div class="tapes">
+        <form class="tapes" on:submit|preventDefault>
             <!-- tape marks above tapes -->
             <div class="tapeMarkers">
                 {#each melody as _}
@@ -132,7 +132,7 @@
                 bind:radioPointerDown = {radioPointerDown}
                 {isReady} />
 
-        </div>
+        </form>
         
         <div class="tapePadding end">
             <button

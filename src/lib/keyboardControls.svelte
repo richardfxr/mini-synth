@@ -10,7 +10,7 @@
 
 
 
-<div class="wrapper">
+<form class="wrapper" on:submit|preventDefault>
     <h2 class="visuallyHidden">select keyboard segment:</h2>
     <div class="keyboardControls">
         <div class="input">
@@ -62,7 +62,7 @@
             </label>
         </div>
     </div>
-</div>
+</form>
 
 
 

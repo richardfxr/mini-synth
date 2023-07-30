@@ -100,9 +100,15 @@
     class:isReady
     style="--_sprocket-rotation: {-1 * $tweenedProgress}deg">
     <div class="timecode">
-        <p aria-live={playbackState === "started" ? "off" : "polite"}>
-            <span aria-atomic="true"><span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}</span>:<span aria-atomic="true"><span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}</span>:<span aria-atomic="true">{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span></span>
-        </p>
+        {#if playbackState === "started"}
+            <p>
+                <span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}:<span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}:{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span>
+            </p>
+        {:else}
+            <p aria-live="polite">
+                <span aria-atomic="true"><span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}</span>:<span aria-atomic="true"><span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}</span>:<span aria-atomic="true">{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span></span>
+            </p>
+        {/if}
     </div>
 
     <div class="playbackWrapper">

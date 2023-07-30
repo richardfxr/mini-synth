@@ -69,13 +69,15 @@
     </a>
 
     <form on:submit|preventDefault={() => titleInput.blur()}>
-        <input
-            type="text"
-            autocomplete="off"
-            placeholder="song title"
-            disabled={!isReady}
-            bind:this={titleInput}
-            bind:value={title}>
+        <h1>
+            <input
+                type="text"
+                autocomplete="off"
+                placeholder="song title"
+                disabled={!isReady}
+                bind:this={titleInput}
+                bind:value={title}>
+        </h1>
     </form>
     
     <button
@@ -127,6 +129,10 @@
 
     form {
         flex-grow: 1;
+
+        h1 {
+            height: 100%;
+        }
 
         input {
             width: 100%;
