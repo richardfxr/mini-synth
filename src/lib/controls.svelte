@@ -100,7 +100,9 @@
     class:isReady
     style="--_sprocket-rotation: {-1 * $tweenedProgress}deg">
     <div class="timecode">
-        <p>{Math.floor((currentSubdiv + 1) / 16)}:{Math.floor((currentSubdiv + 1) / 4) % 4}:{(currentSubdiv + 1) % 4}</p>
+        <p aria-live={playbackState === "started" ? "off" : "polite"}>
+            <span aria-atomic="true"><span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}</span>:<span aria-atomic="true"><span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}</span>:<span aria-atomic="true">{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span></span>
+        </p>
     </div>
 
     <div class="playbackWrapper">
@@ -113,6 +115,8 @@
                     --_spool-scale: {1.1 + playbackProgress * 1.4};
                 "
                 disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+                aria-controls="melody beats"
+                aria-keyshortcuts="Shift+LeftArrow"
                 on:click = {() => dispatch('skipToBeginning')}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">skip to start of track</span>
@@ -126,9 +130,11 @@
                 class:kbActive={prevSubdivKbActive}
                 style="--_dir: 1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv <= 0}
+                aria-controls="melody beats"
+                aria-keyshortcuts="LeftArrow"
                 on:click = {() => dispatch('prevSubdiv')}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
-                <span class="visuallyHidden">previous subdivision</span>
+                <span class="visuallyHidden">previous sixteenth</span>
                 <PrevSubdiv />
             </button>
 
@@ -136,6 +142,8 @@
                 class="button main warn"
                 class:kbActive={playbackKbActive}
                 disabled = {!isReady}
+                aria-controls="melody beats"
+                aria-keyshortcuts="Space"
                 on:click={togglePlayback}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
                 {#if playbackState === "started"}
@@ -152,9 +160,11 @@
                 class:kbActive={nextSubdivKbActive}
                 style="--_dir: -1"
                 disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+                aria-controls="melody beats"
+                aria-keyshortcuts="ArrowRight"
                 on:click = {() => dispatch('nextSubdiv')}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
-                <span class="visuallyHidden">next subdivision</span>
+                <span class="visuallyHidden">next sixteenth</span>
                 <NextSubdivIcon />
             </button>
 
@@ -166,6 +176,8 @@
                     --_spool-scale: {2.5 - playbackProgress * 1.4};
                 "
                 disabled = {!isReady || playbackState === "started" || currentSubdiv >= melodyLength - 1}
+                aria-controls="melody beats"
+                aria-keyshortcuts="Shift+ArrowRight"
                 on:click = {() => dispatch('skipToEnd')}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">skip to end of track</span>
