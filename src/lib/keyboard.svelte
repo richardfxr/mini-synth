@@ -101,6 +101,7 @@
 
 <div class="wrapper" style="--_border-width: {borderWidth}px">
     <div
+        id="keyboard"
         class="keyboard"
         bind:this={keyboard}>
         {#each notesOfSegment as segment, i}
