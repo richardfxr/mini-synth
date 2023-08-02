@@ -459,7 +459,10 @@
     <div
         class="cassette bottom"
         class:isReady>
-        <div class="bottomHousing">
+        <form
+            class="bottomHousing"
+            aria-label="track controls"
+            on:submit|preventDefault>
             <div class="housing">
                 <div class="left screw"></div>
                 <div class="right screw"></div>
@@ -550,7 +553,7 @@
                     
                 </div>
             </div>
-        </div>
+        </form>
         
     </div>
 

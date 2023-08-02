@@ -10,8 +10,10 @@
 
 
 
-<form class="wrapper" on:submit|preventDefault>
-    <h2 class="visuallyHidden">select keyboard segment:</h2>
+<form
+    class="wrapper"
+    aria-label="keyboard controls"
+    on:submit|preventDefault>
     <div class="keyboardControls">
         <div class="input">
             <input
@@ -23,8 +25,9 @@
                 bind:group={currentKbSegment}
                 on:keydown={e => stopPropagation(e, ['Space'])} />
             <label for="kbSegment-0" class="kbSegmentLabel button">
+                <span class="visuallyHidden">show notes </span>
                 1-12
-                <div aria-hidden="true" class="indicator" class:populated={segmentIsPopulated[0]}>
+                <div class="indicator" class:populated={segmentIsPopulated[0]}>
                     <span class="visuallyHidden" style="display: {segmentIsPopulated[0] ? "block" : "none"}">(has pressed keys)</span>
                 </div>
             </label>
@@ -40,8 +43,9 @@
                 bind:group={currentKbSegment}
                 on:keydown={e => stopPropagation(e, ['Space'])} />
             <label for="kbSegment-1" class="kbSegmentLabel button">
+                <span class="visuallyHidden">show notes </span>
                 13-24
-                <div aria-hidden="true" class="indicator" class:populated={segmentIsPopulated[1]}>
+                <div class="indicator" class:populated={segmentIsPopulated[1]}>
                     <span class="visuallyHidden" style="display: {segmentIsPopulated[1] ? "block" : "none"}">(has pressed keys)</span>
             </label>
         </div>
@@ -56,8 +60,9 @@
                 bind:group={currentKbSegment}
                 on:keydown={e => stopPropagation(e, ['Space'])} />
             <label for="kbSegment-2" class="kbSegmentLabel button">
+                <span class="visuallyHidden">show notes </span>
                 25-36
-                <div aria-hidden="true" class="indicator" class:populated={segmentIsPopulated[2]}>
+                <div class="indicator" class:populated={segmentIsPopulated[2]}>
                     <span class="visuallyHidden" style="display: {segmentIsPopulated[2] ? "block" : "none"}">(has pressed keys)</span>
             </label>
         </div>

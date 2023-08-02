@@ -99,7 +99,10 @@
 
 <svelte:window on:resize={checkOrientation} />
 
-<div class="wrapper" style="--_border-width: {borderWidth}px">
+<section
+    class="wrapper"
+    style="--_border-width: {borderWidth}px"
+    aria-label="keyboard">
     <div
         id="keyboard"
         class="keyboard"
@@ -115,14 +118,15 @@
                             on:pointerdown={() => handleKeyDown(note)}
                             on:pointerup={() => handleKeyUp(note)}
                             on:pointerleave={() => handleKeyUp(note)}>
-                            <span>{notes.indexOf(note) + 1}</span>
+                            <span class="visuallyHidden">note </span>
+                            <span class="noteNumber">{notes.indexOf(note) + 1}</span>
                         </button>
                     </li>
                 {/each}
             </ol>
         {/each}
     </div>
-</div>
+</section>
 
 
 
@@ -260,7 +264,7 @@
                 transition: background-color 0.1s ease;
             }
 
-            span {
+            .noteNumber {
                 position: relative;
                 z-index: 0;
                 width: var(--_label-width);

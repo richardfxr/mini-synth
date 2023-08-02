@@ -67,7 +67,9 @@
 </script>
 
 
-<div class="soundboard">
+<section
+    class="soundboard"
+    aria-label="soundboard">
     {#each Object.entries(samples) as [beat, _]}
         <button
             id={beat}
@@ -98,7 +100,7 @@
             </div>
         </button>
     {/each}
-</div>
+</section>
 
 
 

@@ -26,7 +26,10 @@
 
 
 <!-- visually hidden radio input for track switching -->
-<label for={tapeName + "-radio"} class="visuallyHidden">
+<label
+    id={tapeName + "-label"}
+    for={tapeName + "-radio"}
+    class="visuallyHidden">
     {tapeName} tape
 </label>
 
@@ -45,6 +48,7 @@
     class:active={currentTapeName === tapeName}
     class:dragging
     class:isReady
+    aria-labelledby={tapeName + "-label"}
     on:pointerdown={() => {
         // register pointer down event
         // this will be reset if the user drags the reel
@@ -88,7 +92,7 @@
                     aria-current={i === currentSubdiv}>
                     {#each subdiv as note}
                         <p class="note-{notes.indexOf(note) % 12}">
-                            <span><span class="visuallyHidden">key </span>{notes.indexOf(note) + 1}</span>
+                            <span><span class="visuallyHidden">note </span>{notes.indexOf(note) + 1}</span>
                         </p>
                     {/each}
                 </li>
