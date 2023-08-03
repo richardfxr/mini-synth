@@ -45,10 +45,11 @@
     transition:fade|local={{ duration: 150 }}
     bind:this={songListItem}>
     <div>
-        <label>
+        <div class="checkbox">
             <input
+                id={song.id + "-checkbox"}
                 class="visuallyHidden"
-                type=checkbox
+                type="checkbox"
                 name="songs"
                 value={song.id}
                 checked={song.id !== undefined ? selectedSongs.includes(song.id) : false}
@@ -61,10 +62,14 @@
                         selectedSongs = [...selectedSongs, song.id];
                     }
                 }}>
-            <span class="visuallyHidden">{song.title}</span>
-            <div class="checkbox"></div>
-        </label>
+            <label for={song.id + "-checkbox"}>
+                <span class="visuallyHidden">select {song.title}.</span>
+                <div class="box"></div>
+            </label>
+        </div>
+        
         <a href={"/song/" + song.id} class="title">{song.title}</a>
+
         <div class="details">
             <div class="tapeShadow"></div>
             <div class="tapesAndLength">
@@ -172,7 +177,7 @@
         transition: background-color var(--trans-fast) ease,
                     border-color var(--trans-fast) ease;
 
-        &:hover, &:active {
+        &:hover, &:focus, &:active {
             .title {
                 color: var(--clr-1000);
             }
@@ -208,52 +213,68 @@
         }
     }
 
-    label {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 5;
-        width: 100%;
-        height: 100%;
-
-        padding: 0 var(--pad-2xl);
-
-        cursor: pointer;
-    }
-
     .checkbox {
         position: relative;
-        width: $_checkbox-size;
-        height: $_checkbox-size;
-
-        border: solid var(--border-width) var(--clr-350);
+        height: 100%;
 
         transition: background-color var(--trans-fast) ease,
                     border-color var(--trans-fast) ease;
 
-        &::before {
-            content: "";
-            position: absolute;
-            top: var(--pad-xs);
-            right: var(--pad-xs);
-            bottom: var(--pad-xs);
-            left: var(--pad-xs);
+        input {
+            &:checked + label .box {
+                background-color: var(--clr-red);
+                border-color: var(--clr-red);
 
-            background-color: var(--clr-150);
+                &::before {
+                    background-color: var(--clr-highlight);
+                    transform: scale(0.7);
+                }
+            }
 
-            transition: background-color var(--trans-fast) ease,
-                        transform var(--trans-normal) var(--trans-cubic-1);
+            &:focus-visible + label .box {
+                outline-color: var(--clr-focus-red);
+            }
         }
-    }
 
-    input:checked ~ .checkbox {
-        background-color: var(--clr-red);
-        border-color: var(--clr-red);
+        label {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 5;
+            
+            cursor: pointer;
 
-        &::before {
-            background-color: var(--clr-highlight);
-            transform: scale(0.7);
+            &:hover .box::before {
+                background-color: var(--clr-150);
+            }
+
+            .box {
+                position: relative;
+                width: $_checkbox-size;
+                height: $_checkbox-size;
+                border: solid var(--border-width) var(--clr-350);
+                margin: 0 var(--pad-2xl);
+                outline: solid $border-width-thick transparent;
+                outline-offset: var(--pad-xs);
+
+                transition: outline-color var(--trans-fast) ease;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: var(--pad-xs);
+                    right: var(--pad-xs);
+                    bottom: var(--pad-xs);
+                    left: var(--pad-xs);
+
+                    background-color: var(--clr-100);
+
+                    transition: background-color var(--trans-fast) ease,
+                                transform var(--trans-normal) var(--trans-cubic-1);
+                }
+            }
         }
     }
 
@@ -262,11 +283,16 @@
 
         color: var(--clr-900);
         font-size: 1.1rem;
-        padding: var(--pad-xl) var(--pad-xl) var(--pad-xl) 0;
+        padding: var(--pad-xl) 0;
+        margin-right: var(--pad-2xl);
 
-        transition: color var(--trans-fast) ease;
+        outline: solid $border-width-thick transparent;
+
+        transition: color var(--trans-fast) ease,
+                    outline-color var(--trans-fast) ease;
 
         &::before {
+            // larger hitbox that covers entire song list item
             content: "";
             position: absolute;
             top: 0;
@@ -274,6 +300,10 @@
             bottom: 0;
             left: 0;
             z-index: 4;
+        }
+
+        &:focus-visible {
+            outline-color: var(--clr-focus-red);
         }
     }
 
