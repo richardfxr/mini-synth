@@ -102,11 +102,11 @@
     <div class="timecode">
         {#if playbackState === "started"}
             <p>
-                <span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}:<span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}:{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span>
+                <span class="visuallyHidden">bar </span>{Math.floor(currentSubdiv / 16)}:<span class="visuallyHidden">beat </span>{Math.floor(currentSubdiv / 4) % 4}:{currentSubdiv % 4}<span class="visuallyHidden"> sixteenth</span>
             </p>
         {:else}
-            <p aria-live="polite">
-                <span aria-atomic="true"><span class="visuallyHidden">bar </span>{Math.floor((currentSubdiv + 1) / 16)}</span>:<span aria-atomic="true"><span class="visuallyHidden">beat </span>{Math.floor((currentSubdiv + 1) / 4) % 4}</span>:<span aria-atomic="true">{(currentSubdiv + 1) % 4}<span class="visuallyHidden"> sixteenth</span></span>
+            <p>
+                <span aria-live="polite" aria-atomic="true"><span class="visuallyHidden">bar </span>{Math.floor(currentSubdiv / 16)}</span>:<span aria-live="polite" aria-atomic="true"><span class="visuallyHidden">beat </span>{Math.floor(currentSubdiv / 4) % 4}</span>:<span aria-live="polite" aria-atomic="true">{currentSubdiv % 4}<span class="visuallyHidden"> sixteenth</span></span>
             </p>
         {/if}
     </div>
