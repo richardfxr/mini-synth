@@ -194,4 +194,12 @@
             opacity: 0;
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .indexHeader, .actions {
+            // load state
+            transform: translateY(0);
+        }
+    }
 </style>

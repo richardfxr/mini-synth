@@ -195,4 +195,14 @@
             opacity: 1;
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .songs {
+            // load state
+            transform: translateY(0);
+
+            transition: opacity var(--trans-slow) $cassette-ani-easing;
+        }
+    }
 </style>

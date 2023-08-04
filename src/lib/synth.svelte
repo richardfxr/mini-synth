@@ -35,7 +35,7 @@
         playersVol
     } from "../storage/store";
     // helpers
-    import { stopPropagation } from '$lib/helpers';
+    import { stopPropagation, animate } from '$lib/helpers';
     // components
     import CassetteHeader from '$lib/cassetteHeader.svelte';
     import Reels from '$lib/reels.svelte';
@@ -425,7 +425,7 @@
 <div
     class="synth"
     in:fade={{ duration: 50, delay: 200 }}
-    out:fly={{ y: 20, duration: 200 }}>
+    out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
     <div class="background">
         <div
             class="cassette top"
@@ -558,7 +558,9 @@
     </div>
 
     {#if isReady && currentTapeName === "melody"}
-        <div class="inputsWrapper" out:fly={{ y: 20, duration: 200 }}>
+        <div
+            class="inputsWrapper"
+            out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
             <div
                 id="melodyInputs"
                 class="inputs">
@@ -589,11 +591,12 @@
             </div>
         </div>
     {:else if isReady}
-        <div class="inputsWrapper" out:fly={{ y: 20, duration: 200 }}>
+        <div
+            class="inputsWrapper"
+            out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
             <div
                 id="beatsInputs"
-                class="inputs"
-                out:fly={{ y: 20, duration: 200 }}>
+                class="inputs">
                 <Soundboard
                     {currentSubdiv}
                     bind:beats = {beats}
@@ -1027,6 +1030,24 @@
         to {
             transform: translateY(0);
             opacity: 1;
+        }
+    }
+
+    @keyframes fade {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .inputsWrapper {
+            animation: fade var(--trans-normal) $cassette-ani-easing 1;
+            animation-delay: 0.2s;
+            animation-fill-mode: backwards;
         }
     }
 </style>

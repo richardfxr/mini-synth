@@ -368,7 +368,7 @@
             transform: translateX(70px);
 
             transition: background-color var(--trans-fast) ease,
-                        transform var(--trans-normal) var(--trans-cubic-1);
+                        transform var(--trans-normal) $cassette-ani-easing;
 
             span {
                 font-family: inherit;
@@ -387,7 +387,7 @@
 
             transition: background-color var(--trans-fast) ease,
                         border-color var(--trans-fast) ease,
-                        transform var(--trans-normal) var(--trans-cubic-1);
+                        transform var(--trans-normal) $cassette-ani-easing;
 
             .tape {
                 display: grid;
@@ -610,6 +610,21 @@
         }
         to {
             transform: translateX(0);
+        }
+    }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .tapesAndLength {
+            .length {
+                // load state
+                transform: translateX(0);
+            }
+
+            .tapes {
+                // load state
+                transform: translateX(0);
+            }
         }
     }
 </style>

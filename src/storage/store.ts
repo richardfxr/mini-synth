@@ -9,6 +9,7 @@ import type * as Tone from 'tone';
 export const firstLoad = writable(true);
 export const colorScheme: Writable<string> = writable();
 export const displayedColorScheme: Writable<string> = writable();
+export const motionPref = writable("full");
 
 // Tone
 export const synth: Writable<Tone.PolySynth> | Writable<null> = writable(null);
@@ -33,6 +34,10 @@ if (browser) {
         displayedColorScheme.set("light");
     }
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        motionPref.set("reduced");
+    }
+
     /* === MEDIA QUERY LISTENERS ============== */
     // prefers-color-scheme event listener
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
@@ -40,5 +45,12 @@ if (browser) {
 
         // set appropriate displayedColorScheme if user has not manually selected colorScheme
         e.matches ? displayedColorScheme.set("dark") : displayedColorScheme.set("light");
+    });
+
+    // prefers-color-scheme event listener
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", e => {
+        console.log("motionPref: " + e.matches);
+        // set appropriate displayedColorScheme if user has not manually selected colorScheme
+        e.matches ? motionPref.set("reduced") : motionPref.set("full");
     });
 }
