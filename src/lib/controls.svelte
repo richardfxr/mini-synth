@@ -341,7 +341,7 @@
 
         padding: 10px var(--pad-md) var(--pad-sm) var(--pad-md);
 
-        p {
+        p, p span {
             font-family: 'Roboto Mono', monospace;
             font-weight: 500;
         }

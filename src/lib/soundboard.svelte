@@ -143,8 +143,7 @@
         grid-template-rows: auto;
         position: relative;
         width: 100%;
-
-        border: solid var(--border-width-thick) transparent;
+        
         border-radius: calc($input-border-radius + var(--border-width));
 
         button {

@@ -410,6 +410,10 @@
                     margin-right: 10px;
                     margin-bottom: 0;
                 }
+
+                .noteNumber {
+                    margin-bottom: 0;
+                }
             }
 
             &.flat {
