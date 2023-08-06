@@ -23,6 +23,8 @@
 <script lang="ts">
     /* === IMPORTS ============================ */
     import { onMount, createEventDispatcher } from 'svelte';
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
 
     /* === PROPS ============================== */
     export let currentSubdiv: number;
@@ -36,6 +38,7 @@
     /* === VARIABLES ========================== */
     let activeNotes: string[] = [];
     let hasPlayedNote = false;
+    let keyIsHeld = false; // whether the space or enter key is being held down
 
     /* === REACTIVE DECLARATION =============== */
     // call newSubdiv() when currentSubdiv changes
@@ -91,7 +94,20 @@
             class:active={beats[currentSubdiv].includes(beat)}
             on:pointerdown={() => handleButtonDown(beat)}
             on:pointerup={() => handleButtonUp(beat)}
-            on:pointerleave={() => handleButtonUp(beat)}>
+            on:pointerleave={() => handleButtonUp(beat)}
+            on:keydown={e => {
+                stopPropagation(e, ["Space", "Enter"]);
+                if ((e.code === "Space" || e.code === "Enter") && !keyIsHeld) {
+                    keyIsHeld = true;
+                    handleButtonDown(beat);
+                }
+            }}
+            on:keyup={e => {
+                if ((e.code === "Space" || e.code === "Enter")) {
+                    keyIsHeld = false;
+                    handleButtonUp(beat);
+                }
+            }}>
             <div class="beat">
                 <span class="visuallyHidden">{detailForBeat[beat].text}</span>
                 <svelte:component this={detailForBeat[beat].icon} />
@@ -174,6 +190,11 @@
                             transform var(--trans-fastest) ease;
             }
 
+            &:focus-visible .beat {
+                outline: solid $border-width-thick var(--clr-focus-red);
+                outline-offset: var(--pad-xs);
+            }
+
             // beat colors
             @each $beat, $index in $beats {
                 &##{$beat} {
@@ -204,6 +225,10 @@
                 &::before {
                     background-color: var(--_clr);
                     transform: translateY(-0.5 * $beat-highlight-vrt);
+                }
+
+                &:focus-visible .beat {
+                    outline-color: var(--clr-kb-active-focus-red);
                 }
             }
         }
