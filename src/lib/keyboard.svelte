@@ -475,4 +475,11 @@
             }
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .keyboard {
+            scroll-behavior: auto;
+        }
+    }
 </style>

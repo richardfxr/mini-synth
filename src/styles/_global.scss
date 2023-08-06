@@ -30,6 +30,8 @@ GLOBAL
 
         margin-top: env(safe-area-inset-top);
         margin-bottom: env(safe-area-inset-bottom);
+
+        overflow-y: scroll;
     }
 }
 

@@ -198,6 +198,10 @@
 
     /* === A11Y =============================== */
     @media (prefers-reduced-motion: reduce) {
+        :global(html) {
+            scroll-behavior: auto;
+        }
+        
         .songs {
             // load state
             transform: translateY(0);
