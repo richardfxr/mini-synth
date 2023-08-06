@@ -669,7 +669,7 @@
 
                 .buttonInput:focus-visible + .button {
                     --_clr: var(--clr-1000);
-                    --_clr-border: var(--clr-red);
+                    --_clr-border: var(--clr-focus-red);
                 }
             } 
         } 
@@ -708,7 +708,7 @@
 
                 .buttonInput:focus-visible + .button {
                     --_clr: var(--clr-1000);
-                    --_clr-border: var(--clr-active-highlight);
+                    --_clr-border: var(--clr-focus-red);
                 }
             } 
         } 
