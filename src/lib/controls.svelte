@@ -537,4 +537,19 @@
             @include light;
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .playback .button {
+            &.skip {
+                // load state
+                transform: translateX(0);
+            }
+            
+            &.subdiv {
+                // load state
+                transform: translateX(0);
+            }
+        }
+    }
 </style>

@@ -30,6 +30,7 @@
     // stores
     import {
         firstLoad,
+        motionPref,
         synth,
         players,
         playersVol
@@ -86,7 +87,9 @@
     let songIsSaved = false;
 
     let playbackState: Tone.PlaybackState = "stopped";
-    let tweening = false;
+    let untweenedProgress = 0;
+    let tweening = false; // for when a programatic animated (tweened) scroll is occuring
+    let snapping = false; // for when a programatic reduced motion (snap) scroll is occuring
     let playbackProgress: number = 0;
 
     let melodyPart: Tone.Part;
@@ -255,20 +258,23 @@
         const scrollAmount = playbackProgress * melody.length * subdivWidth;
 
         if (playbackState !== "started") {
+            untweenedProgress = scrollAmount;
             // set tweening to false after last tweened (upon pause) animation completes
             await tweenedProgress.set(scrollAmount);
             await tick();
             tweening = false;
+            snapping = false;
             return;
         };
 
+        untweenedProgress = scrollAmount;
         tweenedProgress.set(scrollAmount);
 
         tapesFrame = requestAnimationFrame(scrollTapes);
     };
 
     function startTapes(): void {
-        tweening = true;
+        $motionPref === "full" ? tweening = true : snapping = true;
         tapesFrame = requestAnimationFrame(scrollTapes);
     }
 
@@ -302,16 +308,23 @@
             index >= melody.length
         ) return;
 
+        console.log("currentSubdiv: " + currentSubdiv);
+        console.log("skip to index " + index);
+
         // handle tweenedProgress and scrolling
         hasManuallyScrolled = true;
-        tweening = true;
+        $motionPref === "full" ? tweening = true : snapping = true;
         currentSubdiv = index;
 
+        console.log("currentSubdiv: " + currentSubdiv);
+
+        untweenedProgress = currentSubdiv * subdivWidth;
         // await tweened animation to finish
         await tweenedProgress.set(currentSubdiv * subdivWidth);
         await tick();
         
         tweening = false;
+        snapping = false;
     }
 
     async function addSubdiv(length: number): Promise<void> {
@@ -443,7 +456,9 @@
     <Reels
         {playbackState}
         {tweening}
+        {snapping}
         {tweenedProgress}
+        {untweenedProgress}
         {subdivWidth}
         bind:currentTapeName = {currentTapeName}
         bind:currentSubdiv = {currentSubdiv}
@@ -1044,6 +1059,22 @@
 
     /* === A11Y =============================== */
     @media (prefers-reduced-motion: reduce) {
+        .cassette {
+            &.top {
+                // load state
+                transform: translateY(0);
+            }
+            &.bottom {
+                // load state
+                transform: translateY(0);
+
+                .sideButton .button {
+                    // laod state
+                    transform: translateX(0);
+                }
+            }
+        }
+
         .inputsWrapper {
             animation: fade var(--trans-normal) $cassette-ani-easing 1;
             animation-delay: 0.2s;

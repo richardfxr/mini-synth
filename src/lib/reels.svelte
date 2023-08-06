@@ -4,6 +4,7 @@
     import type { Tweened } from 'svelte/motion';
     import type * as Tone from 'tone';
     import type { TapeName } from '../storage/db';
+    import { motionPref } from '../storage/store';
     import Tape from '$lib/tape.svelte';
     // icons
     import MinusIcon from '$lib/SVGs/minusIcon.svelte';
@@ -13,7 +14,9 @@
     /* === PROPS ============================== */
     export let playbackState: Tone.PlaybackState;
     export let tweening: boolean;
+    export let snapping: boolean;
     export let tweenedProgress: Tweened<number>;
+    export let untweenedProgress: number;
     export let subdivWidth: number;
     export let currentTapeName: TapeName; // bind
     export let currentSubdiv: number; // bind
@@ -37,6 +40,14 @@
     let tapes: HTMLElement;
     let dragging = false;
     let radioPointerDown = false
+
+    $: untweenedProgress, snapTapes();
+
+    function snapTapes() {
+        if ($motionPref === "full" || !tapes) return;
+        console.log("snapping to " + untweenedProgress);
+        tapes.scrollLeft = untweenedProgress;
+    }
 </script>
 
 
@@ -58,7 +69,7 @@
         on:scroll={() => {
             if (!isReady) return;
             // update progress if it is not updating scroll
-            if (!tweening) {
+            if (!tweening && !snapping) {
                 tweenedProgress.set(tapes.scrollLeft);
                 hasManuallyScrolled = true;
                 let calculatedSubdiv = Math.floor(tapes.scrollLeft / subdivWidth);
@@ -416,6 +427,19 @@
 
         :global([data-colorScheme="light"]) {
             @include light;
+        }
+    }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .reels {
+            // laod state
+            transform: translateY(0);
+
+            &::after {
+                // load state
+                opacity: 1;
+            }
         }
     }
 </style>

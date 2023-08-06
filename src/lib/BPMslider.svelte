@@ -251,4 +251,14 @@
             @include light;
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .controls {
+            .button {
+                // load state
+                transform: translateX(0);
+            }
+        }
+    }
 </style>

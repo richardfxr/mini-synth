@@ -169,4 +169,12 @@
             opacity: 1;
         }
     }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        .button {
+            // load state
+            transform: translateX(0);
+        }
+    }
 </style>
