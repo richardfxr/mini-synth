@@ -1,13 +1,28 @@
-<script lang="ts">
+<script context="module" lang="ts">
     /* === IMPORTS ============================ */
-    import { onMount, createEventDispatcher } from 'svelte';
-    // icons
     import HighHatIcon from '$lib/SVGs/highHatIcon.svelte';
     import KickDrumIcon from '$lib/SVGs/kickDrumIcon.svelte';
     import SnareDrumIcon from '$lib/SVGs/snareDrumIcon.svelte';
     import TomDrum1Icon from '$lib/SVGs/tomDrum1Icon.svelte';
     import TomDrum2Icon from '$lib/SVGs/tomDrum2Icon.svelte';
     import TomDrum3Icon from '$lib/SVGs/tomDrum3Icon.svelte';
+
+    /* === CONSTANTS ========================== */
+    export const detailForBeat: {
+        [key: string]: { text: string, icon: ConstructorOfATypedSvelteComponent }
+    } = {
+        "hh": { text: "high hat", icon: HighHatIcon },
+        "kc": { text: "kick drum", icon: KickDrumIcon },
+        "sn": { text: "snare drum", icon: SnareDrumIcon },
+        "t1": { text: "tom drum 1", icon: TomDrum1Icon },
+        "t2": { text: "tom drum 2", icon: TomDrum2Icon },
+        "t3": { text: "tom drum 3", icon: TomDrum3Icon },
+    };
+</script>
+
+<script lang="ts">
+    /* === IMPORTS ============================ */
+    import { onMount, createEventDispatcher } from 'svelte';
 
     /* === PROPS ============================== */
     export let currentSubdiv: number;
@@ -78,25 +93,8 @@
             on:pointerup={() => handleButtonUp(beat)}
             on:pointerleave={() => handleButtonUp(beat)}>
             <div class="beat">
-                {#if beat === "hh"}
-                    <span class="visuallyHidden">high hat</span>
-                    <HighHatIcon />
-                {:else if beat === "kc"}
-                    <span class="visuallyHidden">kick drum</span>
-                    <KickDrumIcon />
-                {:else if beat === "sn"}
-                    <span class="visuallyHidden">snare drum</span>
-                    <SnareDrumIcon />
-                {:else if beat === "t1"}
-                    <span class="visuallyHidden">tom drum 1</span>
-                    <TomDrum1Icon />
-                {:else if beat === "t2"}
-                    <span class="visuallyHidden">tom drum 2</span>
-                    <TomDrum2Icon />
-                {:else if beat === "t3"}
-                    <span class="visuallyHidden">tom drum 3</span>
-                    <TomDrum3Icon />
-                {/if}
+                <span class="visuallyHidden">{detailForBeat[beat].text}</span>
+                <svelte:component this={detailForBeat[beat].icon} />
             </div>
         </button>
     {/each}

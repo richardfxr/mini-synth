@@ -2,15 +2,10 @@
     /* === IMPORTS ============================ */
     import type * as Tone from 'tone';
     import type { TapeName, Tape } from '../storage/db';
+    import { detailForBeat } from '$lib/soundboard.svelte';
     // icons
     import PianoIcon from '$lib/SVGs/pianoIcon.svelte';
     import BeatsIcons from '$lib/SVGs/beatsIcons.svelte';
-    import HighHatIcon from '$lib/SVGs/highHatIcon.svelte';
-    import KickDrumIcon from '$lib/SVGs/kickDrumIcon.svelte';
-    import SnareDrumIcon from '$lib/SVGs/snareDrumIcon.svelte';
-    import TomDrum1Icon from '$lib/SVGs/tomDrum1Icon.svelte';
-    import TomDrum2Icon from '$lib/SVGs/tomDrum2Icon.svelte';
-    import TomDrum3Icon from '$lib/SVGs/tomDrum3Icon.svelte';
 
     /* === PROPS ============================== */
     export let tapeName: TapeName;
@@ -106,25 +101,8 @@
                     aria-current={i === currentSubdiv}>
                     {#each subdiv as beat}
                         <p class="beat-{beat}">
-                            {#if beat === "hh"}
-                                <span class="visuallyHidden">high hat</span>
-                                <HighHatIcon />
-                            {:else if beat === "kc"}
-                                <span class="visuallyHidden">kick drum</span>
-                                <KickDrumIcon />
-                            {:else if beat === "sn"}
-                                <span class="visuallyHidden">snare drum</span>
-                                <SnareDrumIcon />
-                            {:else if beat === "t1"}
-                                <span class="visuallyHidden">tom drum 1</span>
-                                <TomDrum1Icon />
-                            {:else if beat === "t2"}
-                                <span class="visuallyHidden">tom drum 2</span>
-                                <TomDrum2Icon />
-                            {:else if beat === "t3"}
-                                <span class="visuallyHidden">tom drum 3</span>
-                                <TomDrum3Icon />
-                            {/if}
+                            <span class="visuallyHidden">{detailForBeat[beat].text}</span>
+                            <svelte:component this={detailForBeat[beat].icon} />
                         </p>
                     {/each}
                 </li>
