@@ -11,27 +11,57 @@
 $breakpoint-tablet: 700px;
 
 // === SASS VARIABLES =========================
+// global
 $page-maxWidth: 1200px;
 $page-pad-hrz: 10px;
 $subdiv-width: 35px;
 $icon-size: 18px;
 $highlight-height: 1px;
-
+// padding
+$pad-3xl: 20px;
+$pad-2xl: 15px;
+$pad-xl: 10px;
+$pad-lg: 8px;
+$pad-md: 6px;
+$pad-sm: 4px;
+$pad-xs: 2px;
+// border
 $border-width-thick: 2px;
 $border-width: 1.5px;
 $border-width-thin: 1px;
-
-$cassetts-maxWidth: 400px;
+$borderRadius-sm: 3px;
+$borderRadius-round: 9e5px;
+// cassette
+$cassette-maxWidth: 400px;
 $cassette-border-radius: 10px;
 $cassette-screw-size: 10px;
 $cassette-shading-size: 2px;
 $cassette-ani-duration: 0.25s;
 $cassette-ani-easing: cubic-bezier(.54,.12,.21,1);
+$cassettTop-translateY: 50px;
 $cassetteBottom-height: 198px;
 $cassetteBottom-visible: 67px;
-
+// reels & tape
+$tapeMarker-height: 25px;
+$tapeTerminal-start-width: 30px;
+$tapeTerminal-end-width: 20px;
+$noteMarker-width: 8px;
+$melody-height: 80px;
+$beats-height: 55px;
+$reels-height: calc($melody-height + $beats-height + 4 * $border-width-thick);
+$reels-pad-top: 4px;
+// inputs
+$button-minSize: 44px;
 $input-border-radius: 10px;
-
+$inputs-height: calc(100vh - $reels-height - 62px - env(safe-area-inset-bottom));
+$inputs-maxHeight: 400px;
+// transitions & animations
+$trans-fastest: 0.1s;
+$trans-fast: 0.15s;
+$trans-normal: 0.2s;
+$trans-slow: 0.25s;
+$trans-cubic-1: cubic-bezier(0, .36, .34, 1);
+$ani-delay-load: 0.1s;
 // beats color map
 $beats: (
    "hh": "0",
@@ -44,46 +74,9 @@ $beats: (
 
 :root {
    /* === CSS VARIABLES ====================== */
-   --button-minSize: 44px;
-   --cassetts-maxWidth: 400px;
-   --cassettTop-translateY: 50px;
-   --reels-pad-top: 4px;
-   --tapeMarker-height: 25px;
-   --tapeTerminal-start-width: 30px;
-   --tapeTerminal-end-width: 20px;
-   --noteMarker-width: 8px;
-   --melody-height: 80px;
-   --beats-height: 55px;
-   --reels-height: calc(var(--melody-height) + var(--beats-height) + 4 * var(--border-width-thick));
    --inputs-maxWidth: 1000px;
-   --inputs-height: calc(100vh - var(--reels-height) - 62px - env(safe-area-inset-bottom));
-   --inputs-maxHeight: 400px;
-
-   --pad-3xl: 20px;
-   --pad-2xl: 15px;
-   --pad-xl: 10px;
-   --pad-lg: 8px;
-   --pad-md: 6px;
-   --pad-sm: 4px;
-   --pad-xs: 2px;
-
-   --border-width-thick: 2px;
-   --border-width: 1.5px;
-   --border-width-thin: 1px;
-   --borderRadius-sm: 3px;
-   --borderRadius-xl: 10px;
-   --borderRadius-round: 9e5px;
-
-   --trans-fastest: 0.1s;
-   --trans-fast: 0.15s;
-   --trans-normal: 0.2s;
-   --trans-slow: 0.25s;
-   --trans-cubic-1: cubic-bezier(0, .36, .34, 1);
-
-   --ani-delay-load: 0.1s;
 
    /* === COLORS ============================= */
-
    /* light theme (default) */
    // parse $light into CSS variables
    @each $name, $value in $light {

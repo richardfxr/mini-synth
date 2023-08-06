@@ -193,7 +193,7 @@
         --_clr-thumb: var(--clr-500);
 
         position: sticky;
-        top: calc(-1 * (var(--reels-pad-top) + var(--tapeMarker-height)) + var(--border-width-thick));
+        top: calc(-1 * ($reels-pad-top + $tapeMarker-height) + $border-width-thick);
         z-index: 1000;
 
         background-color: var(--clr-50);
@@ -201,7 +201,7 @@
         transition: transform $cassette-ani-duration $cassette-ani-easing;
         
         // load state
-        transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+        transform: translateY(calc(-1 * $reels-height - $tapeMarker-height + $cassettTop-translateY));
 
         &::before, &::after {
             // playhead
@@ -215,24 +215,24 @@
             // playhead circle
             --_size: 10px;
 
-            top: calc(var(--reels-pad-top) + 0.5 * var(--tapeMarker-height) - 0.5 * var(--_size));
+            top: calc($reels-pad-top + 0.5 * $tapeMarker-height - 0.5 * var(--_size));
             left: calc(50% - 0.5 * var(--_size));
             width: var(--_size);
             height: var(--_size);
             z-index: 1001;
 
-            border-radius: var(--borderRadius-round);
+            border-radius: $borderRadius-round;
         }
         
         &::after {
             // playhead bar
-            top: calc(var(--reels-pad-top) + 0.5 * var(--tapeMarker-height));
+            top: calc($reels-pad-top + 0.5 * $tapeMarker-height);
             bottom: -8px;
-            left: calc(50% - 0.5 * var(--border-width-thick) - var(--border-width-thin));
-            width: calc(var(--border-width-thick) + 2 * var(--border-width-thin));
+            left: calc(50% - 0.5 * $border-width-thick - $border-width-thin);
+            width: calc($border-width-thick + 2 * $border-width-thin);
             z-index: 1000;
             
-            border: solid var(--border-width-thin) var(--clr-0);
+            border: solid $border-width-thin var(--clr-0);
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
 
             // load state
@@ -253,15 +253,15 @@
 
         .housing {
             position: relative;
-            max-width: $cassetts-maxWidth;
+            max-width: $cassette-maxWidth;
             height: 100%;
 
             background-color: var(--clr-100);
             border-color: var(--clr-cassette-border);
             border-right-style: solid;
-            border-right-width: var(--border-width-thick);
+            border-right-width: $border-width-thick;
             border-left-style: solid;
-            border-left-width: var(--border-width-thick);
+            border-left-width: $border-width-thick;
             margin: 0 auto;
 
             &::before {
@@ -287,7 +287,7 @@
 
         cursor: grab;
 
-        padding: var(--reels-pad-top) 0 var(--border-width-thick) 0;
+        padding: $reels-pad-top 0 $border-width-thick 0;
         overflow-x: auto;
 
         scrollbar-width: thin;
@@ -329,8 +329,8 @@
 
         .arrowsContainer {
             position: absolute;
-            top: var(--tapeMarker-height);
-            right: calc(var(--tapeTerminal-start-width) + var(--noteMarker-width) + var(--pad-md));
+            top: $tapeMarker-height;
+            right: calc($tapeTerminal-start-width + $noteMarker-width + $pad-md);
             width: 30px;
 
             color: var(--clr-350);
@@ -346,11 +346,11 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            gap: var(--pad-sm);
+            gap: $pad-sm;
 
-            padding-top: var(--tapeMarker-height);
+            padding-top: $tapeMarker-height;
             // prevent buttons from being blocked by tape terminals
-            padding-left: calc(var(--tapeTerminal-end-width) + var(--pad-md));
+            padding-left: calc($tapeTerminal-end-width + $pad-md);
 
             button {
                 width: var(--_width);
@@ -360,14 +360,14 @@
                     border-radius: 
                         calc(0.5 * var(--_width))
                         calc(0.5 * var(--_width))
-                        var(--borderRadius-sm)
-                        var(--borderRadius-sm);
+                        $borderRadius-sm
+                        $borderRadius-sm;
                 }
 
                 &.remove, &.remove::before {
                     border-radius: 
-                        var(--borderRadius-sm)
-                        var(--borderRadius-sm)
+                        $borderRadius-sm
+                        $borderRadius-sm
                         calc(0.5 * var(--_width))
                         calc(0.5 * var(--_width));
                 }
@@ -378,9 +378,9 @@
     .tapeMarkers {
         display: grid;
         grid-template-columns: repeat(var(--melodyLength), var(--subdivWidth));
-        height: var(--tapeMarker-height);
+        height: $tapeMarker-height;
 
-        padding: var(--pad-sm) 0;
+        padding: $pad-sm 0;
 
         .subdiv {
             position: relative;
@@ -393,16 +393,16 @@
                 top: 0;
                 bottom: 0;
 
-                width: var(--border-width);
+                width: $border-width;
                 background-color: var(--clr-250);
             }
 
             &:first-child::before {
-                left: calc(-0.5 * var(--border-width));
+                left: calc(-0.5 * $border-width);
             }
 
             &:nth-child(4n)::before {
-                right: calc(-0.5 * var(--border-width));
+                right: calc(-0.5 * $border-width);
             }
         }
     }

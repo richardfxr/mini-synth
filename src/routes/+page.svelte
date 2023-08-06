@@ -186,8 +186,8 @@
         transform: translateY(70px);
         opacity: 0;
 
-        transition: transform var(--trans-normal) var(--trans-cubic-1),
-                    opacity var(--trans-normal) var(--trans-cubic-1);
+        transition: transform $trans-normal $trans-cubic-1,
+                    opacity $trans-normal $trans-cubic-1;
 
         &.isReady {
             // default state
@@ -206,7 +206,7 @@
             // load state
             transform: translateY(0);
 
-            transition: opacity var(--trans-slow) $cassette-ani-easing;
+            transition: opacity $trans-slow $cassette-ani-easing;
         }
     }
 </style>

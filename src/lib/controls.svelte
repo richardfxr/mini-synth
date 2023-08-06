@@ -316,14 +316,11 @@
     @include light;
 
     .controls {
-        // internal variables
-        --_button-size: 44px;
-
         display: flex;
         flex-direction: column;
         align-items: center;
         position: sticky;
-        top: var(--reels-height);
+        top: $reels-height;
         z-index: 2;
 
         background-color: var(--clr-100);
@@ -339,7 +336,7 @@
         position: relative;
         z-index: 2;
 
-        padding: 10px var(--pad-md) var(--pad-sm) var(--pad-md);
+        padding: 10px $pad-md $pad-sm $pad-md;
 
         p, p span {
             font-family: 'Roboto Mono', monospace;
@@ -350,7 +347,7 @@
     .playbackWrapper {
         padding-bottom: $cassette-shading-size;
         background-color: var(--clr-cassette-bg-highlight);
-        border-radius: var(--borderRadius-round);
+        border-radius: $borderRadius-round;
     }
 
     .playback {
@@ -362,8 +359,8 @@
 
         padding: 6px;
         border-style: solid;
-        border-width: var(--border-width-thick);
-        border-radius: var(--borderRadius-round);
+        border-width: $border-width-thick;
+        border-radius: $borderRadius-round;
 
         overflow: hidden;
         transition: border-color 0.2s ease;
@@ -379,7 +376,7 @@
             }
 
             &.small {
-                width: var(--_button-size);
+                width: $button-minSize;
                 padding-left: 10px;
                 padding-right: 10px;
             }
@@ -387,10 +384,10 @@
             &.skip {
                 z-index: 1;
                 border: none;
-                transition: color var(--trans-normal) ease,
-                            scale var(--trans-normal) ease,
-                            transform var(--trans-normal) var(--trans-cubic-1),
-                            opacity var(--trans-normal) var(--trans-cubic-1);
+                transition: color $trans-normal ease,
+                            scale $trans-normal ease,
+                            transform $trans-normal $trans-cubic-1,
+                            opacity $trans-normal $trans-cubic-1;
 
                 // load state
                 transform: translateX(calc(var(--_dir) * 50px));
@@ -407,29 +404,29 @@
                     z-index: -1;
 
                     background-color: var(--_clr-highlight);
-                    border: solid var(--border-width-thick) var(--_clr-border);
-                    border-radius: var(--borderRadius-round);
+                    border: solid $border-width-thick var(--_clr-border);
+                    border-radius: $borderRadius-round;
 
-                    transition: background-color var(--trans-normal) ease,
-                                border-color var(--trans-normal) ease;
+                    transition: background-color $trans-normal ease,
+                                border-color $trans-normal ease;
                 }
 
                 &::after {
                     // main color
                     content: "";
                     position: absolute;
-                    top: calc(var(--border-width-thick) + $highlight-height);
-                    right: calc(var(--border-width-thick) + 0.5 * $highlight-height);
-                    bottom: var(--border-width-thick);
-                    left: calc(var(--border-width-thick) + 0.5 * $highlight-height);
+                    top: calc($border-width-thick + $highlight-height);
+                    right: calc($border-width-thick + 0.5 * $highlight-height);
+                    bottom: $border-width-thick;
+                    left: calc($border-width-thick + 0.5 * $highlight-height);
 
                     background-color: var(--_clr-background);
-                    border-radius: var(--borderRadius-round);
+                    border-radius: $borderRadius-round;
                     transform: translateY(0);
 
-                    transition: background-color var(--trans-normal) ease,
-                                transform var(--trans-normal) ease,
-                                opacity var(--trans-normal) ease;
+                    transition: background-color $trans-normal ease,
+                                transform $trans-normal ease,
+                                opacity $trans-normal ease;
                 }
 
                 &:active, &.active {
@@ -452,12 +449,12 @@
                     right: 0;
                     z-index: -2;
 
-                    border-radius: var(--borderRadius-round);
+                    border-radius: $borderRadius-round;
 
                     opacity: 0;
 
-                    transition: opacity var(--trans-fastest) ease,
-                                scale var(--trans-fastest) ease;
+                    transition: opacity $trans-fastest ease,
+                                scale $trans-fastest ease;
                 }
 
                 :global(.icon) {
@@ -473,10 +470,10 @@
             &.subdiv {
                 z-index: 2;
 
-                transition: background-color var(--trans-normal) ease,
-                            border-color var(--trans-normal) ease,
-                            transform var(--trans-normal) var(--trans-cubic-1),
-                            opacity var(--trans-normal) var(--trans-cubic-1);
+                transition: background-color $trans-normal ease,
+                            border-color $trans-normal ease,
+                            transform $trans-normal $trans-cubic-1,
+                            opacity $trans-normal $trans-cubic-1;
                 
                 // load state
                 transform: translateX(calc(var(--_dir) * 20px));

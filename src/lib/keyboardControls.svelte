@@ -126,30 +126,30 @@
     .keyboardControls {
         display: flex;
         flex-direction: column;
-        gap: var(--pad-xs);
+        gap: $pad-xs;
         position: sticky;
-        top: calc(var(--reels-height) + $cassetteBottom-visible + var(--border-width-thick));
+        top: calc($reels-height + $cassetteBottom-visible + $border-width-thick);
         height: 100%;
 
-        padding: var(--pad-xs);
+        padding: $pad-xs;
     }
 
     .input {
         flex-grow: 1;
 
         &:first-child .kbSegmentLabel {
-            border-top-left-radius: calc($input-border-radius - var(--pad-xs));
+            border-top-left-radius: calc($input-border-radius - $pad-xs);
 
             &::before {
-                border-top-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+                border-top-left-radius: calc($input-border-radius - $border-width-thick - $pad-xs);
             }
         }
 
         &:last-child .kbSegmentLabel {
-            border-bottom-left-radius: calc($input-border-radius - var(--pad-xs));
+            border-bottom-left-radius: calc($input-border-radius - $pad-xs);
 
             &::before {
-                border-bottom-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+                border-bottom-left-radius: calc($input-border-radius - $border-width-thick - $pad-xs);
             }
         }
 
@@ -183,11 +183,11 @@
             white-space: nowrap;
 
             padding: 8px 10px;
-            border-radius: var(--borderRadius-sm);
-            margin: 0 var(--pad-xl) 0 0;
+            border-radius: $borderRadius-sm;
+            margin: 0 $pad-xl 0 0;
 
             &::before {
-                border-radius: calc(var(--borderRadius-sm) - var(--border-width-thick));
+                border-radius: calc($borderRadius-sm - $border-width-thick);
             }
 
             &::after {
@@ -195,12 +195,12 @@
                 content: "";
                 position: absolute;
                 top: 0;
-                right: calc(-1 * var(--pad-md) - var(--border-width));
+                right: calc(-1 * $pad-md - $border-width);
                 bottom: 0;
                 
-                border-right: solid var(--border-width-thick) map.get($light, 700);
+                border-right: solid $border-width-thick map.get($light, 700);
 
-                transition: border-color var(--trans-fast) ease;
+                transition: border-color $trans-fast ease;
             }
 
             .indicator {
@@ -239,22 +239,22 @@
 
         .input {
             &:first-child .kbSegmentLabel {
-                border-top-left-radius: var(--borderRadius-sm);
-                border-bottom-left-radius: calc($input-border-radius - var(--pad-xs));
+                border-top-left-radius: $borderRadius-sm;
+                border-bottom-left-radius: calc($input-border-radius - $pad-xs);
 
                 &::before {
-                    border-top-left-radius: var(--borderRadius-sm);
-                    border-bottom-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
+                    border-top-left-radius: $borderRadius-sm;
+                    border-bottom-left-radius: calc($input-border-radius - $border-width-thick - $pad-xs);
                 }
             }
 
             &:last-child .kbSegmentLabel {
-                border-top-left-radius: calc($input-border-radius - var(--pad-xs));
-                border-bottom-left-radius: var(--borderRadius-sm);
+                border-top-left-radius: calc($input-border-radius - $pad-xs);
+                border-bottom-left-radius: $borderRadius-sm;
 
                 &::before {
-                    border-top-left-radius: calc($input-border-radius - var(--border-width-thick) - var(--pad-xs));
-                    border-bottom-left-radius: var(--borderRadius-sm);
+                    border-top-left-radius: calc($input-border-radius - $border-width-thick - $pad-xs);
+                    border-bottom-left-radius: $borderRadius-sm;
                 }
             }
 
@@ -274,17 +274,17 @@
             flex-direction: row;
 
             .button {
-                margin: 0 0 var(--pad-xl) 0;
+                margin: 0 0 $pad-xl 0;
 
                 &::after {
                     // active line now at the bottom
                     top: unset;
                     right: 0;
-                    bottom: calc(-1 * var(--pad-md) - var(--border-width));
+                    bottom: calc(-1 * $pad-md - $border-width);
                     left: 0;
                     
                     border-right: none;
-                    border-bottom: solid var(--border-width-thick) map.get($light, 700);
+                    border-bottom: solid $border-width-thick map.get($light, 700);
                 }
 
                 &:active, &.active {
@@ -296,9 +296,9 @@
         }
     }
 
-    @media (max-width: calc($cassetts-maxWidth + 20px + 88px)) {
+    @media (max-width: calc($cassette-maxWidth + 20px + 88px)) {
         .keyboardControls {
-            top: calc(var(--reels-height) + $cassetteBottom-visible + 2 * var(--pad-md) + 44px);
+            top: calc($reels-height + $cassetteBottom-visible + 2 * $pad-md + 44px);
         }
     }
 </style>

@@ -124,9 +124,10 @@
     @use "sass:map";
     @use '../styles/colors' as *;
 
-    // internal variables
-    $beat-highlight-hrz: 2px;
-    $beat-highlight-vrt: 4px;
+    /* === INTERNAL VARIABLES ================= */
+    $_beat-highlight-hrz: 2px;
+    $_beat-highlight-vrt: 4px;
+    $_button-height: 120px;
 
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
@@ -149,9 +150,6 @@
     @include light;
 
     .soundboard {
-        // internal variables
-        --_button-height: 120px;
-        
         align-self: flex-start;
         display: grid;
         grid-template-columns: repeat( auto-fit, minmax(100px, 1fr));
@@ -159,41 +157,41 @@
         position: relative;
         width: 100%;
         
-        border-radius: calc($input-border-radius + var(--border-width));
+        border-radius: calc($input-border-radius + $border-width);
 
         button {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            height: var(--_button-height);
+            height: $_button-height;
 
             background-color: var(--_clr-blank-highlight);
-            border: solid var(--border-width) var(--clr-kb-border);
+            border: solid $border-width var(--clr-kb-border);
             border-radius: $input-border-radius;
 
-            transition: background-color var(--trans-fastest) ease,
-                        border-color var(--trans-fastest) ease;
+            transition: background-color $trans-fastest ease,
+                        border-color $trans-fastest ease;
 
             &::before {
                 // main color
                 content: "";
                 position: absolute;
-                top: $beat-highlight-vrt;
-                right: $beat-highlight-hrz;
+                top: $_beat-highlight-vrt;
+                right: $_beat-highlight-hrz;
                 bottom: 0;
-                left: $beat-highlight-hrz;
+                left: $_beat-highlight-hrz;
 
                 background-color: var(--_clr-blank);
-                border-radius: calc($input-border-radius - $beat-highlight-hrz);
+                border-radius: calc($input-border-radius - $_beat-highlight-hrz);
 
-                transition: background-color var(--trans-fastest) ease,
-                            transform var(--trans-fastest) ease;
+                transition: background-color $trans-fastest ease,
+                            transform $trans-fastest ease;
             }
 
             &:focus-visible .beat {
                 outline: solid $border-width-thick var(--clr-focus-red);
-                outline-offset: var(--pad-xs);
+                outline-offset: $pad-xs;
             }
 
             // beat colors
@@ -210,9 +208,9 @@
 
                 color: var(--clr-note-text);
 
-                padding: var(--pad-lg) var(--pad-xl);
+                padding: $pad-lg $pad-xl;
                 background-color: var(--_clr);
-                border-radius: var(--borderRadius-sm);
+                border-radius: $borderRadius-sm;
 
                 :global(.beat.icon) {
                     width: 24px;
@@ -225,7 +223,7 @@
 
                 &::before {
                     background-color: var(--_clr);
-                    transform: translateY(-0.5 * $beat-highlight-vrt);
+                    transform: translateY(-0.5 * $_beat-highlight-vrt);
                 }
 
                 &:focus-visible .beat {

@@ -10,7 +10,7 @@
 <style lang="scss">
     svg {
         stroke: currentColor;
-        stroke-width: var(--border-width-thick);
+        stroke-width: $border-width-thick;
 
         position: absolute;
         top: 0;

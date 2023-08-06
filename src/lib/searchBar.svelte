@@ -47,12 +47,12 @@
     .searchBar {
         color: var(--clr-700);
         background-color: var(--clr-50);
-        border-top: solid var(--border-width) var(--clr-border);
-        border-bottom: solid var(--border-width) var(--clr-border);
+        border-top: solid $border-width var(--clr-border);
+        border-bottom: solid $border-width var(--clr-border);
 
-        transition: color var(--trans-fast) ease,
-                    background-color var(--trans-fast) ease,
-                    border-color var(--trans-fast) ease;
+        transition: color $trans-fast ease,
+                    background-color $trans-fast ease,
+                    border-color $trans-fast ease;
 
         &:focus-within {
             color: var(--clr-900);
@@ -68,10 +68,10 @@
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
-        gap: var(--pad-xl);
+        gap: $pad-xl;
         max-width: $page-maxWidth;
 
-        padding: 0 var(--pad-2xl);
+        padding: 0 $pad-2xl;
         margin: 0 auto;
     }
 
@@ -79,7 +79,7 @@
         // load state
         opacity: 0;
 
-        transition: opacity var(--trans-slow) var(--trans-cubic-1);
+        transition: opacity $trans-slow $trans-cubic-1;
     }
 
     input {
@@ -89,14 +89,14 @@
         font-weight: 500;
         line-height: 1em;
 
-        padding: var(--pad-2xl) 0;
+        padding: $pad-2xl 0;
 
-        transition: color var(--trans-fast) ease;
+        transition: color $trans-fast ease;
 
         &::placeholder {
             color: var(--clr-700);
 
-            transition: color var(--trans-fast) ease;
+            transition: color $trans-fast ease;
         }
 
         &::-webkit-search-cancel-button {
@@ -107,9 +107,9 @@
     .button {
         flex-shrink: 0;
 
-        transition: background-color var(--trans-normal) ease,
-                    border-color var(--trans-normal) ease,
-                    opacity var(--trans-normal) ease;
+        transition: background-color $trans-normal ease,
+                    border-color $trans-normal ease,
+                    opacity $trans-normal ease;
 
         &:disabled {
             opacity: 0;

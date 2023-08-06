@@ -21,7 +21,7 @@ GLOBAL
     html, body {
         background-color: var(--clr-50);
 
-        transition: background-color var(--trans-fast) ease;
+        transition: background-color $trans-fast ease;
     }
 
     body {
@@ -186,19 +186,19 @@ GLOBAL
     justify-content: center;
     position: relative;
     z-index: 1;
-    width: var(--button-minSize);
-    height: var(--button-minSize);
+    width: $button-minSize;
+    height: $button-minSize;
 
     color: var(--_clr);
     background-color: var(--_clr-highlight);
     padding: 0;
-    border: solid var(--border-width-thick) var(--_clr-border);
-    border-radius: var(--borderRadius-round);
+    border: solid $border-width-thick var(--_clr-border);
+    border-radius: $borderRadius-round;
 
     cursor: pointer;
-    transition: color var(--trans-fast) ease,
-                background-color var(--trans-fast) ease,
-                border-color var(--trans-fast) ease;
+    transition: color $trans-fast ease,
+                background-color $trans-fast ease,
+                border-color $trans-fast ease;
 
     &::before {
         // main color
@@ -211,11 +211,11 @@ GLOBAL
         z-index: -1;
 
         background-color: var(--_clr-background);
-        border-radius: var(--borderRadius-round);
+        border-radius: $borderRadius-round;
         transform: translateY(0);
 
-        transition: background-color var(--trans-fast) ease,
-                    transform var(--trans-fast) ease;
+        transition: background-color $trans-fast ease,
+                    transform $trans-fast ease;
     }
 
     &:active, &.active {

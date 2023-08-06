@@ -734,9 +734,9 @@
 
         .housing {
             position: relative;
-            max-width: $cassetts-maxWidth;
+            max-width: $cassette-maxWidth;
 
-            border: solid var(--border-width-thick) var(--clr-cassette-border);
+            border: solid $border-width-thick var(--clr-cassette-border);
             margin: 0 auto;
 
             &::before {
@@ -758,14 +758,14 @@
                 z-index: 10;
 
                 background-color: var(--clr-cassette-cutout-bg);
-                border-radius: var(--borderRadius-round);
+                border-radius: $borderRadius-round;
 
                 &.left {
-                    left: var(--pad-sm);
+                    left: $pad-sm;
                 }
 
                 &.right {
-                    right: var(--pad-sm);
+                    right: $pad-sm;
                 }
             }
         }
@@ -777,7 +777,7 @@
             transition: transform $cassette-ani-duration $cassette-ani-easing;
 
             // load state
-            transform: translateY(var(--cassettTop-translateY));
+            transform: translateY($cassettTop-translateY);
 
             .housing {
                 background-color: var(--clr-cassette-bg-highlight);
@@ -792,27 +792,27 @@
                     top: $cassette-shading-size;
                     bottom: 0;
                     border-radius:
-                        calc($cassette-border-radius - var(--border-width))
-                        calc($cassette-border-radius - var(--border-width))
+                        calc($cassette-border-radius - $border-width)
+                        calc($cassette-border-radius - $border-width)
                         0
                         0;
                 }
 
                 .screw {
-                    top: var(--pad-sm);
+                    top: $pad-sm;
                 }
             }
         }
 
         &.bottom {
             position: sticky;
-            top: calc(var(--reels-height) - $cassetteBottom-height + $cassetteBottom-visible);
+            top: calc($reels-height - $cassetteBottom-height + $cassetteBottom-visible);
             z-index: 999;
 
-            padding: 0 0 var(--pad-xl) 0;
+            padding: 0 0 $pad-xl 0;
 
             // load state
-            transform: translateY(calc(-1 * var(--reels-height) - var(--tapeMarker-height) + var(--cassettTop-translateY)));
+            transform: translateY(calc(-1 * $reels-height - $tapeMarker-height + $cassettTop-translateY));
             
             transition: transform $cassette-ani-duration $cassette-ani-easing;
             
@@ -820,7 +820,7 @@
                 display: flex;
                 flex-flow: row nowrap;
                 justify-content: center;
-                gap: var(--pad-xl);
+                gap: $pad-xl;
                 width: 100%;
             }
 
@@ -829,7 +829,7 @@
                 z-index: 2;
 
                 background-color: var(--clr-cassette-bg-shadow);
-                padding-bottom: var(--pad-xs);
+                padding-bottom: $pad-xs;
                 border-top: none;
                 border-radius:
                     0
@@ -844,12 +844,12 @@
                     border-radius:
                         0
                         0
-                        calc($cassette-border-radius - var(--border-width))
-                        calc($cassette-border-radius - var(--border-width));
+                        calc($cassette-border-radius - $border-width)
+                        calc($cassette-border-radius - $border-width);
                 }
 
                 .screw {
-                    bottom: var(--pad-sm);
+                    bottom: $pad-sm;
                 }
             }
 
@@ -858,19 +858,19 @@
             }
 
             .sideButton {
-                padding-top: var(--pad-md);
+                padding-top: $pad-md;
 
                 .wrapper {
                     display: flex;
                     flex-flow: row nowrap;
-                    gap: var(--pad-sm);
+                    gap: $pad-sm;
                     position: sticky;
-                    top: calc(var(--reels-height) + var(--pad-md));
+                    top: calc($reels-height + $pad-md);
                 }
 
                 .button {
-                    transition: transform var(--trans-normal) var(--trans-cubic-1),
-                                opacity var(--trans-normal) var(--trans-cubic-1);
+                    transition: transform $trans-normal $trans-cubic-1,
+                                opacity $trans-normal $trans-cubic-1;
 
                     // load state
                     transform: translateX(calc(var(--_dir) * 50px));
@@ -915,16 +915,16 @@
         display: flex;
         max-width: var(--inputs-maxWidth);
 
-        border: solid var(--border-width-thick) map.get($light, 1000);
-        border-radius: calc($input-border-radius + var(--border-width-thick));
+        border: solid $border-width-thick map.get($light, 1000);
+        border-radius: calc($input-border-radius + $border-width-thick);
         margin: 0 auto;
     }
 
     #melodyInputs {
         flex-flow: row nowrap;
         min-height: 129px;
-        height: var(--inputs-height);
-        max-height: var(--inputs-maxHeight);
+        height: $inputs-height;
+        max-height: $inputs-maxHeight;
         
         .secondaryControls {
             display: flex;
@@ -952,7 +952,7 @@
     /* === BREAKPOINTS ======================== */
     @media (orientation: portrait) {
         .inputs {
-            max-width: $cassetts-maxWidth;
+            max-width: $cassette-maxWidth;
         }
 
         #melodyInputs {
@@ -968,18 +968,18 @@
     
     @media (orientation: landscape) and (max-width: $breakpoint-tablet) {
         .inputs {
-            margin: 0 var(--pad-xl);
+            margin: 0 $pad-xl;
         }
 
         #melodyInputs {
             flex-flow: column nowrap;
-            min-height: calc(170px + var(--pad-2xl));
+            min-height: calc(170px + $pad-2xl);
         }
     }
 
-    @media (max-width: calc($cassetts-maxWidth + 28px + 176px)) {
+    @media (max-width: calc($cassette-maxWidth + 28px + 176px)) {
         .cassette.bottom {
-            padding: 0 var(--pad-xl) var(--pad-xl) var(--pad-xl);
+            padding: 0 $pad-xl $pad-xl $pad-xl;
 
             .bottomHousing {
                 display: grid;
@@ -988,12 +988,12 @@
                 grid-template-areas: 
                     "housing housing"
                     "leftButton rightButton";
-                gap: var(--pad-md);
+                gap: $pad-md;
                 position: relative;
-                max-width: $cassetts-maxWidth;
+                max-width: $cassette-maxWidth;
 
                 background-color: var(--_clr-shadow);
-                border: solid var(--border-width-thick) var(--clr-cassette-border);
+                border: solid $border-width-thick var(--clr-cassette-border);
                 border-top: none;
                 border-radius:
                     0
@@ -1027,7 +1027,7 @@
             }
 
             .sideButton {
-                padding: 0 var(--pad-xl) var(--pad-lg) var(--pad-xl);
+                padding: 0 $pad-xl $pad-lg $pad-xl;
 
                 &#right {
                     margin-left: auto;
@@ -1076,7 +1076,7 @@
         }
 
         .inputsWrapper {
-            animation: fade var(--trans-normal) $cassette-ani-easing 1;
+            animation: fade $trans-normal $cassette-ani-easing 1;
             animation-delay: 0.2s;
             animation-fill-mode: backwards;
         }

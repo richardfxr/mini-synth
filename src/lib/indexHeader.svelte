@@ -92,25 +92,24 @@
 
 
 <style lang="scss">
-    :root {
-        // internal variables
-        --_header-height: calc(var(--button-minSize) + 2 * var(--pad-2xl));
-    }
+    /* === INTERNAL VARIABLES ================= */
+    $_header-height: calc($button-minSize + 2 * $pad-2xl);
     
+    /* === MAIN STYLES ======================== */
     .indexHeader {        
         display: grid;
         grid-template-columns: 1fr 40px 1fr;
         max-width: $page-maxWidth;
 
-        padding: var(--pad-2xl);
-        margin: 0 auto calc(-1 * var(--_header-height)) auto;
+        padding: $pad-2xl;
+        margin: 0 auto calc(-1 * $_header-height) auto;
 
         // load state
-        transform: translateY(calc(-0.5 * var(--_header-height)));
+        transform: translateY(calc(-0.5 * $_header-height));
         opacity: 0;
 
-        transition: transform var(--trans-normal) ease-in-out,
-                    opacity var(--trans-normal) ease-in-out;
+        transition: transform $trans-normal ease-in-out,
+                    opacity $trans-normal ease-in-out;
 
         &.isReady {
             // default state
@@ -128,25 +127,25 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: flex-end;
-        gap: var(--pad-sm);
+        gap: $pad-sm;
         position: sticky;
         top: 0;
         right: 0;
         max-width: $page-maxWidth;
         z-index: 1000;
 
-        padding: var(--pad-2xl);
+        padding: $pad-2xl;
         margin: 0 auto;
 
         // allow click through
         pointer-events: none;
 
         // load state
-        transform: translateY(calc(-0.5 * var(--_header-height)));
+        transform: translateY(calc(-0.5 * $_header-height));
         opacity: 0;
 
-        transition: transform var(--trans-normal) ease-in-out,
-                    opacity var(--trans-normal) ease-in-out;
+        transition: transform $trans-normal ease-in-out,
+                    opacity $trans-normal ease-in-out;
 
         #new {
             order: 1;
@@ -162,20 +161,20 @@
                 opacity: 1;
                 transform: translateY(0);
 
-                transition: color var(--trans-fast) ease,
-                            background-color var(--trans-fast) ease,
-                            border-color var(--trans-fast) ease,
-                            opacity var(--trans-normal) var(--trans-cubic-1),
-                            transform var(--trans-normal) var(--trans-cubic-1);
+                transition: color $trans-fast ease,
+                            background-color $trans-fast ease,
+                            border-color $trans-fast ease,
+                            opacity $trans-normal $trans-cubic-1,
+                            transform $trans-normal $trans-cubic-1;
 
                 pointer-events: auto;
 
                 &.disabled {
                     opacity: 0;
-                    transform: translateY(calc(-1 * var(--_header-height)));
+                    transform: translateY(calc(-1 * $_header-height));
 
-                    transition: opacity var(--trans-normal) cubic-bezier(.7,0,.93,.67),
-                                transform var(--trans-normal) cubic-bezier(.7,0,.93,.67);
+                    transition: opacity $trans-normal cubic-bezier(.7,0,.93,.67),
+                                transform $trans-normal cubic-bezier(.7,0,.93,.67);
                 }
             }
             

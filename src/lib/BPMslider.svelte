@@ -72,6 +72,17 @@
 
 
 <style lang="scss">
+    /* === INTERNAL VARIABLES ================= */
+    $_clr-track-progress: var(--clr-red);
+    $_clr-thumb: var(--clr-red);
+    $_track-width: 100%;
+    $_track-height: $border-width;
+    $_thumb-height: 20px;
+    $_thumb-width: 10px;
+    $_clip-top: calc(($_thumb-height - $_track-height) * 0.5);
+    $_clip-bottom: calc($_thumb-height - $_clip-top);
+    $_clip-further: calc(100% + 1px);
+
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
         .sliderWrapper {
@@ -91,22 +102,14 @@
     @include light;
 
     .sliderWrapper {
-        // internal variables
-        --_clr-track-progress: var(--clr-red);
-        --_clr-thumb: var(--clr-red);
-        --_track-width: 100%;
-        --_track-height: var(--border-width);
-        --_thumb-height: 20px;
-        --_thumb-width: 10px;
-
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: var(--pad-sm);
+        gap: $pad-sm;
         position: relative;
         width: 100%;
 
-        padding: var(--pad-3xl) var(--pad-3xl) var(--pad-xl) var(--pad-3xl);
+        padding: $pad-3xl $pad-3xl $pad-xl $pad-3xl;
     }
     
     #rangeInput {
@@ -117,13 +120,13 @@
         cursor: pointer;
 
         display: block;
-        width: var(--_track-width);
+        width: $_track-width;
         overflow: hidden;
 
-        outline: solid var(--border-width-thick) transparent;
+        outline: solid $border-width-thick transparent;
 
-        transition: opacity var(--trans-slow) var(--trans-cubic-1),
-                    outline-color var(--trans-fast) ease;
+        transition: opacity $trans-slow $trans-cubic-1,
+                    outline-color $trans-fast ease;
 
         // load state
         opacity: 0;
@@ -134,58 +137,53 @@
         
         &::-webkit-slider-runnable-track {
             position: relative;
-            height: var(--_thumb-height);
+            height: $_thumb-height;
             background: linear-gradient(var(--_clr-track) 0 0) scroll no-repeat center /
-                        100% calc(var(--_track-height));
+                        100% calc($_track-height);
         }
 
         &::-webkit-slider-thumb {
-            // internal variables
-            --_clip-top: calc((var(--_thumb-height) - var(--_track-height)) * 0.5);
-            --_clip-bottom: calc(var(--_thumb-height) - var(--_clip-top));
-            --_clip-further: calc(100% + 1px);
-            
             // reset styling
             -webkit-appearance: none;
             
             position: relative;
-            width: var(--_thumb-width);
-            height: var(--_thumb-height);
+            width: $_thumb-width;
+            height: $_thumb-height;
 
             // box-shadow and clip-path to fake progress color
-            background: linear-gradient(var(--_clr-track-progress) 0 0) scroll no-repeat left center /
-                        50% calc(var(--_track-height) + 1px);
-            background-color: var(--_clr-thumb);
-            box-shadow: calc(-100vmax - var(--_thumb-width)) 0 0 100vmax var(--_clr-track-progress);
+            background: linear-gradient($_clr-track-progress 0 0) scroll no-repeat left center /
+                        50% calc($_track-height + 1px);
+            background-color: $_clr-thumb;
+            box-shadow: calc(-100vmax - $_thumb-width) 0 0 100vmax $_clr-track-progress;
 
             clip-path: polygon(
                 100% -1px,
                 0 -1px,
-                0 var(--_clip-top),
-                -100vmax var(--_clip-top),
-                -100vmax var(--_clip-bottom),
-                0 var(--_clip-bottom),
+                0 $_clip-top,
+                -100vmax $_clip-top,
+                -100vmax $_clip-bottom,
+                0 $_clip-bottom,
                 0 100%,
-                var(--_clip-further) var(--_clip-further)
+                $_clip-further $_clip-further
             );
         }
 
         &::-moz-range-track {
-            height: var(--_track-height);
+            height: $_track-height;
             background-color: var(--_clr-track);
         }
 
         &::-moz-range-thumb {
-            width: var(--_thumb-width);
-            height: var(--_thumb-height);
-            background-color: var(--_clr-thumb);
+            width: $_thumb-width;
+            height: $_thumb-height;
+            background-color: $_clr-thumb;
             border: none;
             border-radius: 0;
         }
 
         &::-moz-range-progress {
-            height: var(--_track-height);
-            background-color: var(--_clr-track-progress);
+            height: $_track-height;
+            background-color: $_clr-track-progress;
         }
     }
 
@@ -193,11 +191,11 @@
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
-        gap: var(--pad-xl);
+        gap: $pad-xl;
 
         .button {
-            transition: transform var(--trans-slow) var(--trans-cubic-1),
-                        opacity var(--trans-slow) var(--trans-cubic-1);
+            transition: transform $trans-slow $trans-cubic-1,
+                        opacity $trans-slow $trans-cubic-1;
                 
             // load state
             transform: translateX(calc(var(--_dir) * 25px));
@@ -205,7 +203,7 @@
         }
 
         label {
-            transition: opacity var(--trans-slow) var(--trans-cubic-1);
+            transition: opacity $trans-slow $trans-cubic-1;
 
             // load state
             opacity: 0;

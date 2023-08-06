@@ -154,18 +154,18 @@
     @use "sass:map";
     @use '../styles/colors' as *;
 
-    // internal variables
-    $key-highlight-hrz: 2px;
-    $key-highlight-vrt: 4px;
-    $flat-width: 0.8;
-    $flat-height: 55%;
-    $flat-highlight-hrz: 1px;
-    $flat-highlight-vrt: 6px;
+    /* === INTERNAL VARIABLES ================= */
+    $_key-highlight-hrz: 2px;
+    $_key-highlight-vrt: 4px;
+    $_flat-width: 0.8;
+    $_flat-height: 55%;
+    $_flat-highlight-hrz: 1px;
+    $_flat-highlight-vrt: 6px;
 
+    /* === MAIN STYLES ======================== */
     .wrapper {
         // internal variables
         --_octave-width: 82.353%; // width of one octave as as percentage of the visible keyboard
-        
         --_whiteNotes: 7;
         --_label-width: 3ch;
 
@@ -222,7 +222,7 @@
                 border-top-left-radius: $input-border-radius;
 
                 &::before {
-                    border-top-left-radius: calc($input-border-radius - $key-highlight-hrz);
+                    border-top-left-radius: calc($input-border-radius - $_key-highlight-hrz);
                 }
             }
         }
@@ -234,7 +234,7 @@
                 border-top-right-radius: $input-border-radius;
 
                 &::before {
-                    border-top-right-radius: calc($input-border-radius - $key-highlight-hrz);
+                    border-top-right-radius: calc($input-border-radius - $_key-highlight-hrz);
                 }
             }
         }
@@ -267,23 +267,23 @@
                 content: "";
                 position: absolute;
                 top: 0;
-                right: $key-highlight-hrz;
-                bottom: $key-highlight-vrt;
-                left: $key-highlight-hrz;
+                right: $_key-highlight-hrz;
+                bottom: $_key-highlight-vrt;
+                left: $_key-highlight-hrz;
 
                 background-color: var(--clr-kb-white);
                 border-radius:
                     0
                     0
-                    calc($input-border-radius - $key-highlight-hrz)
-                    calc($input-border-radius - $key-highlight-hrz);
+                    calc($input-border-radius - $_key-highlight-hrz)
+                    calc($input-border-radius - $_key-highlight-hrz);
 
                 transition: background-color 0.1s ease;
             }
 
             &:focus-visible .noteNumber {
                 outline: solid $border-width-thick var(--clr-kb-white-focus-red);
-                outline-offset: var(--pad-xs);
+                outline-offset: $pad-xs;
             }
 
             .noteNumber {
@@ -298,7 +298,7 @@
                 padding: 5px;
                 margin-bottom: 12px;
                 background-color: var(--_clr-note);
-                border-radius: var(--borderRadius-sm);
+                border-radius: $borderRadius-sm;
             }
         }
 
@@ -315,9 +315,9 @@
         }
 
         &.flat {
-            width: calc(100% / var(--_whiteNotes) * $flat-width);
-            margin: 0 calc(-0.5 * (100% / var(--_whiteNotes) * $flat-width));
-            height: $flat-height;
+            width: calc(100% / var(--_whiteNotes) * $_flat-width);
+            margin: 0 calc(-0.5 * (100% / var(--_whiteNotes) * $_flat-width));
+            height: $_flat-height;
 
             button {
                 position: absolute;
@@ -334,9 +334,9 @@
 
                 &::before {
                     // main color
-                    right: $flat-highlight-hrz;
-                    bottom: $flat-highlight-vrt;
-                    left: $flat-highlight-hrz;
+                    right: $_flat-highlight-hrz;
+                    bottom: $_flat-highlight-vrt;
+                    left: $_flat-highlight-hrz;
 
                     background-color: var(--clr-kb-flat);
                 }
@@ -396,7 +396,7 @@
 
                     &::before {
                         border-top-left-radius: 0;
-                        border-bottom-left-radius: calc($input-border-radius - $key-highlight-hrz);
+                        border-bottom-left-radius: calc($input-border-radius - $_key-highlight-hrz);
                     }
                 }
             }
@@ -408,7 +408,7 @@
                     border-top-left-radius: $input-border-radius;
 
                     &::before {
-                        border-top-left-radius: calc($input-border-radius - $key-highlight-hrz);
+                        border-top-left-radius: calc($input-border-radius - $_key-highlight-hrz);
                     }
                 }
             }
@@ -428,15 +428,15 @@
 
                 &::before {
                     // main color
-                    top: $key-highlight-hrz;
-                    right: $key-highlight-vrt;
-                    bottom:  $key-highlight-hrz;
+                    top: $_key-highlight-hrz;
+                    right: $_key-highlight-vrt;
+                    bottom:  $_key-highlight-hrz;
                     left: 0;
                     
                     border-radius:
                         0
-                        calc($input-border-radius - $key-highlight-hrz)
-                        calc($input-border-radius - $key-highlight-hrz)
+                        calc($input-border-radius - $_key-highlight-hrz)
+                        calc($input-border-radius - $_key-highlight-hrz)
                         0;
                 }
 
@@ -451,9 +451,9 @@
             }
 
             &.flat {
-                margin: calc(-1 * $flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height)) / (2 * var(--_whiteNotes))) 0;
-                width: $flat-height;
-                height: calc($flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height) / var(--_whiteNotes)));
+                margin: calc(-1 * $_flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height)) / (2 * var(--_whiteNotes))) 0;
+                width: $_flat-height;
+                height: calc($_flat-width * (var(--_whiteNotes) / 7 * var(--_octave-height) / var(--_whiteNotes)));
 
                 button {
                     top: unset;
@@ -467,9 +467,9 @@
 
                     &::before {
                         // main color
-                        top: $flat-highlight-hrz;
-                        right: $flat-highlight-vrt;
-                        bottom:  $flat-highlight-hrz;
+                        top: $_flat-highlight-hrz;
+                        right: $_flat-highlight-vrt;
+                        bottom:  $_flat-highlight-hrz;
                     }
                 }
             }

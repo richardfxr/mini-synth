@@ -103,24 +103,24 @@
     .cassetteHeader {
         display: flex;
         flex-flow: row nowrap;
-        gap: var(--pad-xl);
+        gap: $pad-xl;
         position: relative;
 
         padding: 
-            var(--pad-xl)
-            var(--pad-xl)
-            var(--pad-md)
-            var(--pad-xl);
+            $pad-xl
+            $pad-xl
+            $pad-md
+            $pad-xl;
     }
 
     .button {
         flex-shrink: 0;
 
-        transition: color var(--trans-fast) ease,
-                    background-color var(--trans-fast) ease,
-                    border-color var(--trans-fast) ease,
-                    transform var(--trans-slow) var(--trans-cubic-1),
-                    opacity var(--trans-slow) var(--trans-cubic-1);
+        transition: color $trans-fast ease,
+                    background-color $trans-fast ease,
+                    border-color $trans-fast ease,
+                    transform $trans-slow $trans-cubic-1,
+                    opacity $trans-slow $trans-cubic-1;
 
         // load state
         transform: translateX(calc(var(--_dir) * 35px));
@@ -142,10 +142,10 @@
             text-align: center;
             
             border: none;
-            border-bottom: solid var(--border-width) var(--clr-350);
+            border-bottom: solid $border-width var(--clr-350);
 
-            transition: border-color var(--trans-normal) ease,
-                        opacity var(--trans-slow) var(--trans-cubic-1);
+            transition: border-color $trans-normal ease,
+                        opacity $trans-slow $trans-cubic-1;
 
             // load state
             opacity: 0;

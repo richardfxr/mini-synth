@@ -120,6 +120,10 @@
 
 
 <style lang="scss">
+    /* === INTERNAL VARIABLES ================= */
+    $_note-height: 22px;
+    $_repeatDots-size: 5px;
+
     /* === COLOR SCHEME MIXINS ================ */
     @mixin light {
         .tapeRadio:focus-visible + .tape {
@@ -167,27 +171,23 @@
     }
 
     .tape {
-        // internal variables
-        --_note-height: 22px;
-        --_repeatDots-size: 5px;
-
         display: grid;
         grid-template-columns:
-            var(--tapeTerminal-start-width)
-            var(--noteMarker-width)
+            $tapeTerminal-start-width
+            $noteMarker-width
             1fr
-            var(--tapeTerminal-end-width);
+            $tapeTerminal-end-width;
         background-color: var(--clr-100);
         position: relative;
         z-index: 2;
 
-        border-top: solid var(--border-width) var(--_clr-border);
-        border-bottom: solid var(--border-width) var(--_clr-border);
+        border-top: solid $border-width var(--_clr-border);
+        border-bottom: solid $border-width var(--_clr-border);
         // offset tapeTerminal at each end
-        margin-right: calc(-1 * var(--tapeTerminal-end-width));
-        margin-left: calc(-1 * (var(--tapeTerminal-start-width) + var(--noteMarker-width)));
+        margin-right: calc(-1 * $tapeTerminal-end-width);
+        margin-left: calc(-1 * ($tapeTerminal-start-width + $noteMarker-width));
 
-        transition: border-color var(--trans-fast) ease,
+        transition: border-color $trans-fast ease,
                     width 2s ease-in-out;
 
         // prevent text highlighting on drag
@@ -195,12 +195,12 @@
         user-select: none;
 
         &#melody {
-            height: var(--melody-height);
-            margin-bottom: calc(-1 * var(--border-width));
+            height: $melody-height;
+            margin-bottom: calc(-1 * $border-width);
         }
 
         &#beats {
-            height: var(--beats-height);
+            height: $beats-height;
         }
 
         &.active {
@@ -239,22 +239,22 @@
 
         &.start {
             background-color: var(--_clr-border);
-            transition: background-color var(--trans-fast) ease;
+            transition: background-color $trans-fast ease;
         }
 
         &.end {
             flex-direction: row;
             gap: 3px;
 
-            border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+            border-left: dashed calc(0.5 * $border-width-thick) var(--clr-150);
             border-right: solid 4px var(--_clr-border);
 
-            transition: border-color var(--trans-fast) ease;
+            transition: border-color $trans-fast ease;
 
             .repeatDots {
                 position: relative;
-                height: calc(2 * var(--_repeatDots-size) + 6px);
-                width: var(--_repeatDots-size);
+                height: calc(2 * $_repeatDots-size + 6px);
+                width: $_repeatDots-size;
 
                 &::before, &::after {
                     // dots
@@ -262,12 +262,12 @@
                     position: absolute;
                     right: 0;
                     left: 0;
-                    height: var(--_repeatDots-size);
+                    height: $_repeatDots-size;
 
                     background-color: var(--_clr-border);
-                    border-radius: var(--borderRadius-round);
+                    border-radius: $borderRadius-round;
 
-                    transition: background-color var(--trans-fast) ease;
+                    transition: background-color $trans-fast ease;
                 }
 
                 &::before {
@@ -284,7 +284,7 @@
             .repeatLine {
                 height: 100%;
 
-                border-right: solid var(--border-width) var(--_clr-border);
+                border-right: solid $border-width var(--_clr-border);
             }
         }
     }
@@ -293,16 +293,16 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: var(--border-width);
+        gap: $border-width;
 
-        padding: var(--border-width-thick) 0;
-        border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+        padding: $border-width-thick 0;
+        border-right: dashed calc(0.5 * $border-width-thick) var(--clr-150);
         overflow: hidden;
 
         .noteMarker {
             flex-shrink: 0;
-            width: var(--border-width);
-            height: var(--_note-height);
+            width: $border-width;
+            height: $_note-height;
             
             background-color: var(--clr-350);
         }
@@ -316,12 +316,12 @@
         .subdiv {
             display: flex;
             flex-direction: column;
-            gap: var(--border-width);
+            gap: $border-width;
             position: relative;
 
-            padding: var(--border-width-thick) 0;
-            border-right: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
-            border-left: dashed calc(0.5 * var(--border-width-thick)) var(--clr-150);
+            padding: $border-width-thick 0;
+            border-right: dashed calc(0.5 * $border-width-thick) var(--clr-150);
+            border-left: dashed calc(0.5 * $border-width-thick) var(--clr-150);
 
             overflow-x: visible;
             overflow-y: hidden;
@@ -336,14 +336,14 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                height: var(--_note-height);
+                height: $_note-height;
 
                 color: var(--clr-note-text-dim);
                 text-align: center;
                 background-color: var(--clr-note-dim);
 
-                transition: color var(--trans-fast) ease,
-                            background-color var(--trans-fast) ease;
+                transition: color $trans-fast ease,
+                            background-color $trans-fast ease;
 
                 span {
                     display: block;

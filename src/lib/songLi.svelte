@@ -123,7 +123,7 @@
 <style lang="scss">
     // internal variables
     $_checkbox-size: 18px;
-    $_label-width: calc($_checkbox-size + 2 * var(--pad-2xl));
+    $_label-width: calc($_checkbox-size + 2 * $pad-2xl);
     $_cassette-height: 50px;
     $_cassette-extrusion-inset: 30px;
     $_note-height: 3px;
@@ -172,10 +172,10 @@
         position: relative;
 
         background-color: var(--clr-50);
-        border-bottom: solid var(--border-width) var(--clr-border);
+        border-bottom: solid $border-width var(--clr-border);
 
-        transition: background-color var(--trans-fast) ease,
-                    border-color var(--trans-fast) ease;
+        transition: background-color $trans-fast ease,
+                    border-color $trans-fast ease;
 
         &:hover, &:focus, &:active {
             .title {
@@ -217,8 +217,8 @@
         position: relative;
         height: 100%;
 
-        transition: background-color var(--trans-fast) ease,
-                    border-color var(--trans-fast) ease;
+        transition: background-color $trans-fast ease,
+                    border-color $trans-fast ease;
 
         input {
             &:checked + label .box {
@@ -254,25 +254,25 @@
                 position: relative;
                 width: $_checkbox-size;
                 height: $_checkbox-size;
-                border: solid var(--border-width) var(--clr-350);
-                margin: 0 var(--pad-2xl);
+                border: solid $border-width var(--clr-350);
+                margin: 0 $pad-2xl;
                 outline: solid $border-width-thick transparent;
-                outline-offset: var(--pad-xs);
+                outline-offset: $pad-xs;
 
-                transition: outline-color var(--trans-fast) ease;
+                transition: outline-color $trans-fast ease;
 
                 &::before {
                     content: "";
                     position: absolute;
-                    top: var(--pad-xs);
-                    right: var(--pad-xs);
-                    bottom: var(--pad-xs);
-                    left: var(--pad-xs);
+                    top: $pad-xs;
+                    right: $pad-xs;
+                    bottom: $pad-xs;
+                    left: $pad-xs;
 
                     background-color: var(--clr-100);
 
-                    transition: background-color var(--trans-fast) ease,
-                                transform var(--trans-normal) var(--trans-cubic-1);
+                    transition: background-color $trans-fast ease,
+                                transform $trans-normal $trans-cubic-1;
                 }
             }
         }
@@ -283,13 +283,13 @@
 
         color: var(--clr-900);
         font-size: 1.1rem;
-        padding: var(--pad-xl) 0;
-        margin-right: var(--pad-2xl);
+        padding: $pad-xl 0;
+        margin-right: $pad-2xl;
 
         outline: solid $border-width-thick transparent;
 
-        transition: color var(--trans-fast) ease,
-                    outline-color var(--trans-fast) ease;
+        transition: color $trans-fast ease,
+                    outline-color $trans-fast ease;
 
         &::before {
             // larger hitbox that covers entire song list item
@@ -315,14 +315,14 @@
         position: relative;
         height: $_cassette-height;
 
-        margin-top: var(--pad-xl);
-        margin-right: var(--pad-2xl);
-        margin-bottom: var(--pad-xl);
+        margin-top: $pad-xl;
+        margin-right: $pad-2xl;
+        margin-bottom: $pad-xl;
     }
 
     .tapeShadow {
         position: absolute;
-        right: calc($_cassette-extrusion-inset + var(--border-width) + var(--pad-sm));
+        right: calc($_cassette-extrusion-inset + $border-width + $pad-sm);
         left: 0;
         z-index: 2;
 
@@ -333,7 +333,7 @@
         // load state
         opacity: 0;
 
-        transition: opacity var(--trans-normal) var(--trans-cubic-1);
+        transition: opacity $trans-normal $trans-cubic-1;
     }
 
     .tapesAndLength {
@@ -347,12 +347,12 @@
         position: relative;
         z-index: 3;
 
-        border-right: solid var(--border-width) var(--_clr-border);
-        margin-right: calc($_cassette-extrusion-inset + var(--border-width) + var(--pad-sm));
+        border-right: solid $border-width var(--_clr-border);
+        margin-right: calc($_cassette-extrusion-inset + $border-width + $pad-sm);
         overflow: hidden;
 
-        transition: background-color var(--trans-fast) ease,
-                    border-color var(--trans-fast) ease;
+        transition: background-color $trans-fast ease,
+                    border-color $trans-fast ease;
 
         .length {
             display: flex;
@@ -362,13 +362,13 @@
             font-weight: 500;
             color: var(--clr-highlight);
             background-color: var(--clr-800);
-            padding: var(--pad-xs) var(--pad-xl);
+            padding: $pad-xs $pad-xl;
 
             // load state
             transform: translateX(70px);
 
-            transition: background-color var(--trans-fast) ease,
-                        transform var(--trans-normal) $cassette-ani-easing;
+            transition: background-color $trans-fast ease,
+                        transform $trans-normal $cassette-ani-easing;
 
             span {
                 font-family: inherit;
@@ -379,26 +379,26 @@
             min-width: 100%;
 
             background-color: var(--_clr-bg);
-            border-top: solid var(--border-width) var(--_clr-border);
-            border-bottom: solid var(--border-width) var(--_clr-border);
+            border-top: solid $border-width var(--_clr-border);
+            border-bottom: solid $border-width var(--_clr-border);
 
             // load state
             transform: translateX(70px);
 
-            transition: background-color var(--trans-fast) ease,
-                        border-color var(--trans-fast) ease,
-                        transform var(--trans-normal) $cassette-ani-easing;
+            transition: background-color $trans-fast ease,
+                        border-color $trans-fast ease,
+                        transform $trans-normal $cassette-ani-easing;
 
             .tape {
                 display: grid;
                 grid-template-columns: repeat(var(--_length), $subdiv-width);
 
-                padding: var(--border-width);
+                padding: $border-width;
                 overflow: hidden;
 
                 &.melody {
                     height: $_melody-height;
-                    border-bottom: solid var(--border-width) var(--_clr-border);
+                    border-bottom: solid $border-width var(--_clr-border);
                 }
 
                 &.beats {
@@ -408,12 +408,12 @@
                 .subdiv {
                     display: flex;
                     flex-flow: column nowrap;
-                    gap: var(--border-width-thin);
+                    gap: $border-width-thin;
 
-                    border-right: solid calc(0.5 * var(--border-width)) var(--_clr-bg);
-                    border-left: solid calc(0.5 * var(--border-width)) var(--_clr-bg);
+                    border-right: solid calc(0.5 * $border-width) var(--_clr-bg);
+                    border-left: solid calc(0.5 * $border-width) var(--_clr-bg);
 
-                    transition: border-color var(--trans-fast) ease;
+                    transition: border-color $trans-fast ease;
 
                     p {
                         height: $_note-height;
@@ -449,7 +449,7 @@
         right: 0;
         bottom: 0;
         width: 100%;
-        max-width: $cassetts-maxWidth;
+        max-width: $cassette-maxWidth;
         height: $_cassette-height;
 
         margin: auto;
@@ -464,26 +464,26 @@
             left: 0;
 
             background-color: var(--_clr-bg-highlight);
-            border: solid var(--border-width) var(--_clr-border);
-            border-radius: var(--borderRadius-sm);
+            border: solid $border-width var(--_clr-border);
+            border-radius: $borderRadius-sm;
 
-            transition: background-color var(--trans-fast) ease,
-                        border-color var(--trans-fast) ease;
+            transition: background-color $trans-fast ease,
+                        border-color $trans-fast ease;
         }
 
         &::after {
             // cassette housing background
             content: "";
             position: absolute;
-            top: calc(7px + var(--border-width) + $highlight-height);
-            right: var(--border-width);
-            bottom: calc(7px + var(--border-width));
-            left: var(--border-width);
+            top: calc(7px + $border-width + $highlight-height);
+            right: $border-width;
+            bottom: calc(7px + $border-width);
+            left: $border-width;
 
             background-color: var(--_clr-bg);
-            border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+            border-radius: calc($borderRadius-sm - $border-width);
 
-            transition: background-color var(--trans-fast) ease;
+            transition: background-color $trans-fast ease;
         }
 
         .extrusion {
@@ -499,12 +499,12 @@
             z-index: 1;
 
             background-color: var(--_clr-bg-highlight);
-            padding: var(--pad-sm);
-            border: solid var(--border-width) var(--_clr-border);
-            border-radius: var(--borderRadius-sm);
+            padding: $pad-sm;
+            border: solid $border-width var(--_clr-border);
+            border-radius: $borderRadius-sm;
 
-            transition: background-color var(--trans-fast) ease,
-                        border-color var(--trans-fast) ease;
+            transition: background-color $trans-fast ease,
+                        border-color $trans-fast ease;
 
             &::before {
                 // ectrusion background
@@ -516,9 +516,9 @@
                 left: 0;
 
                 background-color: var(--_clr-bg);
-                border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+                border-radius: calc($borderRadius-sm - $border-width);
 
-                transition: background-color var(--trans-fast) ease;
+                transition: background-color $trans-fast ease;
             }
 
             .cutout {
@@ -527,24 +527,24 @@
                 max-width: 65px;
 
                 background-color: var(--_clr-bg-cutout);
-                border: solid var(--border-width) var(--_clr-border);
+                border: solid $border-width var(--_clr-border);
 
-                transition: background-color var(--trans-fast) ease,
-                            border-color var(--trans-fast) ease;
+                transition: background-color $trans-fast ease,
+                            border-color $trans-fast ease;
 
                 &::before {
                     // cutout highlight
                     content: "";
                     position: absolute;
-                    right: calc(-1 * var(--border-width));
-                    bottom: calc(-1 * var(--border-width) - $highlight-height);
-                    left: calc(-1 * var(--border-width));
+                    right: calc(-1 * $border-width);
+                    bottom: calc(-1 * $border-width - $highlight-height);
+                    left: calc(-1 * $border-width);
                     height: $highlight-height;
 
                     background-color: var(--_clr-bg-highlight);
-                    border-radius: calc(var(--borderRadius-sm) - var(--border-width));
+                    border-radius: calc($borderRadius-sm - $border-width);
 
-                    transition: background-color var(--trans-fast) ease;
+                    transition: background-color $trans-fast ease;
                 }
             }
         }
@@ -591,15 +591,15 @@
         }
 
         .title {
-            padding-top: var(--pad-3xl);
-            padding-bottom: var(--pad-3xl);
+            padding-top: $pad-3xl;
+            padding-bottom: $pad-3xl;
         }
 
         .details {
             grid-area: details;
             margin-top: 0;
-            margin-bottom: var(--pad-2xl);
-            margin-left: var(--pad-2xl);
+            margin-bottom: $pad-2xl;
+            margin-left: $pad-2xl;
         }
     }
 
