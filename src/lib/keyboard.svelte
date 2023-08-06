@@ -2,6 +2,8 @@
     /* === IMPORTS ============================ */
     import { onMount, createEventDispatcher } from 'svelte';
     import type * as Tone from 'tone';
+    // helpers
+    import { stopPropagation } from '$lib/helpers';
 
     /* === PROPS ============================== */
     export let currentSubdiv: number;
@@ -21,6 +23,7 @@
     let isPortrait = false;
     let activeNotes: Tone.Unit.Frequency[] = [];
     let hasPlayedNote = false;
+    let keyIsHeld = false; // whether the space or enter key is being held down
 
     /* === REACTIVE DECLARATION =============== */
     // call newSubdiv() when currentSubdiv changes
@@ -117,7 +120,20 @@
                         <button
                             on:pointerdown={() => handleKeyDown(note)}
                             on:pointerup={() => handleKeyUp(note)}
-                            on:pointerleave={() => handleKeyUp(note)}>
+                            on:pointerleave={() => handleKeyUp(note)}
+                            on:keydown={e => {
+                                stopPropagation(e, ["Space"]);
+                                if ((e.code === "Space" || e.code === "Enter") && !keyIsHeld) {
+                                    keyIsHeld = true;
+                                    handleKeyDown(note);
+                                }
+                            }}
+                            on:keyup={e => {
+                                if (e.code === "Space" || e.code === "Enter") {
+                                    keyIsHeld = false;
+                                    handleKeyUp(note);
+                                }
+                            }}>
                             <span class="visuallyHidden">note </span>
                             <span class="noteNumber">{notes.indexOf(note) + 1}</span>
                         </button>
@@ -264,6 +280,11 @@
                 transition: background-color 0.1s ease;
             }
 
+            &:focus-visible .noteNumber {
+                outline: solid $border-width-thick var(--clr-kb-white-focus-red);
+                outline-offset: var(--pad-xs);
+            }
+
             .noteNumber {
                 position: relative;
                 z-index: 0;
@@ -285,6 +306,10 @@
 
             &::before {
                 background-color: var(--_clr-note);
+            }
+
+            &:focus-visible .noteNumber {
+                outline-color: var(--clr-kb-active-focus-red);
             }
         }
 
@@ -314,6 +339,10 @@
 
                     background-color: var(--clr-kb-flat);
                 }
+
+                &:focus-visible .noteNumber {
+                    outline-color: var(--clr-kb-flat-focus-red);
+                }
             }
 
             &.active button {
@@ -321,6 +350,10 @@
 
                 &::before {
                     background-color: var(--_clr-note);
+                }
+
+                &:focus-visible .noteNumber {
+                    outline-color: var(--clr-kb-active-focus-red);
                 }
             }
         }

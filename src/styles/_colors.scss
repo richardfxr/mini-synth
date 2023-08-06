@@ -30,7 +30,7 @@ $light: (
     red-disabled: #ff9d9d,
     "active": #ff6b6b,
     active-highlight: #ff8383,
-    focus-red: #dd180a,
+    focus-red: #CD170A,
 
     cassette-bg: #eeeeee,
     cassette-bg-highlight: #ffffff,
@@ -40,9 +40,12 @@ $light: (
 
     kb-white: #e6e6e6,
     kb-white-highlight: #ffffff,
+    kb-white-focus-red: #CD170A,
     kb-border: #383838,
     kb-flat: #383838,
     kb-flat-highlight: #555555,
+    kb-flat-focus-red: #FF8080,
+    kb-active-focus-red: #921007,
 
     note-dim: #d6d6d6,
     note-text: #000000,
@@ -99,7 +102,7 @@ $dark: (
     red-disabled: #ac4c4c,
     "active": #f14c4c,
     active-highlight: #ff6363,
-    focus-red: #ff6363,
+    focus-red: #FF8080,
 
     cassette-bg: #2c2c2c,
     cassette-bg-highlight: #383838,
@@ -109,9 +112,12 @@ $dark: (
 
     kb-white: #e6e6e6,
     kb-white-highlight: #ffffff,
+    kb-white-focus-red: #CD170A,
     kb-border: #000000,
     kb-flat: #383838,
     kb-flat-highlight: #555555,
+    kb-flat-focus-red: #FF8080,
+    kb-active-focus-red: #921007,
 
     note-dim: #969696,
     note-text: #000000,
