@@ -92,6 +92,7 @@
         <button
             id={beat}
             class:active={beats[currentSubdiv].includes(beat)}
+            aria-current={beats[currentSubdiv].includes(beat)}
             on:pointerdown={() => handleButtonDown(beat)}
             on:pointerup={() => handleButtonUp(beat)}
             on:pointerleave={() => handleButtonUp(beat)}

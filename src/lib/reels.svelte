@@ -116,7 +116,10 @@
             </div>
         </div>
 
-        <form class="tapes" on:submit|preventDefault>
+        <form
+            class="tapes"
+            aria-label="tapes"
+            on:submit|preventDefault>
             <!-- tape marks above tapes -->
             <div class="tapeMarkers">
                 {#each melody as _}

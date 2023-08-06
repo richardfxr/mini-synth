@@ -118,6 +118,7 @@
                         class:flat={note.toString().charAt(1) === "b"}
                         class:active={melody[currentSubdiv].includes(note)}>
                         <button
+                            aria-current={melody[currentSubdiv].includes(note)}
                             on:pointerdown={() => handleKeyDown(note)}
                             on:pointerup={() => handleKeyUp(note)}
                             on:pointerleave={() => handleKeyUp(note)}
