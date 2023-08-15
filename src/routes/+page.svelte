@@ -145,7 +145,7 @@
     <IndexHeader
         isReady = {introHasFinished}
         {working}
-        noSelectedSongs = {selectedSongs.length === 0}
+        {selectedSongs}
         on:duplicate = {duplicateSelectedSongs}
         on:delete = {deleteSelectedSongs} />
     

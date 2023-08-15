@@ -31,6 +31,8 @@
 
 <style lang="scss">
     .logo {
+        width: 40px;
+
         // colors
         @for $i from 0 through 11 {
             .note-#{$i} {
