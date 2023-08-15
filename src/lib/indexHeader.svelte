@@ -77,7 +77,7 @@
         <p>mini synth</p>
     </div>
     <a
-        href="/"
+        href="#"
         class="button">
         <span class="visuallyHidden">about</span>
         <InfoIcon />
