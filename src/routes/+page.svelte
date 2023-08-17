@@ -130,10 +130,10 @@
 
 
 <svelte:head>
-    <title>Mini Synth</title>
+    <title>mini synth</title>
     <meta
         name="description"
-        content="A simple web-based synthesizer for anyone to create songs."
+        content="A simple synthesizer for beginners and musicians alike."
     />
 </svelte:head>
 
