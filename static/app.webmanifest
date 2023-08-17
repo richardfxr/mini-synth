@@ -1,0 +1,68 @@
+{
+    "name": "mini synth",
+    "id": "miniSynthEdu",
+    "start_url": "/",
+    "display": "standalone",
+    "scope": "/",
+    "lang": "en",
+    "dir": "ltr",
+    "description": "A simple synthesizer for beginners and musicians alike.",
+    "categories": ["music"],
+    "background_color": "#F7F7F7",
+    "theme_color": "#F7F7F7",
+    "icons": [
+        {
+            "src": "icons/icon-44.png",
+            "sizes": "44x44",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-50.png",
+            "sizes": "50x50",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-71.png",
+            "sizes": "71x71",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-150.png",
+            "sizes": "150x150",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-310x150.png",
+            "sizes": "310x150",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-310.png",
+            "sizes": "310x310",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/icon-620x300.png",
+            "sizes": "620x300",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}
