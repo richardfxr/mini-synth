@@ -34,6 +34,26 @@
         // colorScheme setting
         const dbColorScheme = await db.settings.get("colorScheme");
         dbColorScheme ? colorScheme.set(dbColorScheme.value) : colorScheme.set("auto");
+        
+        // persistent storage
+        const storage = await db.settings.get("storage");
+        if (storage === undefined && navigator.storage) {
+            const isPersistent = await navigator.storage.persisted();
+            if (isPersistent) {
+                console.log("data is already persistent");
+                await db.settings.put({
+                    id: "storage",
+                    value: "persistent"
+                });
+            } else {
+                let result = await navigator.storage.persist();
+                console.log("data is persistent: " + result);
+                await db.settings.put({
+                    id: "storage",
+                    value: result ? "persistent" : "notPersistent"
+                });
+            }
+        }
     });
 </script>
 
