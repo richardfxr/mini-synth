@@ -10,6 +10,7 @@ export const firstLoad = writable(true);
 export const colorScheme: Writable<string> = writable();
 export const displayedColorScheme: Writable<string> = writable();
 export const motionPref = writable("full");
+export const PWAInstallEvent: Writable<Event | null> = writable(null);
 
 // Tone
 export const synth: Writable<Tone.PolySynth> | Writable<null> = writable(null);
@@ -52,5 +53,12 @@ if (browser) {
         console.log("motionPref: " + e.matches);
         // set appropriate displayedColorScheme if user has not manually selected colorScheme
         e.matches ? motionPref.set("reduced") : motionPref.set("full");
+    });
+
+    /* === PROGRESSIVE WEB APP EVENT ========== */
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        PWAInstallEvent.set(event);
+        console.log("set PWAInstallEvent");
     });
 }

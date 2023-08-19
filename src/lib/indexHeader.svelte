@@ -3,7 +3,11 @@
     // Svelte
     import { onMount, createEventDispatcher } from 'svelte';
     // stores
-    import { colorScheme, displayedColorScheme } from '../storage/store';
+    import {
+        colorScheme,
+        displayedColorScheme,
+        PWAInstallEvent
+    } from '../storage/store';
     // icons
     import SunIcon from '$lib/SVGs/sunIcon.svelte';
     import MoonIcon from '$lib/SVGs/moonIcon.svelte';
@@ -52,6 +56,7 @@
 
     /* === LIFE CYCLES ======================== */
     onMount(() => {
+        // intersection observer
 		observer = new IntersectionObserver(entries => {
             if(entries[0].isIntersecting) {
                 actionsIsSticking = true;
@@ -141,15 +146,20 @@
                 {/if}
             </label>
         </li>
-        <li id="delete">
-            <button
-                id="install"
-                class="button"
-                on:click={() => dispatch("delete")}>
-                <span class="visuallyHidden">install mini synth</span>
-                <DownloadIcon />
-            </button>
-        </li>
+        {#if $PWAInstallEvent}
+            <li id="install">
+                <button
+                    id="install"
+                    class="button"
+                    on:click={() => {
+                        // @ts-ignore
+                        $PWAInstallEvent.prompt();
+                    }}>
+                    <span class="visuallyHidden">install mini synth</span>
+                    <DownloadIcon />
+                </button>
+            </li>
+        {/if}
     </ul>
 </setion>
 
@@ -439,9 +449,9 @@
             .button {
                 width: $_button-size;
                 height: $_button-size;
+                border-right: none;
                 border-radius: $borderRadius-sm;
                 border-color: var(--clr-cassette-border);
-                margin-left: -$border-width-thick;
 
                 &::before {
                     // main color
@@ -462,8 +472,8 @@
                 outline-offset: -7px;
             }
 
-            li:last-child .button {
-                border-right: none;
+            li:first-child .button {
+                margin-left: -$border-width-thick;
             }
         }
     }
@@ -484,6 +494,13 @@
         .housing {
             margin-right: $pad-xl;
             margin-left: $pad-xl;
+        }
+    }
+
+    /* === PROGRESSIVE WEB APP ================ */
+    @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
+        .actions .scrollContainer #install {
+            display: none;
         }
     }
 
