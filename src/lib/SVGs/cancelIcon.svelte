@@ -1,7 +1,9 @@
 <svg
     class="cancel icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
-    <polygon fill="currentColor" points="15.71 3.71 14.29 2.29 9 7.59 3.71 2.29 2.29 3.71 7.59 9 2.29 14.29 3.71 15.71 9 10.41 14.29 15.71 15.71 14.29 10.41 9 15.71 3.71"/>
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 18 18">
+    <rect fill="currentColor" x="0" y="8" width="18" height="2" transform="translate(21.73 9) rotate(135)"/>
+    <rect fill="currentColor" x="0" y="8" width="18" height="2" transform="translate(9 -3.73) rotate(45)"/>
 </svg>
 
 
