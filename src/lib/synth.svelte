@@ -443,7 +443,7 @@
         <div
             class="cassette top"
             class:isReady>
-            <div class="housing">
+            <div class="cassetteHousing">
                 <div class="left screw"></div>
                 <div class="right screw"></div>
                 <CassetteHeader 
@@ -478,7 +478,7 @@
             class="bottomHousing"
             aria-label="track controls"
             on:submit|preventDefault>
-            <div class="housing">
+            <div class="cassetteHousing">
                 <div class="left screw"></div>
                 <div class="right screw"></div>
                 <Controls
@@ -732,7 +732,7 @@
 
         padding: 0 $page-pad-hrz;
 
-        .housing {
+        .cassetteHousing {
             position: relative;
             max-width: $cassette-maxWidth;
 
@@ -779,7 +779,7 @@
             // load state
             transform: translateY($cassettTop-translateY);
 
-            .housing {
+            .cassetteHousing {
                 background-color: var(--clr-cassette-bg-highlight);
                 border-bottom: none;
                 border-radius:
@@ -824,7 +824,7 @@
                 width: 100%;
             }
 
-            .housing {
+            .cassetteHousing {
                 flex-grow: 1;
                 z-index: 2;
 
@@ -1020,7 +1020,7 @@
                 }
             }
             
-            .housing {
+            .cassetteHousing {
                 grid-area: housing;
                 max-width: unset;
                 border: none;

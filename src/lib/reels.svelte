@@ -58,7 +58,7 @@
     style="--melodyLength: {melody.length}">
 
     <div class="cassette">
-        <div class="housing"></div>
+        <div class="cassetteHousing"></div>
     </div>
 
     <div
@@ -251,7 +251,7 @@
 
         padding: 0 $page-pad-hrz;
 
-        .housing {
+        .cassetteHousing {
             position: relative;
             max-width: $cassette-maxWidth;
             height: 100%;

@@ -82,7 +82,7 @@
         <p>mini synth</p>
     </div>
     <a
-        href="#"
+        href="/info"
         class="button">
         <span class="visuallyHidden">about</span>
         <InfoIcon />
@@ -273,34 +273,6 @@
     /* === MAIN STYLES ======================== */
     @include light;
 
-    .housing {
-        position: relative;
-        max-width: $cassette-maxWidth;
-
-        padding: 0 $pad-2xl;
-        background-color: var(--clr-cassette-bg-shadow);
-        border: solid $border-width-thick var(--clr-cassette-border);
-        border-top: none;
-        margin: 0 auto;
-
-        &::before {
-            // main color
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            z-index: -1;
-
-            background-color: var(--clr-cassette-bg);
-            border-right: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
-            border-left: solid $cassette-shading-size var(--clr-cassette-bg-highlight);
-            
-            transition: background-color $trans-fast ease,
-                        border-color $trans-fast ease;
-        }
-    }
-
     .indexHeader {
         display: flex;
         flex-flow: row wrap;
@@ -309,6 +281,7 @@
         z-index: 1001;
 
         padding: $pad-xl $_pad-hrz;
+        border-top: none;
 
         // load state
         transform: translateY(calc(-0.5 * $_header-height));
@@ -380,6 +353,7 @@
         z-index: 1000;
 
         padding: 0 $_pad-hrz;
+        border-top: none;
         border-radius:
             0
             0
@@ -486,14 +460,6 @@
 
         :global([data-colorScheme="light"]) {
             @include light;
-        }
-    }
-
-    /* === BREAKPOINTS ======================== */
-    @media (max-width: calc($cassette-maxWidth + 2 * $pad-xl)) {
-        .housing {
-            margin-right: $pad-xl;
-            margin-left: $pad-xl;
         }
     }
 
