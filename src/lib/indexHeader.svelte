@@ -276,6 +276,7 @@
     .indexHeader {
         display: flex;
         flex-flow: row wrap;
+        align-items: center;
         position: relative;
         justify-content: space-between;
         z-index: 1001;
@@ -457,7 +458,6 @@
     /* === BREAKPOINTS ======================== */
     @media (max-width: calc($cassette-maxWidth + 2 * $pad-xl)) {
         .indexHeader, .actions {
-            flex-grow: 1;
             width: unset;
         }
     }
