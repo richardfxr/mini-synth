@@ -167,6 +167,8 @@
             {/each}
         </ul>
     {/if}
+
+    <footer>v1.1.0</footer>
 </div>
 
 
@@ -178,7 +180,9 @@
     }
 
     .index {
-        padding-bottom: var(--_actions-height);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
     .songs {
@@ -194,6 +198,18 @@
             transform: translateY(0);
             opacity: 1;
         }
+    }
+
+    footer {
+        color: var(--clr-600);
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 500;
+        text-align: center;
+
+        padding: $pad-2xl $pad-xl $pad-4xl $pad-xl;
+        margin-top: auto;
+
+        transition: color $trans-fast ease;
     }
 
     /* === A11Y =============================== */

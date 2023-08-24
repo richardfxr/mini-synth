@@ -279,6 +279,7 @@
         position: relative;
         justify-content: space-between;
         z-index: 1001;
+        width: 100%;
 
         padding: $pad-xl $_pad-hrz;
         border-top: none;
@@ -351,6 +352,7 @@
         top: 0;
         right: 0;
         z-index: 1000;
+        width: 100%;
 
         padding: 0 $_pad-hrz;
         border-top: none;
@@ -449,6 +451,14 @@
             li:first-child .button {
                 margin-left: -$border-width-thick;
             }
+        }
+    }
+
+    /* === BREAKPOINTS ======================== */
+    @media (max-width: calc($cassette-maxWidth + 2 * $pad-xl)) {
+        .indexHeader, .actions {
+            flex-grow: 1;
+            width: unset;
         }
     }
 
