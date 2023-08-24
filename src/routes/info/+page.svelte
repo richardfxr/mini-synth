@@ -14,6 +14,7 @@
     import InfoIcon from "$lib/SVGs/infoIcon.svelte";
     import CancelIcon from "$lib/SVGs/cancelIcon.svelte";
     import EnvLi from '$lib/envLi.svelte';
+    import Footer from '$lib/footer.svelte';
 
     /* === VARIABLES ========================== */
     let isReady = false;
@@ -239,6 +240,8 @@
             </EnvLi>
         </ul>
     </section>
+
+    <Footer />
 </div>
 
 

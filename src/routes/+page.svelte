@@ -14,6 +14,7 @@
     import IndexHeader from '$lib/indexHeader.svelte';
     import SearchBar from '$lib/searchBar.svelte';
     import SongLi from '$lib/songLi.svelte';
+    import Footer from '$lib/footer.svelte';
 
     /* === VARIABLES ========================== */
     let songs: Song[] = [];
@@ -168,7 +169,7 @@
         </ul>
     {/if}
 
-    <footer>v1.1.0</footer>
+    <Footer />
 </div>
 
 
@@ -200,16 +201,8 @@
         }
     }
 
-    footer {
-        color: var(--clr-600);
-        font-family: 'Roboto Mono', monospace;
-        font-weight: 500;
-        text-align: center;
-
-        padding: $pad-2xl $pad-xl $pad-4xl $pad-xl;
+    :global(footer) {
         margin-top: auto;
-
-        transition: color $trans-fast ease;
     }
 
     /* === A11Y =============================== */
