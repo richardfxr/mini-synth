@@ -5,10 +5,15 @@
     import { beforeNavigate } from '$app/navigation';
     import { fade } from 'svelte/transition';
     // stores
-    import { firstLoad } from "../../storage/store";
+    import {
+        firstLoad,
+        PWAInstallEvent,
+        synth
+    } from "../../storage/store";
     // components
     import InfoIcon from "$lib/SVGs/infoIcon.svelte";
     import CancelIcon from "$lib/SVGs/cancelIcon.svelte";
+    import EnvLi from '$lib/envLi.svelte';
 
     /* === VARIABLES ========================== */
     let isReady = false;
@@ -58,7 +63,7 @@
         <div class="h3Wrapper">
             <h3><span>Team</span></h3>
         </div>
-        <ul>
+        <ul class="buttonsList">
             <li>
                 <a
                     class="button"
@@ -90,7 +95,7 @@
         <div class="h3Wrapper">
             <h3><span>Instructors</span></h3>
         </div>
-        <ul>
+        <ul class="buttonsList">
             <li>
                 <a
                     class="button"
@@ -119,7 +124,7 @@
 
     <section class="housing">
         <h2><span>Demos</span></h2>
-        <ul>
+        <ul class="buttonsList">
             <li>
                 <a
                     class="button"
@@ -153,7 +158,7 @@
 
     <section class="housing">
         <h2><span>Sponsors</span></h2>
-        <ul>
+        <ul class="buttonsList">
             <li>
                 <a
                     class="button"
@@ -201,6 +206,39 @@
             </li>
         </ul>
     </section>
+
+    <section id="env" class="housing">
+        <h2><span>Enviroment</span></h2>
+        <ul>
+            <EnvLi
+                id="polysynth"
+                enabled={$synth !== null}
+                first>
+                Tone.js PolySynth
+            </EnvLi>
+            <EnvLi
+                id="pwaEnabled"
+                enabled={true}>
+                Progressive Web App
+            </EnvLi>
+            <EnvLi
+                id="pwaDisabled"
+                enabled={false}>
+                Progressive Web App
+            </EnvLi>
+            <EnvLi
+                id="pwaInstall"
+                enabled={$PWAInstallEvent !== null}>
+                PWA install prompt
+            </EnvLi>
+            <EnvLi
+                id="fullscreen"
+                enabled={document.fullscreenEnabled}
+                last>
+                Fullscreen support
+            </EnvLi>
+        </ul>
+    </section>
 </div>
 
 
@@ -210,7 +248,6 @@
     /* === INTERNAL VARIABLES ================= */
     $_header-height: calc($button-minSize + 2 * $pad-2xl);
     $_pad-hrz: 25px;
-    $_li-pad-vrt: 13px;
 
     /* === MAIN STYLES ======================== */
     .infoPage {
@@ -341,7 +378,7 @@
             line-height: 1.6em;
         }
 
-        ul, ol {
+        .buttonsList {
             display: flex;
             flex-flow: column nowrap;
             gap: $pad-xs;
@@ -363,7 +400,7 @@
                     height: unset;
 
                     line-height: 1.2em;
-                    padding: $_li-pad-vrt calc($_pad-hrz - $border-width-thick - $pad-md);
+                    padding: $li-pad-vrt calc($_pad-hrz - $border-width-thick - $pad-md);
                     border-radius: $borderRadius-sm;
 
                     &::before {
@@ -374,9 +411,28 @@
 
                 .text {
                     display: block;
-                    padding: $_li-pad-vrt calc($_pad-hrz - $pad-md);
+                    padding: $li-pad-vrt calc($_pad-hrz - $pad-md);
                 }
             } 
         } 
+    }
+
+    :global(#pwaEnabled) {
+        display: none;
+    }
+
+    :global(#pwaDisabled) {
+        display: flex;
+    }
+
+    /* === PROGRESSIVE WEB APP ================ */
+    @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
+        :global(#pwaEnabled) {
+            display: flex;
+        }
+
+        :global(#pwaDisabled) {
+            display: none;
+        }
     }
 </style>
