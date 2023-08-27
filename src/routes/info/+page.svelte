@@ -2,6 +2,7 @@
     /* === IMPORTS ============================ */
     // Svelte
     import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     import { beforeNavigate } from '$app/navigation';
     import { fade } from 'svelte/transition';
     // stores
@@ -210,35 +211,37 @@
 
     <section id="env" class="housing">
         <h2><span>Enviroment</span></h2>
-        <ul>
-            <EnvLi
-                id="polysynth"
-                enabled={$synth !== null}
-                first>
-                Tone.js PolySynth
-            </EnvLi>
-            <EnvLi
-                id="pwaEnabled"
-                enabled={true}>
-                Progressive Web App
-            </EnvLi>
-            <EnvLi
-                id="pwaDisabled"
-                enabled={false}>
-                Progressive Web App
-            </EnvLi>
-            <EnvLi
-                id="pwaInstall"
-                enabled={$PWAInstallEvent !== null}>
-                PWA install prompt
-            </EnvLi>
-            <EnvLi
-                id="fullscreen"
-                enabled={document.fullscreenEnabled}
-                last>
-                Fullscreen support
-            </EnvLi>
-        </ul>
+        {#if browser}
+            <ul>
+                <EnvLi
+                    id="polysynth"
+                    enabled={$synth !== null}
+                    first>
+                    Tone.js PolySynth
+                </EnvLi>
+                <EnvLi
+                    id="pwaEnabled"
+                    enabled={true}>
+                    Progressive Web App
+                </EnvLi>
+                <EnvLi
+                    id="pwaDisabled"
+                    enabled={false}>
+                    Progressive Web App
+                </EnvLi>
+                <EnvLi
+                    id="pwaInstall"
+                    enabled={$PWAInstallEvent !== null}>
+                    PWA install prompt
+                </EnvLi>
+                <EnvLi
+                    id="fullscreen"
+                    enabled={document.fullscreenEnabled}
+                    last>
+                    Fullscreen support
+                </EnvLi>
+            </ul>
+        {/if}
     </section>
 
     <Footer />
