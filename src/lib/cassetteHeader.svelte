@@ -60,7 +60,7 @@
     class:isReady>
     <a
         href="/"
-        id="menu"
+        id="menuButton"
         class="button"
         style="--_dir: 1"
         on:keydown={e => stopPropagation(e, ['Space'])}>
