@@ -41,6 +41,14 @@
 
 
 
+<svelte:head>
+    <title>info | mini synth</title>
+    <meta
+        name="description"
+        content="Mini Synth is an educational project created by Ashley Fan, Richard Fu, and Sean Lee to introduce refugees to music."
+    />
+</svelte:head>
+
 <div
     class="infoPage"
     class:isReady

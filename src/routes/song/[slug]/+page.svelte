@@ -22,4 +22,11 @@
 
 
 
+<svelte:head>
+    <meta
+        name="description"
+        content="Create your own song using different notes and beats with Mini Synth."
+    />
+</svelte:head>
+
 <Synth {id} />
