@@ -18,7 +18,9 @@
     id="searchBar"
     class="searchBar"
     class:isReady>
-    <form on:submit|preventDefault={() => searchInput.blur()}>
+    <form
+        aria-label="search bar"
+        on:submit|preventDefault={() => searchInput.blur()}>
         <label for="search__input">
             <span class="visuallyHidden">search songs</span>
             <SearchIcon />

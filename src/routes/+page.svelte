@@ -158,7 +158,8 @@
     {#if songs.length > 0 && filteredSongs}
         <ul
             class="songs"
-            class:isReady>
+            class:isReady
+            aria-label="songs">
             {#each filteredSongs as song}
                 <SongLi
                     bind:selectedSongs = {selectedSongs}

@@ -59,13 +59,13 @@
         </a>
     </header>
     
-    <section class="housing">
-        <h2><span>About</span></h2>
+    <section class="housing" aria-labelledby="about">
+        <h2 id="about"><span>About</span></h2>
         <p>Mini Synth is an educational project created by Ashley Fan, Richard Fu, and Sean Lee to introduce refugees to music. It serves as a simplified synthesizer that refugees utilize as they learn basic music theory.</p>
         <div class="h3Wrapper">
-            <h3><span>Team</span></h3>
+            <h3 id="team"><span>Team</span></h3>
         </div>
-        <ul class="buttonsList">
+        <ul class="buttonsList" aria-labelledby="team">
             <li>
                 <a
                     class="button"
@@ -95,9 +95,9 @@
             </li>
         </ul>
         <div class="h3Wrapper">
-            <h3><span>Instructors</span></h3>
+            <h3 id="instructors"><span>Instructors</span></h3>
         </div>
-        <ul class="buttonsList">
+        <ul class="buttonsList" aria-labelledby="instructors">
             <li>
                 <a
                     class="button"
@@ -124,9 +124,9 @@
         </ul>
     </section>
 
-    <section class="housing">
-        <h2><span>Demos</span></h2>
-        <ul class="buttonsList">
+    <section class="housing" aria-labelledby="demos">
+        <h2 id="demos"><span>Demos</span></h2>
+        <ul class="buttonsList" aria-labelledby="demos">
             <li>
                 <a
                     class="button"
@@ -158,9 +158,9 @@
         </ul>
     </section>
 
-    <section class="housing">
-        <h2><span>Sponsors</span></h2>
-        <ul class="buttonsList">
+    <section class="housing" aria-labelledby="sponsors">
+        <h2 id="sponsors"><span>Sponsors</span></h2>
+        <ul class="buttonsList" aria-labelledby="sponsors">
             <li>
                 <a
                     class="button"
@@ -209,10 +209,10 @@
         </ul>
     </section>
 
-    <section id="env" class="housing">
-        <h2><span>Enviroment</span></h2>
+    <section id="env" class="housing" aria-labelledby="enviroment">
+        <h2 id="enviroment"><span>Enviroment</span></h2>
         {#if browser}
-            <ul>
+            <ul aria-labelledby="enviroment">
                 <EnvLi
                     id="polysynth"
                     enabled={$synth !== null}
@@ -439,6 +439,14 @@
 
         :global(#pwaDisabled) {
             display: none;
+        }
+    }
+
+    /* === A11Y =============================== */
+    @media (prefers-reduced-motion: reduce) {
+        header, section {
+            // load state
+            transform: translateY(0);
         }
     }
 </style>
