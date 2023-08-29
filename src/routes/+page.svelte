@@ -39,7 +39,6 @@
     async function getSongs(): Promise<void> {
         try {
             songs = await db.songs.toArray();
-            console.log("songs: ", songs);
         } catch (error) {
             console.log(error);
         }
@@ -98,7 +97,6 @@
 
     /* === LIFECYCLES ========================= */
     onMount(async () => {
-        console.log("index onMount");
         // time intro 
         if ($firstLoad) {
             introHasFinished = true;
@@ -119,7 +117,6 @@
         }
 
         songsAreLoaded = true;
-        console.log("onMount finished");
     });
 
     beforeNavigate(() => {

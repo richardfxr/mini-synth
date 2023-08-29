@@ -38,7 +38,6 @@
     }
 
     function handleKeyDown(e: KeyboardEvent): void {
-        console.log("key: " + e.code);
         switch(e.code) {
             case 'Space':
                 playbackKbActive = true;

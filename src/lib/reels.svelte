@@ -45,7 +45,6 @@
 
     function snapTapes() {
         if ($motionPref === "full" || !tapes) return;
-        console.log("snapping to " + untweenedProgress);
         tapes.scrollLeft = untweenedProgress;
     }
 </script>

@@ -144,7 +144,6 @@
             songIsLoaded = true;
             title = "song #" + id;
         } catch (error) {
-            console.log("new song error: " + error);
         }
         
     }
@@ -159,7 +158,6 @@
                 return;
             }
 
-            console.log("song: " + JSON.stringify(song));
 
             // load song
             title = song.title;
@@ -169,7 +167,6 @@
 
             songIsSaved = true
         } catch (error) {
-            console.log("song error: " + error);
         }
     }
 
@@ -308,15 +305,10 @@
             index >= melody.length
         ) return;
 
-        console.log("currentSubdiv: " + currentSubdiv);
-        console.log("skip to index " + index);
-
         // handle tweenedProgress and scrolling
         hasManuallyScrolled = true;
         $motionPref === "full" ? tweening = true : snapping = true;
         currentSubdiv = index;
-
-        console.log("currentSubdiv: " + currentSubdiv);
 
         untweenedProgress = currentSubdiv * subdivWidth;
         // await tweened animation to finish
@@ -361,7 +353,6 @@
 
     /* === LIFECYCLES ========================= */
     onMount(async () => {
-        console.log("onMount");
         // time intro 
         if ($firstLoad) {
             $firstLoad = false;
@@ -369,8 +360,6 @@
         } else {
             setTimeout(() => {
                 introHasFinished = true;
-                console.log("intro has finished");
-                console.log("isReady: " + isReady);
             }, 225);
         }
 
@@ -384,7 +373,6 @@
 
         // initialize synth
         if ($synth === null) {
-            console.log("creating synth");
             $synth = new Tone.PolySynth(Tone.Synth, {
                 oscillator: {
                     partials: [0, 2, 3, 4],

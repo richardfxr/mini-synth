@@ -50,7 +50,6 @@ if (browser) {
 
     // prefers-color-scheme event listener
     window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", e => {
-        console.log("motionPref: " + e.matches);
         // set appropriate displayedColorScheme if user has not manually selected colorScheme
         e.matches ? motionPref.set("reduced") : motionPref.set("full");
     });
@@ -59,6 +58,5 @@ if (browser) {
     window.addEventListener('beforeinstallprompt', (event) => {
         event.preventDefault();
         PWAInstallEvent.set(event);
-        console.log("set PWAInstallEvent");
     });
 }

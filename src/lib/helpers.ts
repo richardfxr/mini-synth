@@ -17,13 +17,10 @@ export function stopPropagation(e: KeyboardEvent, keyCodes: string[]): void {
 
 export function animate(node: HTMLElement, options: animationOptions) {
     if (get(motionPref) === "reduced" && options.reducedAnimation) {
-        console.log("playing reduced");
         return options.reducedAnimation(node, { duration: options.duration });
     } else if (get(motionPref) === "reduced") {
-        console.log("not playing anything");
         return null;
     } else {
-        console.log("playing full");
         return options.animation(node, options);
     }
 };

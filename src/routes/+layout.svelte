@@ -25,8 +25,6 @@
             id: "colorScheme",
             value: value
         });
-
-        console.log("db colorScheme update to " + value);
     });
 
     /* === LIFECYCLES ========================= */
@@ -40,14 +38,12 @@
         if (storage === undefined && navigator.storage) {
             const isPersistent = await navigator.storage.persisted();
             if (isPersistent) {
-                console.log("data is already persistent");
                 await db.settings.put({
                     id: "storage",
                     value: "persistent"
                 });
             } else {
                 let result = await navigator.storage.persist();
-                console.log("data is persistent: " + result);
                 await db.settings.put({
                     id: "storage",
                     value: result ? "persistent" : "notPersistent"
