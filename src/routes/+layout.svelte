@@ -61,6 +61,12 @@
 
 <svelte:head>
     <meta name="theme-color" content={$displayedColorScheme === "light" ? "#f7f7f7" : "#1d1d1d"} />
+    <!-- open graph image -->
+    <meta property="og:image" content="/og-image-1.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Mini Synth with a cassette logo." />
 </svelte:head>
 
 <slot></slot>
