@@ -5,7 +5,7 @@
     import { detailForBeat } from '$lib/soundboard.svelte';
     // icons
     import PianoIcon from '$lib/SVGs/pianoIcon.svelte';
-    import BeatsIcons from '$lib/SVGs/beatsIcons.svelte';
+    import BeatsIcon from '$lib/SVGs/beatsIcon.svelte';
 
     /* === PROPS ============================== */
     export let tapeName: TapeName;
@@ -63,7 +63,7 @@
         {#if tapeName === "melody"}
             <PianoIcon />
         {:else}
-            <BeatsIcons />
+            <BeatsIcon />
         {/if}
     </div>
 

@@ -7,7 +7,7 @@
     import { stopPropagation } from '$lib/helpers';
     // icons
     import SkipToStartIcon from '$lib/SVGs/skipToStartIcon.svelte';
-    import PrevSubdiv from '$lib/SVGs/prevSubdiv.svelte';
+    import PrevSubdivIcon from '$lib/SVGs/prevSubdivIcon.svelte';
     import PlayIcon from '$lib/SVGs/playIcon.svelte';
     import PuaseIcon from '$lib/SVGs/puaseIcon.svelte';
     import NextSubdivIcon from '$lib/SVGs/nextSubdivIcon.svelte';
@@ -140,7 +140,7 @@
                 on:click = {() => dispatch('prevSubdiv')}
                 on:keydown={e => stopPropagation(e, ['Space'])}>
                 <span class="visuallyHidden">previous sixteenth</span>
-                <PrevSubdiv />
+                <PrevSubdivIcon />
             </button>
 
             <button
