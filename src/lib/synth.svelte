@@ -1017,7 +1017,12 @@
             .sideButton {
                 padding: 0 $pad-xl $pad-lg $pad-xl;
 
+                &#left  {
+                    z-index: 1;
+                }
+
                 &#right {
+                    z-index: 1;
                     margin-left: auto;
                 }
             }
