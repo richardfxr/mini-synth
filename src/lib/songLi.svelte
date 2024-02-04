@@ -42,7 +42,7 @@
     class:active={song.id !== undefined ? selectedSongs.includes(song.id) : false}
     class:new={song.id !== undefined ? newSongs.includes(song.id) : false}
     class:isReady
-    transition:fade|local={{ duration: 150 }}
+    transition:fade={{ duration: 150 }}
     bind:this={songListItem}>
     <div>
         <div class="checkbox">

@@ -425,8 +425,8 @@
 
 <div
     class="synth"
-    in:fade={{ duration: 50, delay: 200 }}
-    out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
+    in:fade|global={{ duration: 50, delay: 200 }}
+    out:animate|global={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
     <div class="background">
         <div
             class="cassette top"
@@ -563,7 +563,7 @@
     {#if isReady && currentTapeName === "melody"}
         <div
             class="inputsWrapper"
-            out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
+            out:animate|global={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
             <div
                 id="melodyInputs"
                 class="inputs">
@@ -596,7 +596,7 @@
     {:else if isReady}
         <div
             class="inputsWrapper"
-            out:animate={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
+            out:animate|global={{ animation: fly, y: 20, duration: 200, reducedAnimation: fade }}>
             <div
                 id="beatsInputs"
                 class="inputs">

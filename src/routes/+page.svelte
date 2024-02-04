@@ -137,8 +137,8 @@
 
 <div
     class="index"
-    in:fade={{ duration: 50, delay: 200 }}
-    out:fade={{ duration: 200 }}>
+    in:fade|global={{ duration: 50, delay: 200 }}
+    out:fade|global={{ duration: 200 }}>
 
     <IndexHeader
         isReady = {introHasFinished}
