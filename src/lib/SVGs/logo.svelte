@@ -44,13 +44,14 @@
         width: 39px;
 
         // colors
-        @for $i from 0 through 11 {
-            .note-#{$i} {
-                fill: var(--clr-note-#{$i});
+        $notes: 0, 2, 4, 5, 7, 9, 11;
+        @each $note in $notes {
+            .note-#{$note} {
+                fill: var(--clr-note-#{$note});
             }
 
-            .note-#{$i}-highlight {
-                fill: var(--clr-note-#{$i}-highlight);
+            .note-#{$note}-highlight {
+                fill: var(--clr-note-#{$note}-highlight);
             }
         }
 

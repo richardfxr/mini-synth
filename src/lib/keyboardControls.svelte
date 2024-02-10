@@ -287,7 +287,7 @@
                     border-bottom: solid $border-width-thick map.get($light, 700);
                 }
 
-                &:active, &.active {
+                &:active {
                     &::after {
                         border-color: #{map.get($light, 200)};
                     }

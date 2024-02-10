@@ -224,10 +224,6 @@
                 }
             }
         }
-
-        &.dragging label {
-            cursor: grabbing;
-        }
     }
 
     .tapeTerminal {

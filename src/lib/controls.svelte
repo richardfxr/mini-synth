@@ -216,7 +216,7 @@
                     --_clr-border: var(--clr-focus-red);
                 }
 
-                &:active, &.active {
+                &:active {
                     --_clr-border: var(--clr-700);
                 }
             
@@ -272,7 +272,7 @@
                     --_clr-border: var(--clr-focus-red);
                 }
 
-                &:active, &.active {
+                &:active {
                     --_clr-border: var(--clr-0);
                 }
             
@@ -428,7 +428,7 @@
                                 opacity $trans-normal ease;
                 }
 
-                &:active, &.active {
+                &:active {
                     &::before {
                         // override default .button ::before transform
                         transform: none;
