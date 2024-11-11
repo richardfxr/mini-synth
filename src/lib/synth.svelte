@@ -207,7 +207,7 @@
     }
 
     function readyReels(): void {
-        Tone.Transport.loopEnd = "0:0:" + melody.length;
+        Tone.getTransport().loopEnd = "0:0:" + melody.length;
 
         // initialize/update notesToPlay
         melody.forEach((subdiv, index) =>{
@@ -250,8 +250,8 @@
     async function scrollTapes() {
         if (!browser) return;
 
-        playbackState = Tone.Transport.state;
-        playbackProgress = Tone.Transport.progress;
+        playbackState = Tone.getTransport().state;
+        playbackProgress = Tone.getTransport().progress;
         const scrollAmount = playbackProgress * melody.length * subdivWidth;
 
         if (playbackState !== "started") {
@@ -284,15 +284,15 @@
             // reset manual scroll
             hasManuallyScrolled = false;
             // start transport at current readhead location
-            Tone.Transport.start("+0", "0:0:" + currentSubdiv);
+            Tone.getTransport().start("+0", "0:0:" + currentSubdiv);
         } else {
-            Tone.Transport.start();
+            Tone.getTransport().start();
         }
 
         startTapes();
     }
 
-    function pause(): void {Tone.Transport.pause();}
+    function pause(): void {Tone.getTransport().pause();}
 
     /**
      * Skip to specified subdiv index. Only functions when not playing
@@ -386,9 +386,9 @@
         $players.connect($playersVol);
 
         // set transporter properties
-        Tone.Transport.bpm.value = bpm;
-        Tone.Transport.loop = true;
-        Tone.Transport.loopEnd = "0:0:" + melody.length;
+        Tone.getTransport().bpm.value = bpm;
+        Tone.getTransport().loop = true;
+        Tone.getTransport().loopEnd = "0:0:" + melody.length;
     });
 
     beforeNavigate(() => {
@@ -403,8 +403,8 @@
         cancelAnimationFrame(tapesFrame);
 
         // Tone
-        Tone.Transport.stop();
-        Tone.Transport.cancel();
+        Tone.getTransport().stop();
+        Tone.getTransport().cancel();
         if (melodyPart) melodyPart.dispose();
         if (beatsPart) beatsPart.dispose();
     });
@@ -486,7 +486,7 @@
                 <BPMslider
                     bind:bpm = {bpm}
                     {isReady}
-                    on:input = {() => Tone.Transport.bpm.value = bpm} />
+                    on:input = {() => Tone.getTransport().bpm.value = bpm} />
             </div>
             <div id="left" class="sideButton">
                 <div class="wrapper">
