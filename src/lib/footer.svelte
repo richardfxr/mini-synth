@@ -1,4 +1,4 @@
-<footer>v1.2.2</footer>
+<footer>v1.2.3</footer>
 
 
 <style lang="scss">

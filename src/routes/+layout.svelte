@@ -45,7 +45,7 @@
         // console logs
         console.log("");
         console.log("%c %cm%ci%cn%ci%c %cs%cy%cn%ct%ch%c ", note0, note1, note2, note3, note4, note5, note6, note7, note8, note9, note10, note11);
-        console.log("v1.2.2");
+        console.log("v1.2.3");
         console.log("Source code available on GitHub:");
         console.log("https://github.com/richardfxr/mini-synth");
         console.log("");
